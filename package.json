@@ -17,6 +17,7 @@
     "@types/react-dom": "^18.0.8",
     "aptos": "^1.3.16",
     "bip39": "^3.0.4",
+    "ethers": "^5.7.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-scripts": "5.0.1",
