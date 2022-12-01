@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/Aptos-web-test-tool/static/css/main.2fc6df07.css",
-    "main.js": "/Aptos-web-test-tool/static/js/main.68cf79b0.js",
+    "main.css": "/Aptos-web-test-tool/static/css/main.e6c13ad2.css",
+    "main.js": "/Aptos-web-test-tool/static/js/main.2b0f931c.js",
     "static/js/787.be827f16.chunk.js": "/Aptos-web-test-tool/static/js/787.be827f16.chunk.js",
     "index.html": "/Aptos-web-test-tool/index.html",
-    "main.2fc6df07.css.map": "/Aptos-web-test-tool/static/css/main.2fc6df07.css.map",
-    "main.68cf79b0.js.map": "/Aptos-web-test-tool/static/js/main.68cf79b0.js.map",
+    "main.e6c13ad2.css.map": "/Aptos-web-test-tool/static/css/main.e6c13ad2.css.map",
+    "main.2b0f931c.js.map": "/Aptos-web-test-tool/static/js/main.2b0f931c.js.map",
     "787.be827f16.chunk.js.map": "/Aptos-web-test-tool/static/js/787.be827f16.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.2fc6df07.css",
-    "static/js/main.68cf79b0.js"
+    "static/css/main.e6c13ad2.css",
+    "static/js/main.2b0f931c.js"
   ]
 }
