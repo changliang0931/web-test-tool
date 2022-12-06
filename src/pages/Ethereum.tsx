@@ -10,9 +10,11 @@ function Ethereum() {
   return (
     <div >
       <Container fixed>
-        <Divider>
+        {/* <Divider>
           <h1>Ethereum Wallet Test Tool</h1>
-        </Divider>
+        </Divider>>
+          <h1>Ethereum Wallet Test Tool</h1>
+        </Divider> */}
         <Divider><h3>Mnemonic-Key-Derivation-Address</h3></Divider>
         <Grid container spacing={2}>
           <Grid item xs={12}>

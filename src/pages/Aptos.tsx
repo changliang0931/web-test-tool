@@ -1,16 +1,16 @@
-import { Button, Divider, Grid, FormHelperText, Container, TextField, FormControl, InputAdornment, MenuItem } from "@mui/material";
+import { Button, Divider, Grid, FormHelperText, Container, TextField, FormControl, InputAdornment, MenuItem, } from "@mui/material";
 import myStore from "../state/aptos-state";
+
 function Aptos() {
   const { mnemonic, errorMnemonic, errorText, path, publicKey, privateKey, address, errorTo, to, type, chainId, coin, coinTypes, amount, genMnemonic, handleChange, obtainAccount, signTx, signMessage, parseTx, expTimeStamp, message, signature, typeTags, gasUnitPrice,
     maxGasAmount, sequenceNumber, payload, txRaw
   } = myStore()
-
   return (
     <div >
       <Container fixed>
-        <Divider>
+        {/* <Divider>
           <h1>Aptos Wallet Test Tool</h1>
-        </Divider>
+        </Divider> */}
         <Divider><h3>Mnemonic-Key-Derivation-Address</h3></Divider>
         <Grid container spacing={2}>
           <Grid item xs={12}>
@@ -343,4 +343,4 @@ function Aptos() {
     </div>
   );
 }
-export default Aptos;
+export default Aptos
