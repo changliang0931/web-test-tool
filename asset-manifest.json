@@ -1,12 +1,12 @@
 {
   "files": {
-    "main.js": "/Aptos-web-test-tool/static/js/main.1a942917.js",
-    "static/js/787.be827f16.chunk.js": "/Aptos-web-test-tool/static/js/787.be827f16.chunk.js",
-    "index.html": "/Aptos-web-test-tool/index.html",
-    "main.1a942917.js.map": "/Aptos-web-test-tool/static/js/main.1a942917.js.map",
-    "787.be827f16.chunk.js.map": "/Aptos-web-test-tool/static/js/787.be827f16.chunk.js.map"
+    "main.js": "/web-test-tool/static/js/main.20021be7.js",
+    "static/js/787.e1ea4f47.chunk.js": "/web-test-tool/static/js/787.e1ea4f47.chunk.js",
+    "index.html": "/web-test-tool/index.html",
+    "main.20021be7.js.map": "/web-test-tool/static/js/main.20021be7.js.map",
+    "787.e1ea4f47.chunk.js.map": "/web-test-tool/static/js/787.e1ea4f47.chunk.js.map"
   },
   "entrypoints": [
-    "static/js/main.1a942917.js"
+    "static/js/main.20021be7.js"
   ]
 }
