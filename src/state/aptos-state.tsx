@@ -1,8 +1,5 @@
 import create from "zustand";
-import {
-    AptosAccount, AptosClient, CoinClient, HexString, BCS, TxnBuilderTypes, TransactionBuilder,
-} from "aptos";
-import { generateMnemonic, validateMnemonic } from "bip39";
+import { Aptos, HexString, APTOS_TYPE_TAGS, APTOS_COIN_TYPES, APTOS_DEFAULT_PATH, generateMnemonic, validateMnemonic } from "wallet-web-lib"
 //https://aptos.dev/
 interface EthereumState {
     typeTags: [string];
@@ -66,11 +63,11 @@ interface EthereumState {
     handleChange: (event: any) => void;
 }
 const useStore = create<EthereumState>((set, get) => ({
-    typeTags: ["0x1::coin::transfer"],
-    coinTypes: ["0x1::aptos_coin::AptosCoin"],
+    typeTags: [APTOS_TYPE_TAGS.transfer],
+    coinTypes: [APTOS_COIN_TYPES.aptos_coin],
     mnemonic: "gauge hole clog property soccer idea cycle stadium utility slice hold chief",
     errorMnemonic: false,
-    path: "m/44'/637'/0'/0'/0'",
+    path: APTOS_DEFAULT_PATH,
     errorText: "",
     publicKey: "",
     privateKey: "",
@@ -85,8 +82,8 @@ const useStore = create<EthereumState>((set, get) => ({
     maxGasAmount: 100000,
     expTimeStamp: Math.floor(Date.now() / 1000) + 20,
     chainId: 1,
-    type: "0x1::coin::transfer",
-    coin: "0x1::aptos_coin::AptosCoin",
+    type: APTOS_TYPE_TAGS.transfer,
+    coin: APTOS_COIN_TYPES.aptos_coin,
     txRaw: "",
     signature: "",
     message: "",
@@ -119,10 +116,10 @@ const useStore = create<EthereumState>((set, get) => ({
                 setErrorMnemonic(true)
                 return
             }
-            const account = AptosAccount.fromDerivePath(path, mnemonic);
-            setPublicKey(account.toPrivateKeyObject().publicKeyHex!);
-            setPrivateKey(account.toPrivateKeyObject().privateKeyHex);
-            setAddress(account.toPrivateKeyObject().address!);
+            const account = new Aptos(mnemonic, path);
+            setPublicKey(account.publicKey);
+            setPrivateKey(account.privateKey);
+            setAddress(account.address!);
         } catch (err: any) {
             setErrorText("Mnemonic with less than 12 words have low entropy and may be guessed by an attacker. ")
             setErrorMnemonic(true)
@@ -143,55 +140,23 @@ const useStore = create<EthereumState>((set, get) => ({
         const { setTxRaw, setErrorText, sequenceNumber, setPayload, mnemonic, path, to, address, coin, amount, type,
             maxGasAmount, gasUnitPrice, expTimeStamp, chainId } = get()
         setTxRaw("");
-        let node_url = "";
-        if (chainId == 1) {//1
-            node_url = "https://fullnode.mainnet.aptoslabs.com";
-        } else if (chainId == 2) {//2
-            node_url = "https://fullnode.testnet.aptoslabs.com";
-        } else {//38
-            node_url = "https://fullnode.devnet.aptoslabs.com";
-        }
+        const account = new Aptos(mnemonic, path);
 
-        const client = new AptosClient(node_url);
-        const coinClient = new CoinClient(client);
-        const account = AptosAccount.fromDerivePath(path, mnemonic);
-        const payload = coinClient.transactionBuilder.buildTransactionPayload(
-            type,
-            [coin],
-            [new HexString(to), amount]
-        );
+        const payload = account.getPayload(chainId, type, [coin], [new HexString(to), amount]);
+        setPayload(account.payload2Hex(payload));
 
-        setPayload(HexString.fromUint8Array(BCS.bcsToBytes(payload)).hex());
-
-        const rawTx = new TxnBuilderTypes.RawTransaction(
-            TxnBuilderTypes.AccountAddress.fromHex(account.address()),
-            BigInt(sequenceNumber),
-            payload,
-            BigInt(maxGasAmount),
-            BigInt(gasUnitPrice),
-            BigInt(expTimeStamp),
-            new TxnBuilderTypes.ChainId(Number(chainId))
-        );
-
-        // setSigningMessageWithouPrefix(
-        //     HexString.fromUint8Array(BCS.bcsToBytes(rawTx)).hex()
-        // );
-        // setSigningMessage(
-        //     HexString.fromUint8Array(
-        //         TransactionBuilder.getSigningMessage(rawTx)
-        //     ).hex()
-        // );
-        // setSignature(account.signBuffer(TransactionBuilder.getSigningMessage(rawTx)).hex());
+        const rawTx = account.getRawTx({ sequenceNumber: sequenceNumber, payload: payload, maxGasAmount: maxGasAmount, gasUnitPrice: gasUnitPrice, expTimeStamp: expTimeStamp, chainId: chainId });
         setErrorText("")
-        setTxRaw(account.signBuffer(TransactionBuilder.getSigningMessage(rawTx)).hex())
+        const txRaw = account.signTransaction({ sequenceNumber: sequenceNumber, payload: payload, maxGasAmount: maxGasAmount, gasUnitPrice: gasUnitPrice, expTimeStamp: expTimeStamp, chainId: chainId, type: type, coin: coin, to: to, amount: amount });
+        setTxRaw(txRaw);
     },
     setSignature: (signature: string) => set({ signature: signature }),
     setMessage: (message: string) => set({ message: message }),
     signMessage: async () => {
         const { setSignature, mnemonic, path, message } = get()
         setSignature("")
-        const account = AptosAccount.fromDerivePath(path, mnemonic);
-        setSignature(account.signHexString(message).hex());
+        const account = new Aptos(mnemonic, path);
+        setSignature(account.signMessage(message));
     },
     setErrorTo: (error: boolean) => set({ errorTo: error }),
     parseTx: () => {

@@ -1,6 +1,5 @@
 import create from "zustand";
-import { utils, constants, Wallet, BigNumber } from "ethers";
-import { generateMnemonic } from "bip39";
+import {Ethereum ,parseEthereumTx,generateMnemonic,validateMnemonic,isHexString,isEthereumAddress,ETHEREUM_DEFAULT_PATH,ETHEREUM_ZERO_ADDRESS ,BigNumber } from "wallet-web-lib"
 interface EthereumState {
     mnemonic: string;
     path: string;
@@ -86,12 +85,12 @@ const useStore = create<EthereumState>((set, get) => ({
     ],
     mnemonic: "gauge hole clog property soccer idea cycle stadium utility slice hold chief",
     errorMnemonic: false,
-    path: utils.defaultPath,
+    path:  ETHEREUM_DEFAULT_PATH,
     errorText: "",
     publicKey: "",
     privateKey: "",
     address: "",
-    to: constants.AddressZero,
+    to: ETHEREUM_ZERO_ADDRESS,
     value: 100000000,
     nonce: 0,
     data: "0x",
@@ -109,7 +108,7 @@ const useStore = create<EthereumState>((set, get) => ({
     errorData: false,
     setMnemonic: (mnemonic: string) => {
         const { setErrorMnemonic, setErrorText } = get()
-        if (!utils.isValidMnemonic(mnemonic)) {
+        if (!validateMnemonic(mnemonic)) {
             setErrorMnemonic(true);
             setErrorText("Mnemonic invalid ")
         }
@@ -129,14 +128,14 @@ const useStore = create<EthereumState>((set, get) => ({
     setAddress: (address: string) => set({ address: address }),
     obtainAccount: () => {
         const { setErrorText, mnemonic, path, setErrorMnemonic, setPublicKey, setAddress, setPrivateKey } = get()
-        const isMn = utils.isValidMnemonic(mnemonic)
+        const isMn = validateMnemonic(mnemonic)
         try {
             if (!isMn) {
                 setErrorText("Mnemonic invalid ")
                 setErrorMnemonic(true)
                 return
             }
-            const account = Wallet.fromMnemonic(mnemonic, path)
+            const account = new Ethereum (mnemonic, path)
             setPublicKey(account.publicKey)
             setPrivateKey(account.privateKey)
             setAddress(account.address)
@@ -161,14 +160,14 @@ const useStore = create<EthereumState>((set, get) => ({
     signTx: async () => {
         const { setTxRaw, setErrorText, setErrorTo, setErrorData, mnemonic, path, to, address, nonce, gasLimit, gasPrice, maxFeePerGas, maxPriorityFeePerGas, data, value, type, chainId } = get()
         setTxRaw("");
-        const wallet = Wallet.fromMnemonic(mnemonic, path);
-        const isTo = utils.isAddress(to);
+        const wallet = new Ethereum (mnemonic, path);
+        const isTo = isEthereumAddress(to);
         if (to.length > 0 && !isTo) {
             setErrorTo(true);
             setErrorText("To invalid ")
             return
         }
-        const isData = utils.isHexString(data)
+        const isData = isHexString(data)
         if (!isData) {
             setErrorData(true);
             setErrorText("Data invalid")
@@ -180,7 +179,7 @@ const useStore = create<EthereumState>((set, get) => ({
             return
         }
         let unSigTx = {
-            to: to || constants.AddressZero,
+            to: to || ETHEREUM_ZERO_ADDRESS,
             from: address,
             nonce: nonce || 1,
             gasLimit: gasLimit || 1000000000,
@@ -204,7 +203,7 @@ const useStore = create<EthereumState>((set, get) => ({
     signMessage: async () => {
         const { setSignature, mnemonic, path, message } = get()
         setSignature("")
-        const wallet = Wallet.fromMnemonic(mnemonic, path);
+        const wallet = new Ethereum (mnemonic, path);
         const signature = await wallet.signMessage(message);
         setSignature(signature)
     },
@@ -212,7 +211,7 @@ const useStore = create<EthereumState>((set, get) => ({
     setErrorTo: (error: boolean) => set({ errorTo: error }),
     parseTx: () => {
         const { setTxRaw, txRaw } = get();
-        setTxRaw(JSON.stringify(utils.parseTransaction(txRaw)));
+        setTxRaw(parseEthereumTx(txRaw));
     }, 
     handleChange: (event: any) => {
         const { setSignature, setErrorTo, setTo, setErrorData, setData, setValue, setChainId, setType, setAddress, setDisplay1559,
@@ -221,13 +220,13 @@ const useStore = create<EthereumState>((set, get) => ({
         let id = event.target.id || event.target.name;
         if (id == "to") {
             value = value.trim()
-            if (utils.isAddress(value)) {
+            if (isEthereumAddress(value)) {
                 setErrorTo(false);
             }
             setTo(value);
         } else if (id == "data") {
             value = value.trim()
-            if (utils.isHexString(value)) {
+            if (isHexString(value)) {
                 setErrorData(false);
             }
             setData(value);
@@ -255,7 +254,7 @@ const useStore = create<EthereumState>((set, get) => ({
             value = value.trim()
             setPath(value);
         } else if (id == "mnemonic") {
-            if (utils.isValidMnemonic(value)) {
+            if (validateMnemonic(value)) {
                 setErrorMnemonic(false)
                 setErrorText("")
             }
