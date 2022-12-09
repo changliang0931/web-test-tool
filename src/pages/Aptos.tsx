@@ -137,7 +137,7 @@ function Aptos() {
                 onChange={handleChange}
               >
                 {typeTags.map((option: any) => (
-                  <MenuItem key={option} value={option}>
+                  <MenuItem id={option}  key={option} value={option}>
                     {option}
                   </MenuItem>
                 ))}
@@ -156,7 +156,7 @@ function Aptos() {
                 onChange={handleChange}
               >
                 {modules.map((option: any) => (
-                  <MenuItem key={option} value={option}>
+                  <MenuItem id={option} key={option} value={option}>
                     {option}
                   </MenuItem>
                 ))}
@@ -176,7 +176,7 @@ function Aptos() {
                 onChange={handleChange}
               >
                 {funcs.map((option: any) => (
-                  <MenuItem key={option} value={option}>
+                  <MenuItem id={option} key={option} value={option}>
                     {option}
                   </MenuItem>
                 ))}
