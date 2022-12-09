@@ -1,9 +1,11 @@
 import create from "zustand";
-import { Aptos, HexString, APTOS_TYPE_TAGS, APTOS_COIN_TYPES, APTOS_DEFAULT_PATH, generateMnemonic, validateMnemonic } from "wallet-web-lib"
+import { Aptos, HexString, APTOS_TYPE_TAGS, APTOS_DEFAULT_PATH, APTOS_FUNCS, APTOS_MODULE, generateMnemonic, validateMnemonic } from "wallet-web-lib"
 //https://aptos.dev/
 interface EthereumState {
-    typeTags: [string];
-    coinTypes: [string];
+    typeTags: Array<string>;
+    modules: Array<string>;
+    funcs: Array<string>;
+    
     mnemonic: string;
     path: string;
     errorMnemonic: boolean;
@@ -12,8 +14,10 @@ interface EthereumState {
     privateKey: string;
     address: string;
 
-    coin: string;
-    type: string;
+    
+    module: string;
+    func: string;
+    typeTag: string;
     to: string;
     amount: number;
     gasUnitPrice: number;
@@ -48,8 +52,11 @@ interface EthereumState {
     setSequenceNumber: (sequenceNumber: number) => void;
     setExpTimeStamp: (expTimeStamp: number) => void;
     setChainId: (chainId: number) => void;
-    setType: (type: string) => void;
-    setCoin: (type: string) => void;
+
+    setModule: (module: string) => void;
+    setFunc: (func: string) => void;
+    setTypeTag: (typeTag: string) => void;
+
     setTxRaw: (txRaw: string) => void;
     setPayload: (payload: string) => void;
 
@@ -63,8 +70,9 @@ interface EthereumState {
     handleChange: (event: any) => void;
 }
 const useStore = create<EthereumState>((set, get) => ({
-    typeTags: [APTOS_TYPE_TAGS.transfer],
-    coinTypes: [APTOS_COIN_TYPES.aptos_coin],
+    typeTags: [APTOS_TYPE_TAGS.aptos_coin],
+    modules: [APTOS_MODULE["0x1::aptos_account"], APTOS_MODULE["0x1::coin"]],
+    funcs: [APTOS_FUNCS.transfer],
     mnemonic: "gauge hole clog property soccer idea cycle stadium utility slice hold chief",
     errorMnemonic: false,
     path: APTOS_DEFAULT_PATH,
@@ -82,11 +90,12 @@ const useStore = create<EthereumState>((set, get) => ({
     maxGasAmount: 100000,
     expTimeStamp: Math.floor(Date.now() / 1000) + 20,
     chainId: 1,
-    type: APTOS_TYPE_TAGS.transfer,
-    coin: APTOS_COIN_TYPES.aptos_coin,
+    module: APTOS_MODULE["0x1::aptos_account"],
+    typeTag: "",
     txRaw: "",
     signature: "",
     message: "",
+    func: APTOS_FUNCS.transfer,
 
     setMnemonic: (mnemonic: string) => {
         const { setErrorMnemonic, setErrorText } = get()
@@ -132,23 +141,21 @@ const useStore = create<EthereumState>((set, get) => ({
     setMaxGasAmount: (maxGasAmount: number) => set({ maxGasAmount: maxGasAmount }),
     setExpTimeStamp: (expTimeStamp: number) => set({ expTimeStamp: expTimeStamp }),
     setChainId: (chainId: number) => set({ chainId: chainId }),
-    setType: (type: string) => set({ type: type }),
-    setCoin: (coin: string) => set({ coin: coin }),
+    setModule: (module: string = APTOS_MODULE["0x1::aptos_account"]) => set({ module: module }),
+    setFunc: (func: string = APTOS_FUNCS.transfer) => set({ func: func }),
+    setTypeTag: (typeTag: string = "") => set({ typeTag: typeTag }),
     setPayload: (payload: string) => set({ payload: payload }),
     setTxRaw: (txRaw: string) => set({ txRaw: txRaw }),
     signTx: async () => {
-        const { setTxRaw, setErrorText, sequenceNumber, setPayload, mnemonic, path, to, address, coin, amount, type,
+        const { setTxRaw, setErrorText, module, func, typeTag, sequenceNumber, setPayload, mnemonic, path, to, amount,
             maxGasAmount, gasUnitPrice, expTimeStamp, chainId } = get()
         setTxRaw("");
         const account = new Aptos(mnemonic, path);
-
-        const payload = account.getPayload(chainId, type, [coin], [new HexString(to), amount]);
+        const payload = account.getPayload(module, func, typeTag, to, amount);
         setPayload(account.payload2Hex(payload));
-
-        const rawTx = account.getRawTx({ sequenceNumber: sequenceNumber, payload: payload, maxGasAmount: maxGasAmount, gasUnitPrice: gasUnitPrice, expTimeStamp: expTimeStamp, chainId: chainId });
-        setErrorText("")
-        const txRaw = account.signTransaction({ sequenceNumber: sequenceNumber, payload: payload, maxGasAmount: maxGasAmount, gasUnitPrice: gasUnitPrice, expTimeStamp: expTimeStamp, chainId: chainId, type: type, coin: coin, to: to, amount: amount });
+        const txRaw = await account.signTransaction({ sequenceNumber: sequenceNumber, payload: payload, maxGasAmount: maxGasAmount, gasUnitPrice: gasUnitPrice, expTimeStamp: expTimeStamp, chainId: chainId, typeTag: typeTag, module: module,func:func, to: to, amount: amount });
         setTxRaw(txRaw);
+        setErrorText("");
     },
     setSignature: (signature: string) => set({ signature: signature }),
     setMessage: (message: string) => set({ message: message }),
@@ -164,7 +171,7 @@ const useStore = create<EthereumState>((set, get) => ({
         setTxRaw(JSON.stringify({}));
     },
     handleChange: (event: any) => {
-        const { setAddress, setErrorMnemonic, setMnemonic, setGasUnitPrice, setChainId, setCoin, setType, setPath, setPrivateKey, setPublicKey, setTo, setErrorText, setMessage, setSignature, setAmount, setSequenceNumber, setExpTimeStamp } = get()
+        const { setAddress, setErrorMnemonic, setMnemonic, setGasUnitPrice, setChainId, setModule, setTypeTag, setPath, setPrivateKey, setPublicKey, setTo, setErrorText, setFunc,setMessage, setSignature, setAmount, setSequenceNumber, setExpTimeStamp } = get()
         let value = event.target.value;
         let id = event.target.id || event.target.name;
         if (id == "to") {
@@ -174,16 +181,18 @@ const useStore = create<EthereumState>((set, get) => ({
             setAmount(value)
         } else if (id == "chainId") {
             setChainId(value)
-        } else if (id == "type") {
-            setType(value)
+        } else if (id == "typeTag") {
+            setTypeTag(value)
         } else if (id == "expTimeStamp") {
             setExpTimeStamp(value)
         } else if (id == "sequenceNumber") {
             setSequenceNumber(value)
         } else if (id == "gasUnitPrice") {
             setGasUnitPrice(value)
-        } else if (id == "coin") {
-            setCoin(value)
+        }  else if (id == "module") {
+            setModule(value)
+        } else if (id == "func") {
+            setFunc(value)
         } else if (id == "path") {
             value = value.trim()
             setPath(value);

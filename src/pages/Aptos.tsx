@@ -2,7 +2,7 @@ import { Button, Divider, Grid, FormHelperText, Container, TextField, FormContro
 import myStore from "../state/aptos-state";
 
 function Aptos() {
-  const { mnemonic, errorMnemonic, errorText, path, publicKey, privateKey, address, errorTo, to, type, chainId, coin, coinTypes, amount, genMnemonic, handleChange, obtainAccount, signTx, signMessage, parseTx, expTimeStamp, message, signature, typeTags, gasUnitPrice,
+  const { mnemonic, errorMnemonic,errorText, path, publicKey, privateKey, address, errorTo, to, chainId, modules,func,module,typeTag ,typeTags, funcs,  amount, genMnemonic, handleChange, obtainAccount, signTx, signMessage, parseTx, expTimeStamp, message, signature,  gasUnitPrice,
     maxGasAmount, sequenceNumber, payload, txRaw
   } = myStore()
   return (
@@ -30,7 +30,7 @@ function Aptos() {
                   endAdornment: <InputAdornment position="end" onClick={genMnemonic}>Gen</InputAdornment>,
                 }}
               />
-              <FormHelperText></FormHelperText>
+              <FormHelperText>{errorText}</FormHelperText>
             </FormControl>
           </Grid>
           <Grid item xs={12}>
@@ -126,34 +126,14 @@ function Aptos() {
             </FormControl>
           </Grid>
           <Grid item xs={6}>
-
             <FormControl fullWidth sx={{ m: 1 }} variant="standard">
               <TextField
                 select
-                id="coin"
-                label="Coin"
-                name="coin"
-                value={coin}
-                helperText=" Tip : 0x1::coin::transfer"
-                onChange={handleChange}
-              >
-                {coinTypes.map((option: any) => (
-                  <MenuItem key={option} value={option}>
-                    {option}
-                  </MenuItem>
-                ))}
-              </TextField>
-            </FormControl>
-          </Grid>
-          <Grid item xs={6}>
-            <FormControl fullWidth sx={{ m: 1 }} variant="standard">
-              <TextField
-                select
-                id="type"
-                label="Type"
-                name="type"
-                value={type}
-                helperText=" Tip : 0x1::coin::transfer"
+                id="typeTag"
+                label="TypeTag"
+                name="typeTag"
+                value={typeTag}
+                helperText=" Tip : 0x1::aptos_coin::AptosCoin"
                 onChange={handleChange}
               >
                 {typeTags.map((option: any) => (
@@ -164,6 +144,47 @@ function Aptos() {
               </TextField>
             </FormControl>
           </Grid>
+          <Grid item xs={3}>
+            <FormControl fullWidth sx={{ m: 1 }} variant="standard">
+              <TextField
+                select
+                id="module"
+                label="Module"
+                name="module"
+                value={module}
+                helperText=" Tip : 0x1::aptos_account"
+                onChange={handleChange}
+              >
+                {modules.map((option: any) => (
+                  <MenuItem key={option} value={option}>
+                    {option}
+                  </MenuItem>
+                ))}
+              </TextField>
+            </FormControl>
+          </Grid>
+
+          <Grid item xs={3}>
+            <FormControl fullWidth sx={{ m: 1 }} variant="standard">
+              <TextField
+                select
+                id="func"
+                label="Func"
+                name="func"
+                value={func}
+                helperText=" Tip : transfer"
+                onChange={handleChange}
+              >
+                {funcs.map((option: any) => (
+                  <MenuItem key={option} value={option}>
+                    {option}
+                  </MenuItem>
+                ))}
+              </TextField>
+            </FormControl>
+          </Grid>
+
+
           <Grid item xs={6}>
             <FormControl fullWidth sx={{ m: 1 }} variant="standard">
               <TextField
