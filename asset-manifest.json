@@ -1,12 +1,12 @@
 {
   "files": {
-    "main.js": "/web-test-tool/static/js/main.cb914f61.js",
+    "main.js": "/web-test-tool/static/js/main.2f1f910e.js",
     "static/js/787.e1ea4f47.chunk.js": "/web-test-tool/static/js/787.e1ea4f47.chunk.js",
     "index.html": "/web-test-tool/index.html",
-    "main.cb914f61.js.map": "/web-test-tool/static/js/main.cb914f61.js.map",
+    "main.2f1f910e.js.map": "/web-test-tool/static/js/main.2f1f910e.js.map",
     "787.e1ea4f47.chunk.js.map": "/web-test-tool/static/js/787.e1ea4f47.chunk.js.map"
   },
   "entrypoints": [
-    "static/js/main.cb914f61.js"
+    "static/js/main.2f1f910e.js"
   ]
 }

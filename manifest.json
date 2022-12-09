@@ -1,6 +1,6 @@
 {
-  "short_name": "web-test-tool",
-  "name": "web-test-tool",
+  "short_name": "React App",
+  "name": "Create React App Sample",
   "icons": [
     {
       "src": "favicon.ico",
