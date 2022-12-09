@@ -70,7 +70,7 @@ interface EthereumState {
     handleChange: (event: any) => void;
 }
 const useStore = create<EthereumState>((set, get) => ({
-    typeTags: [APTOS_TYPE_TAGS.aptos_coin],
+    typeTags: ["",APTOS_TYPE_TAGS.aptos_coin],
     modules: [APTOS_MODULE["0x1::aptos_account"], APTOS_MODULE["0x1::coin"]],
     funcs: [APTOS_FUNCS.transfer],
     mnemonic: "gauge hole clog property soccer idea cycle stadium utility slice hold chief",

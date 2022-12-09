@@ -2,7 +2,7 @@ import { Button, Divider, Grid, FormHelperText, Container, TextField, FormContro
 import myStore from "../state/aptos-state";
 
 function Aptos() {
-  const { mnemonic, errorMnemonic,errorText, path, publicKey, privateKey, address, errorTo, to, chainId, modules,func,module,typeTag ,typeTags, funcs,  amount, genMnemonic, handleChange, obtainAccount, signTx, signMessage, parseTx, expTimeStamp, message, signature,  gasUnitPrice,
+  const { mnemonic, errorMnemonic, errorText, path, publicKey, privateKey, address, errorTo, to, chainId, modules, func, module, typeTag, typeTags, funcs, amount, genMnemonic, handleChange, obtainAccount, signTx, signMessage, parseTx, expTimeStamp, message, signature, gasUnitPrice,
     maxGasAmount, sequenceNumber, payload, txRaw
   } = myStore()
   return (
@@ -23,7 +23,7 @@ function Aptos() {
                 sx={{ width: 1 }}
                 multiline
                 rows={2}
-                value={mnemonic}
+                defaultValue={mnemonic}
                 error={errorMnemonic}
                 onChange={handleChange}
                 InputProps={{
@@ -40,7 +40,7 @@ function Aptos() {
                 label="Path"
                 color="success"
                 sx={{ width: 1 }}
-                value={path}
+                defaultValue={path}
                 onChange={handleChange}
                 helperText="Default Path: m/44'/637'/0'/0'/0'"
               />
@@ -53,7 +53,7 @@ function Aptos() {
                 label="PublicKey"
                 color="success"
                 sx={{ width: 1 }}
-                value={publicKey}
+                defaultValue={publicKey}
                 InputProps={{
                   readOnly: true,
                 }}
@@ -67,7 +67,7 @@ function Aptos() {
                 label="PrivateKey"
                 color="success"
                 sx={{ width: 1 }}
-                value={privateKey}
+                defaultValue={privateKey}
                 InputProps={{
                   readOnly: true,
                 }}
@@ -81,7 +81,7 @@ function Aptos() {
                 label="Address"
                 color="success"
                 sx={{ width: 1 }}
-                value={address}
+                defaultValue={address}
                 InputProps={{
                   readOnly: true,
                 }}
@@ -90,7 +90,7 @@ function Aptos() {
           </Grid>
           <Grid item xs={12}>
             <FormControl fullWidth sx={{ m: 1 }} variant="standard">
-              <Button onClick={obtainAccount} variant="contained" color="success" disabled={!(mnemonic.trim() != "" && path.trim() != "")} >Get Account</Button>
+              <Button id="obtainAccount" onClick={obtainAccount} variant="contained" color="success" disabled={!(mnemonic.trim() != "" && path.trim() != "")} >Get Account</Button>
             </FormControl>
           </Grid>
         </Grid>
@@ -103,7 +103,7 @@ function Aptos() {
                 label="From"
                 color="info"
                 sx={{ width: 1 }}
-                value={address}
+                defaultValue={address}
                 InputProps={{
                   readOnly: true,
                 }}
@@ -119,7 +119,7 @@ function Aptos() {
                 color="info"
                 error={errorTo}
                 sx={{ width: 1 }}
-                value={to}
+                defaultValue={to}
                 onChange={handleChange}
               />
               <FormHelperText>{errorText}</FormHelperText>
@@ -132,7 +132,7 @@ function Aptos() {
                 id="typeTag"
                 label="TypeTag"
                 name="typeTag"
-                value={typeTag}
+                defaultValue={typeTag}
                 helperText=" Tip : 0x1::aptos_coin::AptosCoin"
                 onChange={handleChange}
               >
@@ -151,7 +151,7 @@ function Aptos() {
                 id="module"
                 label="Module"
                 name="module"
-                value={module}
+                defaultValue={module}
                 helperText=" Tip : 0x1::aptos_account"
                 onChange={handleChange}
               >
@@ -171,7 +171,7 @@ function Aptos() {
                 id="func"
                 label="Func"
                 name="func"
-                value={func}
+                defaultValue={func}
                 helperText=" Tip : transfer"
                 onChange={handleChange}
               >
@@ -195,7 +195,7 @@ function Aptos() {
                 inputProps={{
                   min: 1,
                 }}
-                value={chainId}
+                defaultValue={chainId}
                 onChange={handleChange}
                 helperText="ChainId  1:mainnet ;  2:testnet; 38:devnet"
               />
@@ -211,7 +211,7 @@ function Aptos() {
                 inputProps={{
                   min: 1,
                 }}
-                value={gasUnitPrice}
+                defaultValue={gasUnitPrice}
                 onChange={handleChange}
               />
             </FormControl>
@@ -228,7 +228,7 @@ function Aptos() {
                 inputProps={{
                   min: 1,
                 }}
-                value={amount}
+                defaultValue={amount}
                 onChange={handleChange}
               />
             </FormControl>
@@ -245,7 +245,7 @@ function Aptos() {
                 inputProps={{
                   min: 21000
                 }}
-                value={maxGasAmount}
+                defaultValue={maxGasAmount}
                 onChange={handleChange}
                 InputProps={{
                   endAdornment: <InputAdornment position="end">Gas</InputAdornment>,
@@ -264,7 +264,7 @@ function Aptos() {
                 inputProps={{
                   min: 1,
                 }}
-                value={sequenceNumber}
+                defaultValue={sequenceNumber}
                 onChange={handleChange}
               />
             </FormControl>
@@ -279,7 +279,7 @@ function Aptos() {
                 inputProps={{
                   min: 1,
                 }}
-                value={expTimeStamp}
+                defaultValue={expTimeStamp}
                 onChange={handleChange}
               />
             </FormControl>
@@ -293,7 +293,7 @@ function Aptos() {
                 sx={{ width: 1 }}
                 multiline
                 rows={3}
-                value={payload}
+                defaultValue={payload}
                 InputProps={{
                   readOnly: true,
                 }}
@@ -309,7 +309,7 @@ function Aptos() {
                 sx={{ width: 1 }}
                 multiline
                 rows={2}
-                value={txRaw}
+                defaultValue={txRaw}
                 InputProps={{
                   readOnly: true,
                   endAdornment: <InputAdornment position="end" onClick={parseTx} >x</InputAdornment>,
@@ -320,7 +320,7 @@ function Aptos() {
         </Grid>
 
         <FormControl fullWidth sx={{ m: 1 }} variant="standard">
-          <Button onClick={signTx} variant="contained" color="info" disabled={address.trim() == ""} >sign transation</Button>
+          <Button id="signTx" onClick={signTx} variant="contained" color="info" disabled={address.trim() == ""} >sign transation</Button>
         </FormControl>
 
         <Divider><h3>Message-Sign</h3></Divider>
@@ -334,7 +334,7 @@ function Aptos() {
                 sx={{ width: 1 }}
                 multiline
                 rows={3}
-                value={message}
+                defaultValue={message}
                 onChange={handleChange}
               />
             </FormControl>
@@ -348,7 +348,7 @@ function Aptos() {
                 sx={{ width: 1 }}
                 multiline
                 rows={3}
-                value={signature}
+                defaultValue={signature}
                 InputProps={{
                   readOnly: true,
                 }}
@@ -357,7 +357,7 @@ function Aptos() {
           </Grid>
         </Grid>
         <FormControl fullWidth sx={{ m: 1 }} variant="standard">
-          <Button onClick={signMessage} variant="contained" color="secondary" disabled={address.trim() == ""} >sign message</Button>
+          <Button id="signMessage" onClick={signMessage} variant="contained" color="secondary" disabled={address.trim() == ""} >sign message</Button>
         </FormControl>
 
       </Container>
