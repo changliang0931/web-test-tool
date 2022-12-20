@@ -27,7 +27,7 @@ function Ethereum() {
                 sx={{ width: 1 }}
                 multiline
                 rows={2}
-                value={mnemonic}
+                defaultValue={mnemonic}
                 error={errorMnemonic}
                 onChange={handleChange}
                 InputProps={{
@@ -44,7 +44,7 @@ function Ethereum() {
                 label="Path"
                 color="success"
                 sx={{ width: 1 }}
-                value={path}
+                defaultValue={path}
                 onChange={handleChange}
                 helperText="Default Path: m/44'/60'/0'/0/0"
               />
@@ -57,8 +57,8 @@ function Ethereum() {
                 label="PublicKey"
                 color="success"
                 sx={{ width: 1 }}
-                value={publicKey}
                 InputProps={{
+                  value: publicKey,
                   readOnly: true,
                 }}
               />
@@ -71,8 +71,8 @@ function Ethereum() {
                 label="PrivateKey"
                 color="success"
                 sx={{ width: 1 }}
-                value={privateKey}
                 InputProps={{
+                  value: privateKey,
                   readOnly: true,
                 }}
               />
@@ -85,8 +85,9 @@ function Ethereum() {
                 label="Address"
                 color="success"
                 sx={{ width: 1 }}
-                value={address}
+                // value={address}
                 InputProps={{
+                  value: address,
                   readOnly: true,
                 }}
               />
@@ -94,7 +95,7 @@ function Ethereum() {
           </Grid>
           <Grid item xs={12}>
             <FormControl fullWidth sx={{ m: 1 }} variant="standard">
-              <Button onClick={obtainAccount} variant="contained" color="success" disabled={!(mnemonic.trim() != "" && path.trim() != "")} >Get Account</Button>
+              <Button  id="obtainAccount"  onClick={obtainAccount} variant="contained" color="success" disabled={!(mnemonic.trim() != "" && path.trim() != "")} >Get Account</Button>
             </FormControl>
           </Grid>
         </Grid>
@@ -108,8 +109,8 @@ function Ethereum() {
                 label="From"
                 color="info"
                 sx={{ width: 1 }}
-                value={address}
                 InputProps={{
+                  value: address,
                   readOnly: true,
                 }}
               />
@@ -124,7 +125,7 @@ function Ethereum() {
                 color="info"
                 error={errorTo}
                 sx={{ width: 1 }}
-                value={to}
+                defaultValue={to}
                 onChange={handleChange}
               />
               <FormHelperText>{errorText}</FormHelperText>
@@ -140,7 +141,7 @@ function Ethereum() {
                 inputProps={{
                   min: 1,
                 }}
-                value={chainId}
+                defaultValue={chainId}
                 onChange={handleChange}
               />
             </FormControl>
@@ -157,12 +158,12 @@ function Ethereum() {
                   min: 0,
                   max: 2
                 }}
-                value={type}
+                defaultValue={type}
                 helperText=" Tip : 0: legacy; 1:eip2930 ; 2:eip1559"
                 onChange={handleChange}
               >
                 {transactionTypes.map((option: any) => (
-                  <MenuItem key={option.value} value={option.value}>
+                  <MenuItem id={option.value} key={option.value} value={option.value}>
                     {option.label}
                   </MenuItem>
                 ))}
@@ -180,7 +181,7 @@ function Ethereum() {
                 inputProps={{
                   min: 0
                 }}
-                value={value}
+                defaultValue={value}
                 onChange={handleChange}
                 InputProps={{
                   endAdornment: <InputAdornment position="end">Wei</InputAdornment>,
@@ -199,7 +200,7 @@ function Ethereum() {
                 inputProps={{
                   min: 0
                 }}
-                value={nonce}
+                defaultValue={nonce}
                 onChange={handleChange}
               />
             </FormControl>
@@ -215,7 +216,7 @@ function Ethereum() {
                 inputProps={{
                   min: 1
                 }}
-                value={gasPrice}
+                defaultValue={gasPrice}
                 onChange={handleChange}
                 InputProps={{
                   endAdornment: <InputAdornment position="end">Wei/Gas</InputAdornment>,
@@ -234,7 +235,7 @@ function Ethereum() {
                 inputProps={{
                   min: 21000
                 }}
-                value={gasLimit}
+                defaultValue={gasLimit}
                 onChange={handleChange}
                 InputProps={{
                   endAdornment: <InputAdornment position="end">Gas</InputAdornment>,
@@ -253,7 +254,7 @@ function Ethereum() {
                 inputProps={{
                   min: 1
                 }}
-                value={maxPriorityFeePerGas}
+                defaultValue={maxPriorityFeePerGas}
                 onChange={handleChange}
                 InputProps={{
                   endAdornment: <InputAdornment position="end">Wei</InputAdornment>,
@@ -272,7 +273,7 @@ function Ethereum() {
                 inputProps={{
                   min: 1
                 }}
-                value={maxFeePerGas}
+                defaultValue={maxFeePerGas}
                 onChange={handleChange}
                 InputProps={{
                   endAdornment: <InputAdornment position="end">Wei</InputAdornment>,
@@ -291,7 +292,7 @@ function Ethereum() {
                 sx={{ width: 1 }}
                 multiline
                 rows={3}
-                value={data}
+                defaultValue={data}
                 onChange={handleChange}
               />
               <FormHelperText>{errorText}</FormHelperText>
@@ -307,7 +308,7 @@ function Ethereum() {
                 sx={{ width: 1 }}
                 multiline
                 rows={3}
-                value={txRaw}
+                defaultValue={txRaw}
                 InputProps={{
                   readOnly: true,
                   endAdornment: <InputAdornment position="end" onClick={parseTx} ><PsychologyAltOutlinedIcon fontSize="large" color="success"></PsychologyAltOutlinedIcon></InputAdornment>,
@@ -317,7 +318,7 @@ function Ethereum() {
           </Grid>
         </Grid>
         <FormControl fullWidth sx={{ m: 1 }} variant="standard">
-          <Button onClick={signTx} variant="contained" color="info" disabled={address.trim() == ""} >sign transation</Button>
+          <Button id="signTx" onClick={signTx} variant="contained" color="info" disabled={address.trim() == ""} >sign transation</Button>
         </FormControl>
         <Divider><h3>Message-Sign</h3></Divider>
         <Grid container spacing={2}>
@@ -330,7 +331,7 @@ function Ethereum() {
                 sx={{ width: 1 }}
                 multiline
                 rows={3}
-                value={message}
+                defaultValue={message}
                 onChange={handleChange}
               />
             </FormControl>
@@ -344,7 +345,7 @@ function Ethereum() {
                 sx={{ width: 1 }}
                 multiline
                 rows={3}
-                value={signature}
+                defaultValue={signature}
                 InputProps={{
                   readOnly: true,
                 }}
@@ -353,7 +354,7 @@ function Ethereum() {
           </Grid>
         </Grid>
         <FormControl fullWidth sx={{ m: 1 }} variant="standard">
-          <Button onClick={signMessage} variant="contained" color="secondary" disabled={address.trim() == ""} >sign message</Button>
+          <Button id="signMessage"  onClick={signMessage} variant="contained" color="secondary" disabled={address.trim() == ""} >sign message</Button>
         </FormControl>
       </Container>
     </div>

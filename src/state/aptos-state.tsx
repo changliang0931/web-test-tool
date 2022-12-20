@@ -153,8 +153,8 @@ const useStore = create<EthereumState>((set, get) => ({
         const account = new Aptos(mnemonic, path);
         const payload = account.getPayload(module, func, typeTag, to, amount);
         setPayload(account.payload2Hex(payload));
-        const txRaw = await account.signTransaction({ sequenceNumber: sequenceNumber, payload: payload, maxGasAmount: maxGasAmount, gasUnitPrice: gasUnitPrice, expTimeStamp: expTimeStamp, chainId: chainId, typeTag: typeTag, module: module,func:func, to: to, amount: amount });
-        setTxRaw(txRaw);
+        const tx = await account.signTransaction({ sequenceNumber: sequenceNumber, payload: payload, maxGasAmount: maxGasAmount, gasUnitPrice: gasUnitPrice, expTimeStamp: expTimeStamp, chainId: chainId, typeTag: typeTag, module: module,func:func, to: to, amount: amount });
+        setTxRaw(tx.raw);
         setErrorText("");
     },
     setSignature: (signature: string) => set({ signature: signature }),
