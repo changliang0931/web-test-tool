@@ -1,5 +1,5 @@
 import create from "zustand";
-import {Ethereum ,parseEthereumTx,generateMnemonic,validateMnemonic,isHexString,isEthereumAddress,ETHEREUM_DEFAULT_PATH,ETHEREUM_ZERO_ADDRESS ,BigNumber } from "wallet-web-lib"
+import { Ethereum, parseEthereumTx, generateMnemonic, validateMnemonic, isHexString, isEthereumAddress, ETHEREUM_DEFAULT_PATH, ETHEREUM_ZERO_ADDRESS, BigNumber } from "wallet-web-lib"
 interface EthereumState {
     mnemonic: string;
     path: string;
@@ -85,7 +85,7 @@ const useStore = create<EthereumState>((set, get) => ({
     ],
     mnemonic: "gauge hole clog property soccer idea cycle stadium utility slice hold chief",
     errorMnemonic: false,
-    path:  ETHEREUM_DEFAULT_PATH,
+    path: ETHEREUM_DEFAULT_PATH,
     errorText: "",
     publicKey: "",
     privateKey: "",
@@ -135,7 +135,7 @@ const useStore = create<EthereumState>((set, get) => ({
                 setErrorMnemonic(true)
                 return
             }
-            const account = new Ethereum (mnemonic, path)
+            const account = new Ethereum(mnemonic, path)
             setPublicKey(account.publicKey)
             setPrivateKey(account.privateKey)
             setAddress(account.address)
@@ -160,7 +160,7 @@ const useStore = create<EthereumState>((set, get) => ({
     signTx: async () => {
         const { setTxRaw, setErrorText, setErrorTo, setErrorData, mnemonic, path, to, address, nonce, gasLimit, gasPrice, maxFeePerGas, maxPriorityFeePerGas, data, value, type, chainId } = get()
         setTxRaw("");
-        const wallet = new Ethereum (mnemonic, path);
+        const wallet = new Ethereum(mnemonic, path);
         const isTo = isEthereumAddress(to);
         if (to.length > 0 && !isTo) {
             setErrorTo(true);
@@ -181,9 +181,8 @@ const useStore = create<EthereumState>((set, get) => ({
         let unSigTx = {
             to: to || ETHEREUM_ZERO_ADDRESS,
             from: address,
-            nonce: nonce || 1,
+            nonce: nonce || 0,
             gasLimit: gasLimit || 1000000000,
-            data: data || "0x",
             value: value || 1000000000,
             chainId: chainId || 1,
             type: type || 0,
@@ -194,6 +193,9 @@ const useStore = create<EthereumState>((set, get) => ({
         } else {
             unSigTx = Object.assign(unSigTx, { gasPrice: gasPrice || 21000 });
         }
+        if ((data.startsWith("0x") || data.startsWith("0X")) && data.length > 2) {
+            unSigTx = Object.assign(unSigTx, { data: data });
+        }
         let sigTx = await wallet.signTransaction(unSigTx);
         setErrorText("")
         setTxRaw(sigTx)
@@ -203,7 +205,7 @@ const useStore = create<EthereumState>((set, get) => ({
     signMessage: async () => {
         const { setSignature, mnemonic, path, message } = get()
         setSignature("")
-        const wallet = new Ethereum (mnemonic, path);
+        const wallet = new Ethereum(mnemonic, path);
         const signature = await wallet.signMessage(message);
         setSignature(signature)
     },
@@ -212,7 +214,7 @@ const useStore = create<EthereumState>((set, get) => ({
     parseTx: () => {
         const { setTxRaw, txRaw } = get();
         setTxRaw(parseEthereumTx(txRaw));
-    }, 
+    },
     handleChange: (event: any) => {
         const { setSignature, setErrorTo, setTo, setErrorData, setData, setValue, setChainId, setType, setAddress, setDisplay1559,
             setMaxFeePerGas, setMaxPriorityFeePerGas, setErrorMnemonic, setNonce, setGasLimit, setGasPrice, setMessage, setMnemonic, setPath, setPrivateKey, setPublicKey, setErrorText } = get()
