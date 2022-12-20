@@ -53,8 +53,8 @@ function Aptos() {
                 label="PublicKey"
                 color="success"
                 sx={{ width: 1 }}
-                defaultValue={publicKey}
                 InputProps={{
+                  value: publicKey,
                   readOnly: true,
                 }}
               />
@@ -67,8 +67,8 @@ function Aptos() {
                 label="PrivateKey"
                 color="success"
                 sx={{ width: 1 }}
-                defaultValue={privateKey}
                 InputProps={{
+                  value: privateKey,
                   readOnly: true,
                 }}
               />
@@ -81,8 +81,8 @@ function Aptos() {
                 label="Address"
                 color="success"
                 sx={{ width: 1 }}
-                defaultValue={address}
                 InputProps={{
+                  value: address,
                   readOnly: true,
                 }}
               />
@@ -103,8 +103,8 @@ function Aptos() {
                 label="From"
                 color="info"
                 sx={{ width: 1 }}
-                defaultValue={address}
                 InputProps={{
+                  value: address,
                   readOnly: true,
                 }}
               />
