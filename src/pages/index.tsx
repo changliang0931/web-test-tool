@@ -1,3 +1,3 @@
 const Pages: Array<string> =
-    ["aptos", "ethereum"]
+    ["aptos", "ethereum","eos"]
 export default Pages;
