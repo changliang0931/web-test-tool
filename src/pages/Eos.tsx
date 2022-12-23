@@ -121,10 +121,12 @@ function Eos() {
                 label="MaxNetUsageWords"
                 color="info"
                 sx={{ width: 1 }}
-                InputProps={{
-                  value: maxNetUsageWords,
-                  readOnly: true,
+                type="number"
+                inputProps={{
+                  min: 0
                 }}
+                defaultValue={maxNetUsageWords}
+                onChange={handleChange}
               />
             </FormControl>
           </Grid>
@@ -136,6 +138,10 @@ function Eos() {
                 label="MaxCpuUsageMs"
                 color="info"
                 sx={{ width: 1 }}
+                type="number"
+                inputProps={{
+                  min: 0
+                }}
                 defaultValue={maxCpuUsageMs}
                 onChange={handleChange}
               />
@@ -148,6 +154,10 @@ function Eos() {
                 label="DelaySec"
                 color="info"
                 sx={{ width: 1 }}
+                type="number"
+                inputProps={{
+                  min: 0
+                }}
                 defaultValue={delaySec}
                 onChange={handleChange}
               />
@@ -160,9 +170,6 @@ function Eos() {
                 id="expiration"
                 label="expiration"
                 color="info"
-                inputProps={{
-                  min: 1,
-                }}
                 defaultValue={expiration}
                 onChange={handleChange}
               />
@@ -227,9 +234,7 @@ function Eos() {
                 multiline
                 rows={1}
                 defaultValue={contextFreeActions}
-                InputProps={{
-                  readOnly: true,
-                }}
+                onChange={handleChange}
               />
             </FormControl>
           </Grid>
@@ -243,9 +248,7 @@ function Eos() {
                 multiline
                 rows={1}
                 defaultValue={contextFreeData}
-                InputProps={{
-                  readOnly: true,
-                }}
+                onChange={handleChange}
               />
             </FormControl>
           </Grid>
@@ -259,9 +262,7 @@ function Eos() {
                 multiline
                 rows={1}
                 defaultValue={transactionExtensions}
-                InputProps={{
-                  readOnly: true,
-                }}
+                onChange={handleChange}
               />
             </FormControl>
           </Grid> */}
@@ -275,17 +276,17 @@ function Eos() {
                 sx={{ width: 1 }}
                 multiline
                 rows={3}
-                defaultValue={signature}
+                // defaultValue={signature}
                 InputProps={{
+                  value: signature,
                   readOnly: true,
                 }}
               />
             </FormControl>
           </Grid>
         </Grid>
-
         <FormControl fullWidth sx={{ m: 1 }} variant="standard">
-          <Button id="signTx" onClick={signTx} variant="contained" color="info" disabled={publicKey.trim() == ""} >sign transation</Button>
+          <Button id="signTx" onClick={signTx} variant="contained" color="info" disabled={publicKey.trim() == "" && !errorActions} >sign transation</Button>
         </FormControl>
       </Container>
     </div>

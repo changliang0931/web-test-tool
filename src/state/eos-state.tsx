@@ -71,24 +71,7 @@ const useStore = create<EosState>((set, get) => ({
     delaySec: 0,
     contextFreeActions: [],
     contextFreeData: [],
-    actions: [
-        {
-            "account": "eosio.token",
-            "name": "transfer",
-            "authorization": [
-                {
-                    "actor": "zijunzimo555",
-                    "permission": "active"
-                }
-            ],
-            "data": {
-                "from": "zijunzimo555",
-                "to": "jubitertest4",
-                "quantity": "50.0000 EOS",
-                "memo": "from jwallet_core"
-            }
-        }
-    ],
+    actions: [{"account":"eosio.token","name":"transfer","authorization":[{"actor":"zijunzimo555","permission":"active"}],"data":{"from":"zijunzimo555","to":"jubitertest4","quantity":"50.0000 EOS","memo":"from jwallet_core"}}],
     errorActions: false,
     transactionExtensions: [],
     signature: "",
@@ -120,7 +103,7 @@ const useStore = create<EosState>((set, get) => ({
     setTransactionExtensions: (transactionExtensions: [number, string][]) => set({ transactionExtensions: transactionExtensions }),
     setSignature: (signature: string) => set({ signature: signature }),
     signTx: async () => {
-        const { setErrorText, setSignature, mnemonic, path, expiration, refBlockNum, refBlockPrefix, maxNetUsageWords, maxCpuUsageMs, delaySec, actions, contextFreeActions, contextFreeData, transactionExtensions } = get()
+        const { setErrorText, setSignature,setErrorActions, mnemonic, path, expiration, refBlockNum, refBlockPrefix, maxNetUsageWords, maxCpuUsageMs, delaySec, actions, contextFreeActions, contextFreeData, transactionExtensions } = get()
         const account = new Eos(mnemonic, path);
         let transaction: ApiInterfaces.Transaction = {
             expiration: expiration,
@@ -141,7 +124,8 @@ const useStore = create<EosState>((set, get) => ({
 
     genMnemonic: () => {
         const { setMnemonic, setErrorMnemonic, setErrorText } = get()
-        setMnemonic(generateMnemonic())
+        const mnemoic = generateMnemonic()
+        setMnemonic(mnemoic)
         setErrorMnemonic(false)
         setErrorText("")
     },
@@ -187,23 +171,30 @@ const useStore = create<EosState>((set, get) => ({
         } else if (id == "expiration") {
             setExpiration(value);
         } else if (id == "refBlockNum") {
-            setRefBlockNum(value);
+            setRefBlockNum(parseInt(value));
         } else if (id == "refBlockPrefix") {
-            setRefBlockPrefix(value);
+            setRefBlockPrefix(parseInt(value));
         } else if (id == "maxNetUsageWords") {
-            setMaxNetUsageWords(value);
+            setMaxNetUsageWords(parseInt(value));
         } else if (id == "maxCpuUsageMs") {
-            setMaxCpuUsageMs(value);
+            setMaxCpuUsageMs(parseInt(value));
         } else if (id == "delaySec") {
-            setDelaySec(value);
+            setDelaySec(parseInt(value));
         } else if (id == "actions") {
             try {
-                JSON.parse(value);
+                if(value.trim() == "" ){
+                    setErrorActions(true);
+                    // setActions();
+                    setErrorText("Actions  invalid ")
+                    return
+                }
+                const actions = JSON.parse(value);
                 setErrorActions(false);
-                setActions(JSON.parse(value));
-            } catch (error) {
+                setActions(actions);
+                setErrorText("")
+            } catch (error:any) {
                 setErrorActions(true);
-                setErrorText("Actions  invalid ")
+                setErrorText("Actions  invalid "+ error.message)
             }
         } else if (id == "transactionExtensions") {
             setTransactionExtensions(value);
