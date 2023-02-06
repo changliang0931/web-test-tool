@@ -1,15 +1,10 @@
-import { Button, Divider, Grid, FormHelperText, Container, TextField, FormControl, InputAdornment, MenuItem, } from "@mui/material";
+import { Button, Divider, Grid, FormHelperText, Container, TextField, FormControl, InputAdornment, } from "@mui/material";
 import tronStore from "../state/tron-state";
 
 function Tron() {
   const { mnemonic, errorMnemonic, errorText, path, publicKey, privateKey, address,
-
-    // maxNetUsageWords, maxCpuUsageMs, delaySec, expiration, refBlockNum, refBlockPrefix, actions, errorActions, contextFreeActions, transactionExtensions, contextFreeData, 
-
-
-    // signature,
-    genMnemonic, handleChange, obtainAccount,
-    // signTx, 
+    refBlockBytes, refBlockNum, refBlockHash, expiration, timestamp, feeLimit, contracts, errorContracts, signature,
+    genMnemonic, handleChange, obtainAccount, signTx,
   } = tronStore()
   return (
     <div >
@@ -100,56 +95,16 @@ function Tron() {
             </FormControl>
           </Grid>
         </Grid>
-        {/* <Divider><h3>Transaction-Sign</h3></Divider>
+        <Divider><h3>Transaction-Sign</h3></Divider>
         <Grid container spacing={2}>
-          <Grid item xs={12}>
-            <FormControl fullWidth sx={{ m: 1 }} variant="standard">
-              <TextField
-                select
-                id="chainId"
-                label="ChainId"
-                name="chainId"
-                defaultValue={chainId}
-                helperText=" Tip : Mainnet: aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906"
-                onChange={handleChange}
-              >
-                {chainIds.map((option: any) => (
-                  <MenuItem id={option} key={option} value={option}>
-                    {option}
-                  </MenuItem>
-                ))}
-              </TextField>
-            </FormControl>
-          </Grid>
           <Grid item xs={4}>
             <FormControl fullWidth sx={{ m: 1 }} variant="standard">
               <TextField
-                id="maxNetUsageWords"
-                label="MaxNetUsageWords"
+                id="refBlockHash"
+                label="RefBlockHash"
                 color="info"
                 sx={{ width: 1 }}
-                type="number"
-                inputProps={{
-                  min: 0
-                }}
-                defaultValue={maxNetUsageWords}
-                onChange={handleChange}
-              />
-            </FormControl>
-          </Grid>
-
-          <Grid item xs={4}>
-            <FormControl fullWidth sx={{ m: 1 }} variant="standard">
-              <TextField
-                id="maxCpuUsageMs"
-                label="MaxCpuUsageMs"
-                color="info"
-                sx={{ width: 1 }}
-                type="number"
-                inputProps={{
-                  min: 0
-                }}
-                defaultValue={maxCpuUsageMs}
+                defaultValue={refBlockHash}
                 onChange={handleChange}
               />
             </FormControl>
@@ -157,25 +112,36 @@ function Tron() {
           <Grid item xs={4}>
             <FormControl fullWidth sx={{ m: 1 }} variant="standard">
               <TextField
-                id="delaySec"
-                label="DelaySec"
+                id="refBlockBytes"
+                label="RefBlockBytes"
+                color="info"
+                sx={{ width: 1 }}
+                defaultValue={refBlockBytes}
+                onChange={handleChange}
+              />
+            </FormControl>
+          </Grid>
+          <Grid item xs={4}>
+            <FormControl fullWidth sx={{ m: 1 }} variant="standard">
+              <TextField
+                id="refBlockNum"
+                label="RefBlockNum"
                 color="info"
                 sx={{ width: 1 }}
                 type="number"
                 inputProps={{
                   min: 0
                 }}
-                defaultValue={delaySec}
+                defaultValue={refBlockNum}
                 onChange={handleChange}
               />
-
             </FormControl>
           </Grid>
           <Grid item xs={4}>
             <FormControl fullWidth sx={{ m: 1 }} variant="standard">
               <TextField
                 id="expiration"
-                label="expiration"
+                label="Expiration"
                 color="info"
                 defaultValue={expiration}
                 onChange={handleChange}
@@ -186,15 +152,11 @@ function Tron() {
           <Grid item xs={4}>
             <FormControl fullWidth sx={{ m: 1 }} variant="standard">
               <TextField
-                id="refBlockNum"
-                label="RefBlockNum"
+                id="timestamp"
+                label="Timestamp"
                 color="info"
                 type="number"
-                inputProps={{
-                  min: 10000,
-                  max: 99999
-                }}
-                defaultValue={refBlockNum}
+                defaultValue={timestamp}
                 onChange={handleChange}
               />
             </FormControl>
@@ -202,37 +164,35 @@ function Tron() {
           <Grid item xs={4}>
             <FormControl fullWidth sx={{ m: 1 }} variant="standard">
               <TextField
-                id="refBlockPrefix"
-                label="RefBlockPrefix"
+                id="feeLimit"
+                label="FeeLimit"
                 color="info"
                 type="number"
                 inputProps={{
-                  min: 100000000,
+                  min: 0,
                   max: 999999999
                 }}
-                defaultValue={refBlockPrefix}
+                defaultValue={feeLimit}
                 onChange={handleChange}
               />
             </FormControl>
           </Grid>
           <Grid item xs={12}>
-            <FormControl fullWidth sx={{ m: 1 }} error={errorActions} variant="standard">
+            <FormControl fullWidth sx={{ m: 1 }} error={errorContracts} variant="standard">
               <TextField
-                id="actions"
-                label="Actions"
+                id="contracts"
+                label="Contracts"
                 color="info"
-                error={errorActions}
+                error={errorContracts}
                 sx={{ width: 1 }}
                 multiline
                 rows={3}
-                defaultValue={JSON.stringify(actions)}
+                defaultValue={JSON.stringify(contracts)}
                 onChange={handleChange}
               />
               <FormHelperText>{errorText}</FormHelperText>
             </FormControl>
           </Grid>
-        
-
           <Grid item xs={12}>
             <FormControl fullWidth sx={{ m: 1 }} variant="standard">
               <TextField
@@ -252,8 +212,8 @@ function Tron() {
           </Grid>
         </Grid>
         <FormControl fullWidth sx={{ m: 1 }} variant="standard">
-          <Button id="signTx" onClick={signTx} variant="contained" color="info" disabled={publicKey.trim() == "" && !errorActions} >sign transation</Button>
-        </FormControl> */}
+          <Button id="signTx" onClick={signTx} variant="contained" color="info" disabled={publicKey.trim() == "" && !errorContracts} >sign transation</Button>
+        </FormControl>
       </Container>
     </div>
   );

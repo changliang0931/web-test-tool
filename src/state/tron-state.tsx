@@ -9,20 +9,15 @@ interface TronState {
     privateKey: string;
     address: string;
 
-
-    // expiration: string;
-    // refBlockNum: number;
-    // refBlockPrefix: number;
-    // maxNetUsageWords: number;
-    // maxCpuUsageMs: number;
-    // delaySec: number;
-    // contextFreeActions: Action[];
-    // contextFreeData?: Uint8Array[];
-    // actions: Action[];
-    // errorActions: boolean;
-    // transactionExtensions?: [number, string][];
+    refBlockBytes: string;
+    refBlockNum: number;
+    refBlockHash: string;
+    expiration: string;
+    timestamp: number;
+    feeLimit: number;
+    contracts: Object[];
+    errorContracts: boolean;
     signature: string;
-
     setMnemonic: (mnemonic: string) => void;
     setErrorMnemonic: (error: boolean) => void;
     setErrorText: (errorMsg: string) => void;
@@ -31,17 +26,15 @@ interface TronState {
     setPublicKey: (pubkey: string) => void;
     setPrivateKey: (priKey: string) => void;
     setAddress: (address: string) => void;
-    // setExpiration: (expiration: string) => void;
-    // setRefBlockNum: (refBlockNum: number) => void;
-    // setRefBlockPrefix: (refBlockPrefix: number) => void;
-    // setMaxNetUsageWords: (maxNetUsageWords: number) => void;
-    // setMaxCpuUsageMs: (maxCpuUsageMs: number) => void;
-    // setDelaySec: (delaySec: number) => void;
-    // setContextFreeActions: (contextFreeActions: Array<any>) => void;
-    // setContextFreeData: (contextFreeData: Uint8Array[]) => void;
-    // setActions: (actions: Action[]) => void;
-    // setErrorActions: (error: boolean) => void;
-    // setTransactionExtensions: (transactionExtensions: [number, string][]) => void;
+
+    setRefBlockBytes: (refBlockBytes: string) => void;
+    setRefBlockNum: (refBlockNum: number) => void;
+    setRefBlockHash: (refBlockHash: string) => void;
+    setExpiration: (expiration: string) => void;
+    setTimestamp: (timestamp: number) => void;
+    setFeeLimit: (feeLimit: number) => void;
+    setContracts: (contracts: []) => void;
+    setErrorContracts: (errorContracts: boolean) => void;
     setSignature: (signature: string) => void;
 
     genMnemonic: () => void;
@@ -58,17 +51,14 @@ const useStore = create<TronState>((set: any, get: any) => ({
     publicKey: "",
     privateKey: "",
     address: "",
-    // expiration: "2020-08-06T09:50:56",
-    // refBlockNum: 13949,
-    // refBlockPrefix: 241701672,
-    // maxNetUsageWords: 0,
-    // maxCpuUsageMs: 0,
-    // delaySec: 0,
-    // contextFreeActions: [],
-    // contextFreeData: [],
-    // actions: [{"account":"eosio.token","name":"transfer","authorization":[{"actor":"zijunzimo555","permission":"active"}],"data":{"from":"zijunzimo555","to":"jubitertest4","quantity":"50.0000 EOS","memo":"from jwallet_core"}}],
-    // errorActions: false,
-    // transactionExtensions: [],
+    refBlockBytes: "9148",
+    refBlockNum: 0,
+    refBlockHash: "2b72b05b7674b257",
+    expiration: "2021-09-28T14:46:18",
+    timestamp: 1603346193445,
+    feeLimit: 0,
+    contracts: [{ "name": "transfer", "to_address": "TLb2e2uRhzxvrxMcC8VkL2N7zmxYyg3Vfc", "amount": 1000000000000000000 }],
+    errorContracts: false,
     signature: "",
     setMnemonic: (mnemonic: string) => {
         const { setErrorMnemonic, setErrorText } = get()
@@ -84,38 +74,34 @@ const useStore = create<TronState>((set: any, get: any) => ({
     setPublicKey: (pubKey: string) => set({ publicKey: pubKey }),
     setPrivateKey: (priKey: string) => set({ privateKey: priKey }),
     setAddress: (address: string) => set({ address: address }),
-    // setExpiration: (expiration: string) => set({ expiration: expiration }),
-    // setRefBlockNum: (refBlockNum: number) => set({ refBlockNum: refBlockNum }),
-    // setRefBlockPrefix: (refBlockPrefix: number) => set({ refBlockPrefix: refBlockPrefix }),
-    // setMaxNetUsageWords: (maxNetUsageWords: number) => set({ maxNetUsageWords: maxNetUsageWords }),
-    // setMaxCpuUsageMs: (maxCpuUsageMs: number) => set({ maxCpuUsageMs: maxCpuUsageMs }),
-    // setDelaySec: (delaySec: number) => set({ delaySec: delaySec }),
-    // setContextFreeActions: (contextFreeActions: Action[]) => set({ contextFreeActions: contextFreeActions }),
-    // setContextFreeData: (contextFreeData: Uint8Array[]) => set({ contextFreeData: contextFreeData }),
-    // setActions: (actions: Action[]) => set({ actions: actions }),
-    // setErrorActions: (error: boolean) => set({ errorActions: error }),
-    // setTransactionExtensions: (transactionExtensions: [number, string][]) => set({ transactionExtensions: transactionExtensions }),
+    setRefBlockBytes: (refBlockBytes: string) => set({ refBlockBytes: refBlockBytes }),
+    setRefBlockNum: (refBlockNum: number) => set({ refBlockNum: refBlockNum }),
+    setRefBlockHash: (refBlockHash: string) => set({ refBlockHash: refBlockHash }),
+    setExpiration: (expiration: string) => set({ expiration: expiration }),
+    setTimestamp: (timestamp: number) => set({ timestamp: timestamp }),
+    setFeeLimit: (feeLimit: number) => set({ feeLimit: feeLimit }),
     setSignature: (signature: string) => set({ signature: signature }),
+    setContracts: (contracts: Object[]) => set({ contracts: contracts }),
+    setErrorContracts: (errorContracts: boolean) => set({ errorContracts: errorContracts }),
     signTx: async () => {
-        // const { setErrorText, setSignature, mnemonic, path, 
-        //     // expiration, refBlockNum, refBlockPrefix, maxNetUsageWords, maxCpuUsageMs, delaySec, actions, contextFreeActions, contextFreeData, transactionExtensions 
-        // } = get()
-        // const account = new Tron(mnemonic, path);
-        // // let transaction: ApiInterfaces.Transaction = {
-        // //     expiration: expiration,
-        // //     ref_block_num: refBlockNum,
-        // //     ref_block_prefix: refBlockPrefix,
-        // //     max_net_usage_words: maxNetUsageWords || 0,
-        // //     max_cpu_usage_ms: maxCpuUsageMs || 0,
-        // //     delay_sec: delaySec || 0,
-        // //     actions: actions,
-        // // }
-        // setSignature("")
-        // const { signatures } = await account.signTransaction(transaction);
-        // setSignature(signatures)
-        // setErrorText("");
+        const { setErrorText, setSignature, mnemonic, path,
+            refBlockBytes, refBlockNum, refBlockHash, expiration, timestamp, feeLimit, contracts
+        } = get()
+        const account = new Tron(mnemonic, path);
+        let transaction = {
+            ref_block_bytes: refBlockBytes || "9148",
+            ref_block_num: refBlockNum || 0,
+            ref_block_hash: refBlockHash || "2b72b05b7674b257",
+            expiration: expiration || "2021-09-28T14:46:18",
+            timestamp: timestamp || 1603346193445,
+            fee_limit: feeLimit || 0,
+            contracts: contracts
+        }
+        setSignature("")
+        const signaturer = await account.signTransaction(transaction);
+        setSignature(JSON.stringify(signaturer))
+        setErrorText("");
     },
-
     genMnemonic: () => {
         const { setMnemonic, setErrorMnemonic, setErrorText } = get()
         const mnemoic = generateMnemonic()
@@ -144,7 +130,7 @@ const useStore = create<TronState>((set: any, get: any) => ({
     },
     handleChange: (event: any) => {
         const { setAddress, setErrorMnemonic, setMnemonic, setPath, setPrivateKey, setPublicKey, setErrorText,
-            // setExpiration, setRefBlockNum, setRefBlockPrefix, setMaxNetUsageWords, setMaxCpuUsageMs, setDelaySec, setContextFreeActions, setContextFreeData, setActions, setErrorActions, setTransactionExtensions 
+            setRefBlockBytes, setRefBlockNum, setRefBlockHash, setExpiration, setTimestamp, setFeeLimit, setErrorContracts, setContracts
         } = get()
         let value = event.target.value;
         let id = event.target.id || event.target.name;
@@ -162,42 +148,33 @@ const useStore = create<TronState>((set: any, get: any) => ({
             setPublicKey(value);
         } else if (id === "address") {
             setAddress(value);
-            // } else if (id === "chainId") {
-            //     setChainId(value)
-            // } else if (id === "expiration") {
-            //     setExpiration(value);
-            // } else if (id === "refBlockNum") {
-            //     setRefBlockNum(parseInt(value));
-            // } else if (id === "refBlockPrefix") {
-            //     setRefBlockPrefix(parseInt(value));
-            // } else if (id === "maxNetUsageWords") {
-            //     setMaxNetUsageWords(parseInt(value));
-            // } else if (id === "maxCpuUsageMs") {
-            //     setMaxCpuUsageMs(parseInt(value));
-            // } else if (id === "delaySec") {
-            //     setDelaySec(parseInt(value));
-            // } else if (id === "actions") {
-            //     try {
-            //         if(value.trim() === "" ){
-            //             setErrorActions(true);
-            //             // setActions();
-            //             setErrorText("Actions  invalid ")
-            //             return
-            //         }
-            //         const actions = JSON.parse(value);
-            //         setErrorActions(false);
-            //         setActions(actions);
-            //         setErrorText("")
-            //     } catch (error:any) {
-            //         setErrorActions(true);
-            //         setErrorText("Actions  invalid "+ error.message)
-            //     }
-            // } else if (id === "transactionExtensions") {
-            //     setTransactionExtensions(value);
-            // } else if (id === "contextFreeActions") {
-            //     setContextFreeActions(value);
-            // } else if (id === "contextFreeData") {
-            //     setContextFreeData(value);
+        } else if (id === "expiration") {
+            setExpiration(value);
+        } else if (id === "refBlockNum") {
+            setRefBlockNum(parseInt(value));
+        } else if (id === "refBlockBytes") {
+            setRefBlockBytes(value);
+        } else if (id === "refBlockHash") {
+            setRefBlockHash(value);
+        } else if (id === "timestamp") {
+            setTimestamp(parseInt(value));
+        } else if (id === "feeLimit") {
+            setFeeLimit(parseInt(value));
+        } else if (id === "contracts") {
+            try {
+                if (value.trim() === "") {
+                    setErrorContracts(true);
+                    setErrorText("Contracts  invalid ")
+                    return
+                }
+                const contracts = JSON.parse(value);
+                setErrorContracts(false);
+                setContracts(contracts);
+                setErrorText("")
+            } catch (error: any) {
+                setErrorContracts(true);
+                setErrorText("Contracts  invalid " + error.message)
+            }
         }
     }
 }));
