@@ -152,35 +152,35 @@ const useStore = create<EosState>((set, get) => ({
         const { setAddress, setErrorMnemonic, setMnemonic, setChainId, setPath, setPrivateKey, setPublicKey, setErrorText, setExpiration, setRefBlockNum, setRefBlockPrefix, setMaxNetUsageWords, setMaxCpuUsageMs, setDelaySec, setContextFreeActions, setContextFreeData, setActions, setErrorActions, setTransactionExtensions } = get()
         let value = event.target.value;
         let id = event.target.id || event.target.name;
-        if (id == "mnemonic") {
+        if (id === "mnemonic") {
             if (validateMnemonic(value)) {
                 setErrorMnemonic(false)
                 setErrorText("")
             }
             setMnemonic(value);
-        } else if (id == "path") {
+        } else if (id === "path") {
             setPath(value.trim());
-        } else if (id == "privateKey") {
+        } else if (id === "privateKey") {
             setPrivateKey(value);
-        } else if (id == "publicKey") {
+        } else if (id === "publicKey") {
             setPublicKey(value);
-        } else if (id == "address") {
+        } else if (id === "address") {
             setAddress(value);
-        } else if (id == "chainId") {
+        } else if (id === "chainId") {
             setChainId(value)
-        } else if (id == "expiration") {
+        } else if (id === "expiration") {
             setExpiration(value);
-        } else if (id == "refBlockNum") {
+        } else if (id === "refBlockNum") {
             setRefBlockNum(parseInt(value));
-        } else if (id == "refBlockPrefix") {
+        } else if (id === "refBlockPrefix") {
             setRefBlockPrefix(parseInt(value));
-        } else if (id == "maxNetUsageWords") {
+        } else if (id === "maxNetUsageWords") {
             setMaxNetUsageWords(parseInt(value));
-        } else if (id == "maxCpuUsageMs") {
+        } else if (id === "maxCpuUsageMs") {
             setMaxCpuUsageMs(parseInt(value));
-        } else if (id == "delaySec") {
+        } else if (id === "delaySec") {
             setDelaySec(parseInt(value));
-        } else if (id == "actions") {
+        } else if (id === "actions") {
             try {
                 if(value.trim() == "" ){
                     setErrorActions(true);
@@ -196,11 +196,11 @@ const useStore = create<EosState>((set, get) => ({
                 setErrorActions(true);
                 setErrorText("Actions  invalid "+ error.message)
             }
-        } else if (id == "transactionExtensions") {
+        } else if (id === "transactionExtensions") {
             setTransactionExtensions(value);
-        } else if (id == "contextFreeActions") {
+        } else if (id === "contextFreeActions") {
             setContextFreeActions(value);
-        } else if (id == "contextFreeData") {
+        } else if (id === "contextFreeData") {
             setContextFreeData(value);
         }
     }

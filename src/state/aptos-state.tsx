@@ -174,41 +174,41 @@ const useStore = create<EthereumState>((set, get) => ({
         const { setAddress, setErrorMnemonic, setMnemonic, setGasUnitPrice, setChainId, setModule, setTypeTag, setPath, setPrivateKey, setPublicKey, setTo, setErrorText, setFunc,setMessage, setSignature, setAmount, setSequenceNumber, setExpTimeStamp } = get()
         let value = event.target.value;
         let id = event.target.id || event.target.name;
-        if (id == "to") {
+        if (id === "to") {
             value = value.trim()
             setTo(value);
-        } else if (id == "amount") {
+        } else if (id === "amount") {
             setAmount(value)
-        } else if (id == "chainId") {
+        } else if (id === "chainId") {
             setChainId(value)
-        } else if (id == "typeTag") {
+        } else if (id === "typeTag") {
             setTypeTag(value)
-        } else if (id == "expTimeStamp") {
+        } else if (id === "expTimeStamp") {
             setExpTimeStamp(value)
-        } else if (id == "sequenceNumber") {
+        } else if (id === "sequenceNumber") {
             setSequenceNumber(value)
-        } else if (id == "gasUnitPrice") {
+        } else if (id === "gasUnitPrice") {
             setGasUnitPrice(value)
-        }  else if (id == "module") {
+        }  else if (id === "module") {
             setModule(value)
-        } else if (id == "func") {
+        } else if (id === "func") {
             setFunc(value)
-        } else if (id == "path") {
+        } else if (id === "path") {
             value = value.trim()
             setPath(value);
-        } else if (id == "mnemonic") {
+        } else if (id === "mnemonic") {
             if (validateMnemonic(value)) {
                 setErrorMnemonic(false)
                 setErrorText("")
             }
             setMnemonic(value);
-        } else if (id == "privateKey") {
+        } else if (id === "privateKey") {
             setPrivateKey(value);
-        } else if (id == "publicKey") {
+        } else if (id === "publicKey") {
             setPublicKey(value);
-        } else if (id == "address") {
+        } else if (id === "address") {
             setAddress(value);
-        } else if (id == "message") {
+        } else if (id === "message") {
             setMessage(value.trim());
             setSignature("");
         }

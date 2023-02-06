@@ -173,7 +173,7 @@ const useStore = create<EthereumState>((set, get) => ({
             setErrorText("Data invalid")
             return
         }
-        if (to.length == 0 && data.length < 3) {
+        if (to.length === 0 && data.length < 3) {
             setErrorText("Data and To cannot be empty at the same time.");
             setErrorData(true)
             return
@@ -188,7 +188,7 @@ const useStore = create<EthereumState>((set, get) => ({
             type: type || 0,
         }
 
-        if (type == 2) {
+        if (type === 2) {
             unSigTx = Object.assign(unSigTx, { maxPriorityFeePerGas: maxPriorityFeePerGas || 100000, ßmaxFeePerGas: maxFeePerGas || 100000 });
         } else {
             unSigTx = Object.assign(unSigTx, { gasPrice: gasPrice || 21000 });
@@ -220,54 +220,54 @@ const useStore = create<EthereumState>((set, get) => ({
             setMaxFeePerGas, setMaxPriorityFeePerGas, setErrorMnemonic, setNonce, setGasLimit, setGasPrice, setMessage, setMnemonic, setPath, setPrivateKey, setPublicKey, setErrorText } = get()
         let value = event.target.value;
         let id = event.target.id || event.target.name;
-        if (id == "to") {
+        if (id === "to") {
             value = value.trim()
             if (isEthereumAddress(value)) {
                 setErrorTo(false);
             }
             setTo(value);
-        } else if (id == "data") {
+        } else if (id === "data") {
             value = value.trim()
             if (isHexString(value)) {
                 setErrorData(false);
             }
             setData(value);
-        } else if (id == "value") {
+        } else if (id === "value") {
             setValue(value)
-        } else if (id == "chainId") {
+        } else if (id === "chainId") {
             setChainId(value)
-        } else if (id == "type") {
+        } else if (id === "type") {
             setType(value)
             setDisplay1559("none")
-            if (value == 2) {
+            if (value === 2) {
                 setDisplay1559("block")
             }
-        } else if (id == "maxFeePerGas") {
+        } else if (id === "maxFeePerGas") {
             setMaxFeePerGas(value)
-        } else if (id == "maxPriorityFeePerGas") {
+        } else if (id === "maxPriorityFeePerGas") {
             setMaxPriorityFeePerGas(value)
-        } else if (id == "nonce") {
+        } else if (id === "nonce") {
             setNonce(value)
-        } else if (id == "gasPrice") {
+        } else if (id === "gasPrice") {
             setGasPrice(value)
-        } else if (id == "gasLimit") {
+        } else if (id === "gasLimit") {
             setGasLimit(value)
-        } else if (id == "path") {
+        } else if (id === "path") {
             value = value.trim()
             setPath(value);
-        } else if (id == "mnemonic") {
+        } else if (id === "mnemonic") {
             if (validateMnemonic(value)) {
                 setErrorMnemonic(false)
                 setErrorText("")
             }
             setMnemonic(value);
-        } else if (id == "privateKey") {
+        } else if (id === "privateKey") {
             setPrivateKey(value);
-        } else if (id == "publicKey") {
+        } else if (id === "publicKey") {
             setPublicKey(value);
-        } else if (id == "address") {
+        } else if (id === "address") {
             setAddress(value);
-        } else if (id == "message") {
+        } else if (id === "message") {
             setMessage(value.trim());
             setSignature("");
         }
