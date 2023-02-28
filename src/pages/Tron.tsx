@@ -3,7 +3,7 @@ import tronStore from "../state/tron-state";
 
 function Tron() {
   const { mnemonic, errorMnemonic, errorText, path, publicKey, privateKey, address,
-    refBlockBytes, refBlockNum, refBlockHash, expiration, timestamp, feeLimit, contracts, errorContracts, signature,
+    refBlockBytes, refBlockNum, refBlockHash, expiration, timestamp, feeLimit, contracts, errorContracts, payload, signature,
     genMnemonic, handleChange, obtainAccount, signTx,
   } = tronStore()
   return (
@@ -27,9 +27,9 @@ function Tron() {
                 defaultValue={mnemonic}
                 error={errorMnemonic}
                 onChange={handleChange}
-                InputProps={{
-                  endAdornment: <InputAdornment position="end" onClick={genMnemonic}>Gen</InputAdornment>,
-                }}
+              // InputProps={{
+              //   endAdornment: <InputAdornment position="end" onClick={genMnemonic}>Gen</InputAdornment>,
+              // }}
               />
               <FormHelperText>{errorText}</FormHelperText>
             </FormControl>
@@ -191,6 +191,23 @@ function Tron() {
                 onChange={handleChange}
               />
               <FormHelperText>{errorText}</FormHelperText>
+            </FormControl>
+          </Grid>
+          <Grid item xs={12}>
+            <FormControl fullWidth sx={{ m: 1 }} variant="standard">
+              <TextField
+                id="payload"
+                label="Payload"
+                color="info"
+                sx={{ width: 1 }}
+                multiline
+                rows={3}
+                // defaultValue={signature}
+                InputProps={{
+                  value: payload,
+                  readOnly: true,
+                }}
+              />
             </FormControl>
           </Grid>
           <Grid item xs={12}>

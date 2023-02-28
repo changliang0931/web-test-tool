@@ -30,9 +30,9 @@ function Ethereum() {
                 defaultValue={mnemonic}
                 error={errorMnemonic}
                 onChange={handleChange}
-                InputProps={{
-                  endAdornment: <InputAdornment position="end" onClick={genMnemonic} >Gen</InputAdornment>,
-                }}
+              // InputProps={{
+              //   endAdornment: <InputAdornment position="end" onClick={genMnemonic} >Gen</InputAdornment>,
+              // }}
               />
               <FormHelperText>{errorText}</FormHelperText>
             </FormControl>
@@ -95,7 +95,7 @@ function Ethereum() {
           </Grid>
           <Grid item xs={12}>
             <FormControl fullWidth sx={{ m: 1 }} variant="standard">
-              <Button  id="obtainAccount"  onClick={obtainAccount} variant="contained" color="success" disabled={!(mnemonic.trim() != "" && path.trim() != "")} >Get Account</Button>
+              <Button id="obtainAccount" onClick={obtainAccount} variant="contained" color="success" disabled={!(mnemonic.trim() != "" && path.trim() != "")} >Get Account</Button>
             </FormControl>
           </Grid>
         </Grid>
@@ -354,7 +354,7 @@ function Ethereum() {
           </Grid>
         </Grid>
         <FormControl fullWidth sx={{ m: 1 }} variant="standard">
-          <Button id="signMessage"  onClick={signMessage} variant="contained" color="secondary" disabled={address.trim() == ""} >sign message</Button>
+          <Button id="signMessage" onClick={signMessage} variant="contained" color="secondary" disabled={address.trim() == ""} >sign message</Button>
         </FormControl>
       </Container>
     </div>

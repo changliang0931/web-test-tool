@@ -31,9 +31,9 @@ function Dot() {
                 defaultValue={mnemonic}
                 error={errorMnemonic}
                 onChange={handleChange}
-                InputProps={{
-                  endAdornment: <InputAdornment position="end" onClick={genMnemonic}>Gen</InputAdornment>,
-                }}
+              // InputProps={{
+              //   endAdornment: <InputAdornment position="end" onClick={genMnemonic}>Gen</InputAdornment>,
+              // }}
               />
               <FormHelperText>{errorText}</FormHelperText>
             </FormControl>

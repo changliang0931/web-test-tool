@@ -25,7 +25,6 @@ const Menus = () => {
                             }}
                         >
                             <Tooltip title={text} placement="right-end">
-                                {/* {index % 2 === 0 ? <CurrencyBitcoinIcon /> : <AbcIcon />} */}
                                 <img src={process.env.PUBLIC_URL + '/' + text + '.png'} width={30} height={30}/>
                             </Tooltip>
                         </ListItemIcon>

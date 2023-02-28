@@ -1,5 +1,5 @@
 import create from "zustand";
-import { Tron, TRON_DEFAULT_PATH, generateMnemonic, validateMnemonic } from "wallet-web-lib";
+import { Tron, TRON_DEFAULT_PATH, generateMnemonic, validateMnemonic ,getExpiration} from "wallet-web-lib";
 interface TronState {
     mnemonic: string;
     path: string;
@@ -18,6 +18,7 @@ interface TronState {
     contracts: Object[];
     errorContracts: boolean;
     signature: string;
+    payload: string;
     setMnemonic: (mnemonic: string) => void;
     setErrorMnemonic: (error: boolean) => void;
     setErrorText: (errorMsg: string) => void;
@@ -36,7 +37,7 @@ interface TronState {
     setContracts: (contracts: []) => void;
     setErrorContracts: (errorContracts: boolean) => void;
     setSignature: (signature: string) => void;
-
+    setPayload: (payload: string) => void;
     genMnemonic: () => void;
     obtainAccount: () => void;
     signTx: () => void;
@@ -60,6 +61,7 @@ const useStore = create<TronState>((set: any, get: any) => ({
     contracts: [{ "name": "transfer", "to_address": "TLb2e2uRhzxvrxMcC8VkL2N7zmxYyg3Vfc", "amount": 1000000000000000000 }],
     errorContracts: false,
     signature: "",
+    payload: "",
     setMnemonic: (mnemonic: string) => {
         const { setErrorMnemonic, setErrorText } = get()
         if (!validateMnemonic(mnemonic)) {
@@ -81,10 +83,11 @@ const useStore = create<TronState>((set: any, get: any) => ({
     setTimestamp: (timestamp: number) => set({ timestamp: timestamp }),
     setFeeLimit: (feeLimit: number) => set({ feeLimit: feeLimit }),
     setSignature: (signature: string) => set({ signature: signature }),
+    setPayload: (payload: string) => set({ payload: payload }),
     setContracts: (contracts: Object[]) => set({ contracts: contracts }),
     setErrorContracts: (errorContracts: boolean) => set({ errorContracts: errorContracts }),
     signTx: async () => {
-        const { setErrorText, setSignature, mnemonic, path,
+        const { setErrorText, setPayload, setSignature, mnemonic, path,
             refBlockBytes, refBlockNum, refBlockHash, expiration, timestamp, feeLimit, contracts
         } = get()
         const account = new Tron(mnemonic, path);
@@ -92,13 +95,14 @@ const useStore = create<TronState>((set: any, get: any) => ({
             ref_block_bytes: refBlockBytes || "9148",
             ref_block_num: refBlockNum || 0,
             ref_block_hash: refBlockHash || "2b72b05b7674b257",
-            expiration: expiration || "2021-09-28T14:46:18",
+            expiration: getExpiration(expiration || "2021-09-28T14:46:18"),
             timestamp: timestamp || 1603346193445,
             fee_limit: feeLimit || 0,
             contracts: contracts
         }
         setSignature("")
         const signaturer = await account.signTransaction(transaction);
+        setPayload(signaturer.raw_data_hex)
         setSignature(JSON.stringify(signaturer))
         setErrorText("");
     },
