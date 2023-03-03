@@ -1,15 +1,15 @@
 import * as React from 'react';
 import { Link as ToPage, useLocation } from "react-router-dom"
 import { styled, useTheme, Theme, CSSObject } from '@mui/material/styles';
-import { Box, Breadcrumbs, Link, Toolbar, CssBaseline, Divider, IconButton,Drawer as MuiDrawer } from '@mui/material';
+import { Box, Breadcrumbs, Link, Toolbar, CssBaseline, Divider, IconButton, Drawer as MuiDrawer, Typography } from '@mui/material';
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
 import HomeIcon from '@mui/icons-material/Home';
 import WalletIcon from '@mui/icons-material/Wallet';
-
+import AccountCircle from '@mui/icons-material/AccountCircle';
 import Content from "./content"
 import Menus from './menus';
+import storage from '../state/storage';
 const drawerWidth = 200;
-
 const openedMixin = (theme: Theme): CSSObject => ({
   width: drawerWidth,
   transition: theme.transitions.create('width', {
@@ -98,7 +98,6 @@ export default function MainLayout() {
 
             }}
           >
-            {/* <MenuIcon /> */}
             <WalletIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
           </IconButton>
           <Breadcrumbs aria-label="breadcrumb">
@@ -122,10 +121,24 @@ export default function MainLayout() {
               </Link> : null
             }
           </Breadcrumbs>
+
+          <Box sx={{ position: 'fixed', right: 20 }}>
+            <IconButton
+              size="large"
+              aria-label="show more"
+              aria-haspopup="true"
+              color="inherit"
+            >
+              <Typography sx={{mr:1}}>{storage.get("LOCAL_TEST_MNEMONIC", "")}</Typography>
+              <AccountCircle sx={{ width: 40, height: 40, display: { xs: 'none', md: 'flex' }, mr: 1 }} color={!storage.get("LOCAL_TEST_MNEMONIC", "")?'action':'success'} />
+            </IconButton>
+          </Box>
+
         </Toolbar>
+
       </AppBar>
       <Drawer variant="permanent" >
-        <DrawerHeader/>
+        <DrawerHeader />
         <Divider />
         <Menus />
       </Drawer>

@@ -11,6 +11,7 @@ interface EthereumState {
     address: string;
     signature: string;
     message: string;
+    messageHash: string;
     transactionTypes: any;
 
 
@@ -64,6 +65,7 @@ interface EthereumState {
 
     setSignature: (signature: string) => void;
     setMessage: (message: string) => void;
+    setMessageHash: (messageHash: string) => void;
     signMessage: () => void;
     parseTx: () => void;
     handleChange: (event: any) => void;
@@ -104,6 +106,7 @@ const useStore = create<EthereumState>((set, get) => ({
     display1559: "none",
     signature: "",
     message: "",
+    messageHash: "",
     errorTo: false,
     errorData: false,
     setMnemonic: (mnemonic: string) => {
@@ -202,11 +205,16 @@ const useStore = create<EthereumState>((set, get) => ({
     },
     setSignature: (signature: string) => set({ signature: signature }),
     setMessage: (message: string) => set({ message: message }),
+    setMessageHash: (messageHash: string) => set({ messageHash: messageHash }),
     signMessage: async () => {
-        const { setSignature, mnemonic, path, message } = get()
+        const { setSignature, mnemonic, path, message, setMessageHash } = get()
         setSignature("")
+        setMessageHash("");
         const wallet = new Ethereum(mnemonic, path);
+        const messageHash = await wallet.message2Hash(message);
+        setMessageHash(messageHash);
         const signature = await wallet.signMessage(message);
+
         setSignature(signature)
     },
     setErrorData: (error: boolean) => set({ errorData: error }),

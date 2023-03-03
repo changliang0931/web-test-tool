@@ -5,7 +5,7 @@ import myStore from "../state/ethereum-state"
 function Ethereum() {
   const { mnemonic, errorMnemonic, errorText, path, publicKey, privateKey, address,
     to, nonce, data, value, gasLimit, gasPrice, maxFeePerGas, maxPriorityFeePerGas,
-    type, chainId, txRaw, errorTo, errorData, transactionTypes, display1559, message, signature,
+    type, chainId, txRaw, errorTo, errorData, transactionTypes, display1559, message,messageHash, signature,
     signMessage, genMnemonic, handleChange, obtainAccount, signTx, parseTx } = myStore()
   return (
     <div >
@@ -332,6 +332,23 @@ function Ethereum() {
                 multiline
                 rows={3}
                 defaultValue={message}
+                onChange={handleChange}
+              />
+            </FormControl>
+          </Grid>
+          <Grid item xs={12}>
+            <FormControl fullWidth sx={{ m: 1 }} variant="standard">
+              <TextField
+                id="messageHash"
+                label="MessageHash"
+                color="secondary"
+                sx={{ width: 1 }}
+                multiline
+                rows={1}
+                defaultValue={messageHash}
+                InputProps={{
+                  readOnly: true,
+                }}
                 onChange={handleChange}
               />
             </FormControl>

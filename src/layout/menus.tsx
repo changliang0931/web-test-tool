@@ -1,7 +1,5 @@
 import { List, Tooltip, ListItemButton, ListItem, ListItemIcon, ListItemText, Icon } from '@mui/material';
-import AbcIcon from '@mui/icons-material/Abc';
-import CurrencyBitcoinIcon from '@mui/icons-material/CurrencyBitcoin';
-import { Link as ToPage, useLocation } from "react-router-dom"
+import { Link as ToPage } from "react-router-dom"
 import Pages from '../pages';
 const Menus = () => {
     return (
