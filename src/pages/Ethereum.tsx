@@ -1,12 +1,18 @@
+
+import * as React from 'react';
 import Divider from "@mui/material/Divider";
 import { Button, Grid, FormHelperText, Container, TextField, FormControl, InputAdornment, MenuItem } from "@mui/material";
 import PsychologyAltOutlinedIcon from '@mui/icons-material/PsychologyAltOutlined';
 import myStore from "../state/ethereum-state"
+import storage from '../state/storage';
 function Ethereum() {
   const { mnemonic, errorMnemonic, errorText, path, publicKey, privateKey, address,
     to, nonce, data, value, gasLimit, gasPrice, maxFeePerGas, maxPriorityFeePerGas,
-    type, chainId, txRaw, errorTo, errorData, transactionTypes, display1559, message,messageHash, signature,
-    signMessage, genMnemonic, handleChange, obtainAccount, signTx, parseTx } = myStore()
+    type, chainId, txRaw, errorTo, errorData, transactionTypes, display1559, message, messageHash, signature, errorTypedData, typedData, signatureTypedData,
+    signMessage, handleChange, obtainAccount, signTx, parseTx, signTypedData } = myStore()
+  if (storage.get(storage.keys.LOCAL_TEST_MNEMONIC)) {
+    //    obtainAccount();
+  }
   return (
     <div >
       <Container fixed>
@@ -372,6 +378,62 @@ function Ethereum() {
         </Grid>
         <FormControl fullWidth sx={{ m: 1 }} variant="standard">
           <Button id="signMessage" onClick={signMessage} variant="contained" color="secondary" disabled={address.trim() == ""} >sign message</Button>
+        </FormControl>
+
+        <Divider><h3>Typed-Data-Sign</h3></Divider>
+        <Grid container spacing={2}>
+          <Grid item xs={12}>
+            <FormControl fullWidth sx={{ m: 1 }} error={errorTypedData} variant="standard">
+              <TextField
+                id="typedData"
+                label="TypedData"
+                color="warning"
+                sx={{ width: 1 }}
+                multiline
+                rows={3}
+                error={errorTypedData}
+                defaultValue={JSON.stringify(typedData)}
+                onChange={handleChange} 
+              />
+              <FormHelperText>{errorText}</FormHelperText>
+            </FormControl>
+          </Grid>
+          {/* <Grid item xs={12}>
+            <FormControl fullWidth sx={{ m: 1 }} variant="standard">
+              <TextField
+                id="messageHash"
+                label="MessageHash"
+                color="warning"
+                sx={{ width: 1 }}
+                multiline
+                rows={1}
+                defaultValue={messageHash}
+                InputProps={{
+                  readOnly: true,
+                }}
+                onChange={handleChange}
+              />
+            </FormControl>
+          </Grid> */}
+          <Grid item xs={12}>
+            <FormControl fullWidth sx={{ m: 1 }} variant="standard" >
+              <TextField
+                id="signatureTypedData"
+                label="SignatureTypedData"
+                color="warning"
+                sx={{ width: 1 }}
+                multiline
+                rows={3}
+                defaultValue={signatureTypedData}
+                InputProps={{
+                  readOnly: true,
+                }}
+              />
+            </FormControl>
+          </Grid>
+        </Grid>
+        <FormControl fullWidth sx={{ m: 1 }} variant="standard">
+          <Button id="signTypedData" onClick={signTypedData} variant="contained" color="warning" disabled={address.trim() == ""} >sign type data</Button>
         </FormControl>
       </Container>
     </div>
