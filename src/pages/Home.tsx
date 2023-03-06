@@ -1,4 +1,3 @@
-
 import * as React from 'react';
 import { Box, Grid, CardContent, Typography, CardActions, Button, Dialog, DialogTitle, DialogContent, DialogActions, DialogContentText, TextField } from '@mui/material';
 import WalletIcon from '@mui/icons-material/Wallet';
@@ -23,7 +22,7 @@ export default function BasicCard() {
     setMn(event.target.value)
   }
   const genMnemonic = () => {
-    storage.set("LOCAL_TEST_MNEMONIC", generateMnemonic())
+    storage.set(storage.keys.LOCAL_TEST_MNEMONIC, generateMnemonic())
     window.location.reload()
   }
   const importMnemonic = () => {
@@ -37,7 +36,7 @@ export default function BasicCard() {
       setErrMsg("Invalid mnemonic.")
       return;
     }
-    storage.set("LOCAL_TEST_MNEMONIC", mn)
+    storage.set(storage.keys.LOCAL_TEST_MNEMONIC, mn)
     setMn("")
     window.location.reload()
   }

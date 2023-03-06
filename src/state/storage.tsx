@@ -9,8 +9,9 @@ const storage = {
     },
     remove: (key: string) => {
         localStorage.removeItem(key);
+    },
+    keys: {
+        LOCAL_TEST_MNEMONIC: "LOCAL_TEST_MNEMONIC"
     }
 }
-
-
 export default storage;
