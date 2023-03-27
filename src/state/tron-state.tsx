@@ -1,5 +1,5 @@
 import create from "zustand";
-import { Tron, TRON_DEFAULT_PATH, generateMnemonic, validateMnemonic ,getExpiration} from "wallet-web-lib";
+import { Tron, TRON_DEFAULT_PATH, generateMnemonic, validateMnemonic } from "wallet-web-lib";
 interface TronState {
     mnemonic: string;
     path: string;
@@ -95,7 +95,7 @@ const useStore = create<TronState>((set: any, get: any) => ({
             ref_block_bytes: refBlockBytes || "9148",
             ref_block_num: refBlockNum || 0,
             ref_block_hash: refBlockHash || "2b72b05b7674b257",
-            expiration: getExpiration(expiration || "2021-09-28T14:46:18"),
+            expiration: expiration || "2021-09-28T14:46:18",
             timestamp: timestamp || 1603346193445,
             fee_limit: feeLimit || 0,
             contracts: contracts

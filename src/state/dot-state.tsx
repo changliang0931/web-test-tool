@@ -4,6 +4,7 @@ interface DotState {
     // 'ed25519' | 'sr25519' | 'ecdsa' | 'ethereum';
     keypairTypes: Array<string>;
     mnemonic: string;
+    keypairType: string;
     path: string;
     errorMnemonic: boolean;
     errorText: string;
@@ -11,7 +12,7 @@ interface DotState {
     privateKey: string;
     address: string;
 
-
+    
     // expiration: string;
     // refBlockNum: number;
     // refBlockPrefix: number;
@@ -24,8 +25,11 @@ interface DotState {
     // errorActions: boolean;
     // transactionExtensions?: [number, string][];
     signature: string;
-
+    message: string;
+    messageHash: string;
     setMnemonic: (mnemonic: string) => void;
+    setKeypairType: (keypairType: string) => void;
+
     setErrorMnemonic: (error: boolean) => void;
     setErrorText: (errorMsg: string) => void;
 
@@ -45,22 +49,26 @@ interface DotState {
     // setErrorActions: (error: boolean) => void;
     // setTransactionExtensions: (transactionExtensions: [number, string][]) => void;
     setSignature: (signature: string) => void;
-
+    setMessage: (message: string) => void;
     genMnemonic: () => void;
     obtainAccount: () => void;
     signTx: () => void;
+    signMessage: () => void;
     parseTx: () => void;
     handleChange: (event: any) => void;
 }
-const useStore = create<DotState>((set:any, get:any) => ({
-    keypairTypes: ['ed25519' , 'sr25519' , 'ecdsa' , 'ethereum'],
+const useStore = create<DotState>((set: any, get: any) => ({
+    keypairTypes: ['ed25519', 'sr25519', 'ecdsa'],
     mnemonic: "gauge hole clog property soccer idea cycle stadium utility slice hold chief",
     errorMnemonic: false,
+    keypairType: "ed25519",
     path: POLKADOT_DEFAULT_PATH,
     errorText: "",
     publicKey: "",
     privateKey: "",
     address: "",
+    message: "",
+    messageHash: "",
     // expiration: "2020-08-06T09:50:56",
     // refBlockNum: 13949,
     // refBlockPrefix: 241701672,
@@ -81,12 +89,14 @@ const useStore = create<DotState>((set:any, get:any) => ({
         }
         set({ mnemonic: mnemonic })
     },
+    setKeypairType: (keypairType: string) => set({ keypairType: keypairType }),
     setPath: (path: string) => set({ path: path }),
     setErrorMnemonic: (error: boolean) => set({ errorMnemonic: error }),
     setErrorText: (msg: string) => set({ errorText: msg }),
     setPublicKey: (pubKey: string) => set({ publicKey: pubKey }),
     setPrivateKey: (priKey: string) => set({ privateKey: priKey }),
     setAddress: (address: string) => set({ address: address }),
+    setMessage: (message: string) => set({ message: message }),
     // setExpiration: (expiration: string) => set({ expiration: expiration }),
     // setRefBlockNum: (refBlockNum: number) => set({ refBlockNum: refBlockNum }),
     // setRefBlockPrefix: (refBlockPrefix: number) => set({ refBlockPrefix: refBlockPrefix }),
@@ -118,7 +128,16 @@ const useStore = create<DotState>((set:any, get:any) => ({
         // setSignature(signatures)
         // setErrorText("");
     },
-
+    signMessage: () => {
+        const { mnemonic, path, keypairType, setErrorText, message,setSignature } = get()
+        try {
+            const account = new Polkadot(mnemonic, path, keypairType);
+            const signature  = account.signMessage(message);
+            setSignature(signature);
+        } catch (err: any) {
+            setErrorText("Mnemonic with less than 12 words have low entropy and may be guessed by an attacker. ")
+        }
+    },
     genMnemonic: () => {
         const { setMnemonic, setErrorMnemonic, setErrorText } = get()
         const mnemoic = generateMnemonic()
@@ -127,14 +146,14 @@ const useStore = create<DotState>((set:any, get:any) => ({
         setErrorText("")
     },
     obtainAccount: () => {
-        const { mnemonic, path, setErrorMnemonic, setErrorText, setPublicKey, setAddress, setPrivateKey } = get()
+        const { mnemonic, path, setErrorMnemonic, keypairType, setErrorText, setPublicKey, setAddress, setPrivateKey } = get()
         try {
             if (!validateMnemonic(mnemonic)) {
                 setErrorText("Mnemonic invalid ")
                 setErrorMnemonic(true)
                 return
             }
-            const account = new Polkadot(mnemonic, path);
+            const account = new Polkadot(mnemonic, path, keypairType);
             setPublicKey(account.publicKey);
             setPrivateKey(account.privateKey);
             setAddress(account.address!);
@@ -146,7 +165,7 @@ const useStore = create<DotState>((set:any, get:any) => ({
     parseTx: () => {
     },
     handleChange: (event: any) => {
-        const { setAddress, setErrorMnemonic, setMnemonic, setPath, setPrivateKey, setPublicKey, setErrorText,
+        const { setAddress, setErrorMnemonic, setMnemonic, setPath, setPublicKey, setErrorText, setKeypairType,setMessage,setSignature
             // setExpiration, setRefBlockNum, setRefBlockPrefix, setMaxNetUsageWords, setMaxCpuUsageMs, setDelaySec, setContextFreeActions, setContextFreeData, setActions, setErrorActions, setTransactionExtensions 
         } = get()
         let value = event.target.value;
@@ -159,16 +178,16 @@ const useStore = create<DotState>((set:any, get:any) => ({
             setMnemonic(value);
         } else if (id === "path") {
             setPath(value.trim());
-        } else if (id === "privateKey") {
-            setPrivateKey(value);
+        } else if (id === "keypairType") {
+            setKeypairType(value);
         } else if (id === "publicKey") {
             setPublicKey(value);
         } else if (id === "address") {
             setAddress(value);
-            // } else if (id === "chainId") {
-            //     setChainId(value)
-            // } else if (id === "expiration") {
-            //     setExpiration(value);
+        } else if (id === "message") {
+            setMessage(value)
+        } else if (id === "signature") {
+            setSignature(value);
             // } else if (id === "refBlockNum") {
             //     setRefBlockNum(parseInt(value));
             // } else if (id === "refBlockPrefix") {

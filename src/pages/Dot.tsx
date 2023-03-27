@@ -2,12 +2,11 @@ import { Button, Divider, Grid, FormHelperText, Container, TextField, FormContro
 import dotStore from "../state/dot-state";
 
 function Dot() {
-  const { mnemonic, errorMnemonic, errorText, path, publicKey, privateKey, address,
-
+  const { mnemonic, keypairType, keypairTypes, errorMnemonic, errorText, path, publicKey, privateKey, address,
     // maxNetUsageWords, maxCpuUsageMs, delaySec, expiration, refBlockNum, refBlockPrefix, actions, errorActions, contextFreeActions, transactionExtensions, contextFreeData, 
-
-    // signature,
-    genMnemonic, handleChange, obtainAccount,
+    signature,
+    message,
+    signMessage, handleChange, obtainAccount,
     // signTx, 
   } = dotStore()
   return (
@@ -36,6 +35,25 @@ function Dot() {
               // }}
               />
               <FormHelperText>{errorText}</FormHelperText>
+            </FormControl>
+          </Grid>
+          <Grid item xs={12}>
+            <FormControl fullWidth sx={{ m: 1 }} variant="standard">
+              <TextField
+                select
+                id="keypairType"
+                label="KeypairType"
+                name="keypairType"
+                defaultValue={keypairType}
+                helperText=" Tip : Mainnet: aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906"
+                onChange={handleChange}
+              >
+                {keypairTypes.map((option: any) => (
+                  <MenuItem id={option} key={option} value={option}>
+                    {option}
+                  </MenuItem>
+                ))}
+              </TextField>
             </FormControl>
           </Grid>
           <Grid item xs={12}>
@@ -254,6 +272,61 @@ function Dot() {
         <FormControl fullWidth sx={{ m: 1 }} variant="standard">
           <Button id="signTx" onClick={signTx} variant="contained" color="info" disabled={publicKey.trim() == "" && !errorActions} >sign transation</Button>
         </FormControl> */}
+
+
+        <Divider><h3>Message-Sign</h3></Divider>
+        <Grid container spacing={2}>
+          <Grid item xs={12}>
+            <FormControl fullWidth sx={{ m: 1 }} variant="standard">
+              <TextField
+                id="message"
+                label="Message"
+                color="secondary"
+                sx={{ width: 1 }}
+                multiline
+                rows={3}
+                defaultValue={message}
+                onChange={handleChange}
+              />
+            </FormControl>
+          </Grid>
+          {/* <Grid item xs={12}>
+            <FormControl fullWidth sx={{ m: 1 }} variant="standard">
+              <TextField
+                id="messageHash"
+                label="MessageHash"
+                color="secondary"
+                sx={{ width: 1 }}
+                multiline
+                rows={1}
+                defaultValue={messageHash}
+                InputProps={{
+                  readOnly: true,
+                }}
+                onChange={handleChange}
+              />
+            </FormControl>
+          </Grid> */}
+          <Grid item xs={12}>
+            <FormControl fullWidth sx={{ m: 1 }} variant="standard">
+              <TextField
+                id="signature"
+                label="Signature"
+                color="secondary"
+                sx={{ width: 1 }}
+                multiline
+                rows={3}
+                defaultValue={signature}
+                InputProps={{
+                  readOnly: true,
+                }}
+              />
+            </FormControl>
+          </Grid>
+        </Grid>
+        <FormControl fullWidth sx={{ m: 1 }} variant="standard">
+          <Button id="signMessage" onClick={signMessage} variant="contained" color="secondary" disabled={address.trim() == ""} >sign message</Button>
+        </FormControl>
       </Container>
     </div>
   );
