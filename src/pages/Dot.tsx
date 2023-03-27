@@ -44,8 +44,7 @@ function Dot() {
                 id="keypairType"
                 label="KeypairType"
                 name="keypairType"
-                defaultValue={keypairType}
-                helperText=" Tip : Mainnet: aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906"
+                value={keypairType}
                 onChange={handleChange}
               >
                 {keypairTypes.map((option: any) => (
