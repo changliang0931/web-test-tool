@@ -1,7 +1,7 @@
 import { Button, Divider, InputAdornment, Grid, MenuItem, Container, TextField, FormControl } from "@mui/material";
 import cryptoStore from "../state/crypto-state";
 function Crypto() {
-  const { cryptoTypes, cryptoType, privateKey, signature, message, signMessage,
+  const { cryptoTypes, cryptoType, privateKey, auxRand, signature, message, messageHash, signMessage,
     handleChange, random
   } = cryptoStore()
   return (
@@ -16,6 +16,7 @@ function Crypto() {
                 id="cryptoType"
                 label="cryptoType"
                 name="cryptoType"
+                color="success"
                 value={cryptoType}
                 onChange={handleChange}
               >
@@ -35,7 +36,19 @@ function Crypto() {
                 color="success"
                 sx={{ width: 1 }}
                 value={privateKey}
-                onBlur={handleChange}
+                onChange={handleChange}
+              />
+            </FormControl>
+          </Grid>
+          <Grid item xs={12} display={cryptoType == 'Schnorr' ? 'block' : 'none'}>
+            <FormControl fullWidth sx={{ m: 1 }} variant="standard">
+              <TextField
+                id="auxRand"
+                label="AuxRand"
+                color="success"
+                sx={{ width: 1 }}
+                value={auxRand}
+                onChange={handleChange}
               />
             </FormControl>
           </Grid>
@@ -46,15 +59,15 @@ function Crypto() {
               <TextField
                 id="message"
                 label="Message"
-                color="secondary"
+                color="success"
                 sx={{ width: 1 }}
                 multiline
                 rows={3}
                 value={message}
                 InputProps={{
-                  endAdornment: <InputAdornment id="randomBtn" position="end" onClick={random} ><h3 style={{ color: 'green' }}>Random</h3></InputAdornment>,
+                  endAdornment: <InputAdornment id="random" position="end" onClick={random} ><h3 style={{ color: 'green' }}>Random</h3></InputAdornment>,
                 }}
-                onBlur={handleChange}
+                onChange={handleChange}
               />
             </FormControl>
           </Grid>
@@ -67,7 +80,7 @@ function Crypto() {
                 sx={{ width: 1 }}
                 multiline
                 rows={1}
-                defaultValue={messageHash}
+                value={messageHash}
                 InputProps={{
                   readOnly: true,
                 }}
@@ -75,7 +88,7 @@ function Crypto() {
               />
             </FormControl>
           </Grid> */}
-          <Grid item xs={12}>
+          <Grid item xs={12} >
             <FormControl fullWidth sx={{ m: 1 }} variant="standard">
               <TextField
                 id="signature"
@@ -84,7 +97,7 @@ function Crypto() {
                 sx={{ width: 1 }}
                 multiline
                 rows={3}
-                defaultValue={signature}
+                value={signature}
                 InputProps={{
                   readOnly: true,
                 }}
@@ -93,7 +106,7 @@ function Crypto() {
           </Grid>
         </Grid>
         <FormControl fullWidth sx={{ m: 1 }} variant="standard">
-          <Button id="signMessage" onClick={signMessage} variant="contained" color="secondary" disabled={privateKey.trim() == "" || privateKey.trim().length < 64} >sign message</Button>
+          <Button id="signMessage" onClick={signMessage} variant="contained" color="success" disabled={privateKey.trim() == "" || privateKey.trim().length < 64} >sign message</Button>
         </FormControl>
       </Container>
     </div>
