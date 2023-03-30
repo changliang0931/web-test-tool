@@ -5,6 +5,7 @@ import Main from "../pages/Home"
 import Eos from "../pages/Eos"
 import Tron from "../pages/Tron"
 import Dot from "../pages/Dot"
+import Crypto from "../pages/crypto"
 import { Route, Routes } from "react-router-dom"
 const Content = () => {
     return (
@@ -15,6 +16,7 @@ const Content = () => {
             <Route key="eos" path="eos" element={<Eos />} />
             <Route key="tron" path="tron" element={<Tron />} />
             <Route key="polkadot" path="polkadot" element={<Dot />} />
+            <Route key="crypto" path="crypto" element={<Crypto />} />
         </Routes>
     )
 }

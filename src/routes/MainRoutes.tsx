@@ -8,6 +8,7 @@ const Ethereum = Loadable(lazy(() => import('../pages/Ethereum')));
 const Home = Loadable(lazy(() => import('../pages/Home')));
 const EosPage = Loadable(lazy(() => import('../pages/Eos')));
 const TronPage = Loadable(lazy(() => import('../pages/Tron')));
+const CryptoPage = Loadable(lazy(() => import('../pages/crypto')));
 const MainRoutes = {
     path: '/',
     element: <Layout />,
@@ -35,6 +36,10 @@ const MainRoutes = {
         {
             path: 'polkadot',
             element: <EosPage />
+        },
+        {
+            path: 'crypto',
+            element: <CryptoPage />
         },
     ]
 };

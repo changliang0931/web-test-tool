@@ -21,7 +21,7 @@
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.4.4",
     "react-scripts": "5.0.1",
-    "wallet-web-lib": "github:changliang0931/WalletWebLib",
+    "wallet-web-lib": "file:../WalletWebLib",
     "web-vitals": "^2.1.4",
     "zustand": "^4.1.4"
   },
@@ -41,9 +41,11 @@
   },
   "browserslist": {
     "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
+      "chrome >= 67",
+      "edge >= 79",
+      "firefox >= 68",
+      "opera >= 54",
+      "safari >= 14"
     ],
     "development": [
       "last 1 chrome version",
