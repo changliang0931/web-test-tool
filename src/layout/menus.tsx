@@ -1,4 +1,4 @@
-import { List, Tooltip, ListItemButton, ListItem, ListItemIcon, ListItemText, Icon } from '@mui/material';
+import { List, Tooltip, Divider, ListItemButton, ListItem, ListItemIcon, ListItemText, Icon } from '@mui/material';
 import { Link as ToPage } from "react-router-dom"
 import Pages from '../pages';
 const Menus = () => {
@@ -8,6 +8,8 @@ const Menus = () => {
                 <ListItem id={text} key={text} disablePadding sx={{ display: 'block' }}
                     component={ToPage} to={"/" + text.toLocaleLowerCase()}
                 >
+                    <Divider variant="middle" style={{ color: 'black', display: text === "crypto" ? 'block' : 'none' }} />
+                    <Divider variant="middle" style={{ marginTop: 0.5, color: 'black', display: text === "crypto" ? 'block' : 'none' }} />
                     <ListItemButton
                         sx={{
                             minHeight: 48,
@@ -23,7 +25,7 @@ const Menus = () => {
                             }}
                         >
                             <Tooltip title={text} placement="right-end">
-                                <img src={process.env.PUBLIC_URL + '/' + text + '.png'} width={30} height={30}/>
+                                <img src={process.env.PUBLIC_URL + '/' + text + '.png'} width={30} height={30} />
                             </Tooltip>
                         </ListItemIcon>
                         <ListItemText primary={text} sx={{ opacity: 0 }} />
