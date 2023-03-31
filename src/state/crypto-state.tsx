@@ -19,6 +19,7 @@ interface CryptoState {
     signMessage: () => void;
     random: () => void;
     handleChange: (event: any) => void;
+    handleClear: (event: any) => void;
 }
 const useStore = create<CryptoState>((set, get) => ({
     cryptoTypes: ["Schnorr", "Ecdsa", "Ed25519"],
@@ -45,6 +46,9 @@ const useStore = create<CryptoState>((set, get) => ({
         setSignature("")
         setMessageHash("");
         let signature: string = "";
+        if(!message || !privateKey){
+            return;
+        }
         if (cryptoType === "Schnorr") {
             const schoor = new Schnorr();
             signature = schoor.sign(privateKey, message, auxRand);
@@ -59,19 +63,28 @@ const useStore = create<CryptoState>((set, get) => ({
     },
     handleChange: (event: any) => {
         const { setMessage, setPrivateKey, setAuxRand, setCryptoType } = get()
-        let value = event.target.value;
+        let value = event.target.value.trim();
         let id = event.target.id || event.target.name;
+        value = value.trim()
         if (id === "message") {
-            value = value.trim()
             setMessage(value);
         } else if (id === "privateKey") {
-            value = value.trim()
             setPrivateKey(value);
         } else if (id === "auxRand") {
-            value = value.trim()
             setAuxRand(value);
         } else if (id === "cryptoType") {
             setCryptoType(value);
+        }
+    },
+    handleClear: (event: any) => {
+        const { setMessage, setPrivateKey, setAuxRand } = get()
+        let id = event.currentTarget.id;
+        if (id === "messagec") {
+            setMessage("");
+        } else if (id === "privateKeyc") {
+            setPrivateKey("");
+        } else if (id === "auxRandc") {
+            setAuxRand("");
         }
     }
 }));

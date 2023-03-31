@@ -1,5 +1,5 @@
 import create from "zustand";
-import { Ethereum, parseEthereumTx, validateMnemonic, isHexString, isEthereumAddress, ETHEREUM_DEFAULT_PATH, ETHEREUM_ZERO_ADDRESS, BigNumber ,EthereumTypedData} from "wallet-web-lib"
+import { Ethereum, parseEthereumTx, validateMnemonic, isHexString, isEthereumAddress, ETHEREUM_DEFAULT_PATH, ETHEREUM_ZERO_ADDRESS, BigNumber, EthereumTypedData } from "wallet-web-lib"
 import storage from '../state/storage';
 interface EthereumState {
     mnemonic: string;
@@ -17,21 +17,21 @@ interface EthereumState {
 
 
     to: string;
-    value: number;
-    nonce: number;
-    gasPrice: number;
-    gasLimit: number;
-    maxPriorityFeePerGas: number;
-    maxFeePerGas: number;
-    chainId: number;
-    type: number;
+    value: string;
+    nonce: string;
+    gasPrice: string;
+    gasLimit: string;
+    maxPriorityFeePerGas: string;
+    maxFeePerGas: string;
+    chainId: string;
+    type: string;
     data: string;
     txRaw: string;
     display1559: string;
     errorTo: boolean;
     errorData: boolean;
-    typedData: EthereumTypedData;
-    signatureTypedData:string;
+    typedData: string;
+    signatureTypedData: string;
     errorTypedData: boolean;
     setMnemonic: (mnemonic: string) => void;
 
@@ -50,14 +50,14 @@ interface EthereumState {
 
 
     setTo: (to: string) => void;
-    setValue: (value: number) => void;
-    setNonce: (nonce: number) => void;
-    setGasPrice: (gasPrice: number) => void;
-    setGasLimit: (gasLimit: number) => void;
-    setMaxPriorityFeePerGas: (maxPriorityFeePerGas: number) => void;
-    setMaxFeePerGas: (maxFeePerGas: number) => void;
-    setChainId: (chainId: number) => void;
-    setType: (type: number) => void;
+    setValue: (value: string) => void;
+    setNonce: (nonce: string) => void;
+    setGasPrice: (gasPrice: string) => void;
+    setGasLimit: (gasLimit: string) => void;
+    setMaxPriorityFeePerGas: (maxPriorityFeePerGas: string) => void;
+    setMaxFeePerGas: (maxFeePerGas: string) => void;
+    setChainId: (chainId: string) => void;
+    setType: (type: string) => void;
     setTxRaw: (txRaw: string) => void;
     setData: (data: string) => void;
     setDisplay1559: (display1559: string) => void;
@@ -69,12 +69,13 @@ interface EthereumState {
     setSignature: (signature: string) => void;
     setMessage: (message: string) => void;
     setMessageHash: (messageHash: string) => void;
-    setTypedData: (typedData: EthereumTypedData) => void;
+    setTypedData: (typedData: string) => void;
     setSignatureTypedData: (signatureTypedData: string) => void;
     signMessage: () => void;
     signTypedData: () => void;
     parseTx: () => void;
     handleChange: (event: any) => void;
+    handleClear: (event: any) => void;
 }
 const useStore = create<EthereumState>((set, get) => ({
     transactionTypes: [
@@ -99,15 +100,15 @@ const useStore = create<EthereumState>((set, get) => ({
     privateKey: "",
     address: "",
     to: ETHEREUM_ZERO_ADDRESS,
-    value: 100000000,
-    nonce: 0,
+    value: "100000000",
+    nonce: "0",
     data: "0x",
-    gasPrice: 100000000,
-    gasLimit: 21000,
-    maxPriorityFeePerGas: 100000000,
-    maxFeePerGas: 200000000,
-    chainId: 1,
-    type: 0,
+    gasPrice: "100000000",
+    gasLimit: "21000",
+    maxPriorityFeePerGas: "100000000",
+    maxFeePerGas: "200000000",
+    chainId: "1",
+    type: "0",
     txRaw: "",
     display1559: "none",
     signature: "",
@@ -115,9 +116,9 @@ const useStore = create<EthereumState>((set, get) => ({
     messageHash: "",
     errorTo: false,
     errorData: false,
-    typedData: { "types": { "Person": [{ "name": "name", "type": "string" }, { "name": "wallet", "type": "address" }], "Mail": [{ "name": "from", "type": "Person" }, { "name": "to", "type": "Person" }, { "name": "contents", "type": "string" }] }, "primaryType": "Mail", "domain": { "name": "Ether Mail", "version": "1", "chainId": 1, "verifyingContract": "0x1e0Ae8205e9726E6F296ab8869160A6423E2337E" }, "message": { "from": { "name": "Cow", "wallet": "0xc0004B62C5A39a728e4Af5bee0c6B4a4E54b15ad" }, "to": { "name": "Bob", "wallet": "0x54B0Fa66A065748C40dCA2C7Fe125A2028CF9982" }, "contents": "Hello, Bob!" } }
+    typedData: `{ "types": { "Person": [{ "name": "name", "type": "string" }, { "name": "wallet", "type": "address" }], "Mail": [{ "name": "from", "type": "Person" }, { "name": "to", "type": "Person" }, { "name": "contents", "type": "string" }] }, "primaryType": "Mail", "domain": { "name": "Ether Mail", "version": "1", "chainId": 1, "verifyingContract": "0x1e0Ae8205e9726E6F296ab8869160A6423E2337E" }, "message": { "from": { "name": "Cow", "wallet": "0xc0004B62C5A39a728e4Af5bee0c6B4a4E54b15ad" }, "to": { "name": "Bob", "wallet": "0x54B0Fa66A065748C40dCA2C7Fe125A2028CF9982" }, "contents": "Hello, Bob!" } }`
     ,
-    signatureTypedData:"",
+    signatureTypedData: "",
     errorTypedData: false,
     setMnemonic: (mnemonic: string) => {
         const { setErrorMnemonic, setErrorText } = get()
@@ -154,14 +155,14 @@ const useStore = create<EthereumState>((set, get) => ({
         }
     },
     setTo: (to: string) => set({ to: to }),
-    setValue: (value: number) => set({ value: BigNumber.from(value).toNumber() }),
-    setNonce: (nonce: number) => set({ nonce: BigNumber.from(nonce).toNumber() }),
-    setGasPrice: (gasPrice: number) => set({ gasPrice: BigNumber.from(gasPrice).toNumber() }),
-    setGasLimit: (gasLimit: number) => set({ gasLimit: BigNumber.from(gasLimit).toNumber() }),
-    setMaxPriorityFeePerGas: (maxPriorityFeePerGas: number) => set({ maxPriorityFeePerGas: BigNumber.from(maxPriorityFeePerGas).toNumber() }),
-    setMaxFeePerGas: (maxFeePerGas: number) => set({ maxFeePerGas: BigNumber.from(maxFeePerGas).toNumber() }),
-    setChainId: (chainId: number) => set({ chainId: BigNumber.from(chainId).toNumber() }),
-    setType: (type: number) => set({ type: type }),
+    setValue: (value: string) => set({ value: value }),
+    setNonce: (nonce: string) => set({ nonce: nonce }),
+    setGasPrice: (gasPrice: string) => set({ gasPrice: gasPrice }),
+    setGasLimit: (gasLimit: string) => set({ gasLimit: gasLimit }),
+    setMaxPriorityFeePerGas: (maxPriorityFeePerGas: string) => set({ maxPriorityFeePerGas: maxPriorityFeePerGas }),
+    setMaxFeePerGas: (maxFeePerGas: string) => set({ maxFeePerGas: maxFeePerGas }),
+    setChainId: (chainId: string) => set({ chainId: chainId }),
+    setType: (type: string) => set({ type: type }),
     setTxRaw: (txRaw: string) => set({ txRaw: txRaw }),
     setData: (data: string) => set({ data: data }),
     setDisplay1559: (display1559: string) => set({ display1559: display1559 }),
@@ -189,17 +190,17 @@ const useStore = create<EthereumState>((set, get) => ({
         let unSigTx = {
             to: to || ETHEREUM_ZERO_ADDRESS,
             from: address,
-            nonce: nonce || 0,
-            gasLimit: gasLimit || 1000000000,
-            value: value || 1000000000,
-            chainId: chainId || 1,
-            type: type || 0,
+            nonce: BigNumber.from(nonce).toNumber() || 0,
+            gasLimit: BigNumber.from(gasLimit).toNumber() || 1000000000,
+            value: BigNumber.from(value).toNumber() || 1000000000,
+            chainId: BigNumber.from(chainId).toNumber() || 1,
+            type: BigNumber.from(type).toNumber() || 0,
         }
 
-        if (type === 2) {
-            unSigTx = Object.assign(unSigTx, { maxPriorityFeePerGas: maxPriorityFeePerGas || 100000, ßmaxFeePerGas: maxFeePerGas || 100000 });
+        if (type === "2") {
+            unSigTx = Object.assign(unSigTx, { maxPriorityFeePerGas: BigNumber.from(maxPriorityFeePerGas).toNumber() || 100000, maxFeePerGas: BigNumber.from(maxFeePerGas).toNumber() || 100000 });
         } else {
-            unSigTx = Object.assign(unSigTx, { gasPrice: gasPrice || 21000 });
+            unSigTx = Object.assign(unSigTx, { gasPrice: BigNumber.from(gasPrice).toNumber() || 21000 });
         }
         if ((data.startsWith("0x") || data.startsWith("0X")) && data.length > 2) {
             unSigTx = Object.assign(unSigTx, { data: data });
@@ -210,7 +211,7 @@ const useStore = create<EthereumState>((set, get) => ({
     },
     setSignature: (signature: string) => set({ signature: signature }),
     setMessage: (message: string) => set({ message: message }),
-    setTypedData: (typedData: EthereumTypedData) => set({ typedData: typedData }),
+    setTypedData: (typedData: string) => set({ typedData: typedData }),
     setMessageHash: (messageHash: string) => set({ messageHash: messageHash }),
     signMessage: async () => {
         const { setSignature, mnemonic, path, message, setMessageHash } = get()
@@ -224,10 +225,25 @@ const useStore = create<EthereumState>((set, get) => ({
         setSignature(signature)
     },
     signTypedData: async () => {
-        const { mnemonic, path,typedData, setSignatureTypedData } = get()
+        const { mnemonic, path, typedData, setSignatureTypedData, setErrorTypedData, setErrorText } = get()
         setSignatureTypedData("");
+        try {
+            if (typedData.trim() === "") {
+                setErrorTypedData(true);
+                setErrorText("TypedData  invalid ")
+                return
+            }
+            JSON.parse(typedData);
+        } catch (error: any) {
+            setErrorTypedData(true);
+            setErrorText("TypedData  invalid " + error.message);
+            return
+        }
+        setErrorTypedData(false);
+        setErrorText("")
+        let typedDat: EthereumTypedData = JSON.parse(typedData);
         const wallet = new Ethereum(mnemonic, path);
-        const signature = await wallet.signTypedData(typedData);
+        const signature = await wallet.signTypedData(typedDat);
         setSignatureTypedData(signature);
     },
     setSignatureTypedData: (signatureTypedData: string) => set({ signatureTypedData: signatureTypedData }),
@@ -293,22 +309,45 @@ const useStore = create<EthereumState>((set, get) => ({
             setMessage(value.trim());
             setSignature("");
         } else if (id === "typedData") {
-            setTypedData(value.trim());
-            try {
-                if (value.trim() === "") {
-                    setErrorTypedData(true);
-                    setErrorText("TypedData  invalid ")
-                    return
-                }
-                const typedData = JSON.parse(value);
-                setErrorTypedData(false);
-                setTypedData(typedData);
-                setErrorText("")
-            } catch (error: any) {
-                setErrorTypedData(true);
-                setErrorText("TypedData  invalid " + error.message)
-            }
+            setTypedData(value);
         }
-    }
+    },
+    handleClear: (event: any) => {
+        const { setTo, setData, setMessage, setMnemonic, setPath, setTypedData,
+            setValue, setChainId, setType,
+            setMaxFeePerGas, setMaxPriorityFeePerGas, setNonce, setGasLimit, setGasPrice,
+        } = get()
+        let id = event.currentTarget.id;
+        if (id === "pathc") {
+            setPath("");
+        } else if (id === "mnemonicc") {
+            setMnemonic("");
+        } else if (id === "toc") {
+            setTo("");
+        } else if (id === "datac") {
+            setData("");
+        } else if (id === "valuec") {
+            setValue("")
+        } else if (id === "chainIdc") {
+            setChainId("")
+        } else if (id === "typec") {
+            setType("")
+        } else if (id === "maxFeePerGasc") {
+            setMaxFeePerGas("")
+        } else if (id === "maxPriorityFeePerGasc") {
+            setMaxPriorityFeePerGas("")
+        } else if (id === "noncec") {
+            setNonce("")
+        } else if (id === "gasPricec") {
+            setGasPrice("")
+        } else if (id === "gasLimitc") {
+            setGasLimit("")
+        } else if (id === "messagec") {
+            setMessage("");
+        } else if (id === "typedDatac") {
+            setTypedData("");
+        }
+    },
+
 }));
 export default useStore;

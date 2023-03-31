@@ -1,7 +1,8 @@
 
-import * as React from 'react';
 import Divider from "@mui/material/Divider";
-import { Button, Grid, FormHelperText, Container, TextField, FormControl, InputAdornment, MenuItem } from "@mui/material";
+import { Button, Tooltip,  Grid, FormHelperText, Container, TextField, FormControl, InputAdornment, MenuItem } from "@mui/material";
+import ClearIcon from "@mui/icons-material/Clear";
+import IconButton from "@mui/material/IconButton";
 import PsychologyAltOutlinedIcon from '@mui/icons-material/PsychologyAltOutlined';
 import myStore from "../state/ethereum-state"
 import storage from '../state/storage';
@@ -9,7 +10,7 @@ function Ethereum() {
   const { mnemonic, errorMnemonic, errorText, path, publicKey, privateKey, address,
     to, nonce, data, value, gasLimit, gasPrice, maxFeePerGas, maxPriorityFeePerGas,
     type, chainId, txRaw, errorTo, errorData, transactionTypes, display1559, message, messageHash, signature, errorTypedData, typedData, signatureTypedData,
-    signMessage, handleChange, obtainAccount, signTx, parseTx, signTypedData } = myStore()
+    signMessage, handleChange, handleClear,obtainAccount, signTx, parseTx, signTypedData } = myStore()
   if (storage.get(storage.keys.LOCAL_TEST_MNEMONIC)) {
     //    obtainAccount();
   }
@@ -33,12 +34,12 @@ function Ethereum() {
                 sx={{ width: 1 }}
                 multiline
                 rows={2}
-                defaultValue={mnemonic}
+                value={mnemonic}
                 error={errorMnemonic}
                 onChange={handleChange}
-              // InputProps={{
-              //   endAdornment: <InputAdornment position="end" onClick={genMnemonic} >Gen</InputAdornment>,
-              // }}
+                InputProps={{
+                  endAdornment: <Tooltip title="Clear" placement="right-end"><IconButton id="mnemonicc" sx={{ visibility: mnemonic ? "visible" : "hidden" }} onClick={handleClear}><ClearIcon /></IconButton></Tooltip>,
+                }}
               />
               <FormHelperText>{errorText}</FormHelperText>
             </FormControl>
@@ -50,9 +51,12 @@ function Ethereum() {
                 label="Path"
                 color="success"
                 sx={{ width: 1 }}
-                defaultValue={path}
+                value={path}
                 onChange={handleChange}
                 helperText="Default Path: m/44'/60'/0'/0/0"
+                InputProps={{
+                  endAdornment: <Tooltip title="Clear" placement="right-end"><IconButton id="pathc" sx={{ visibility: path ? "visible" : "hidden" }} onClick={handleClear}><ClearIcon /></IconButton></Tooltip>,
+                }}
               />
             </FormControl>
           </Grid>
@@ -91,7 +95,6 @@ function Ethereum() {
                 label="Address"
                 color="success"
                 sx={{ width: 1 }}
-                // value={address}
                 InputProps={{
                   value: address,
                   readOnly: true,
@@ -131,8 +134,11 @@ function Ethereum() {
                 color="info"
                 error={errorTo}
                 sx={{ width: 1 }}
-                defaultValue={to}
+                value={to}
                 onChange={handleChange}
+                InputProps={{
+                  endAdornment: <Tooltip title="Clear" placement="right-end"><IconButton id="toc" sx={{ visibility: to ? "visible" : "hidden" }} onClick={handleClear}><ClearIcon /></IconButton></Tooltip>,
+                }}
               />
               <FormHelperText>{errorText}</FormHelperText>
             </FormControl>
@@ -147,8 +153,11 @@ function Ethereum() {
                 inputProps={{
                   min: 1,
                 }}
-                defaultValue={chainId}
+                value={chainId}
                 onChange={handleChange}
+                InputProps={{
+                  endAdornment: <Tooltip title="Clear" placement="right-end"><IconButton id="chainIdc" sx={{ visibility: chainId ? "visible" : "hidden" }} onClick={handleClear}><ClearIcon /></IconButton></Tooltip>,
+                }}
               />
             </FormControl>
           </Grid>
@@ -164,7 +173,7 @@ function Ethereum() {
                   min: 0,
                   max: 2
                 }}
-                defaultValue={type}
+                value={type}
                 helperText=" Tip : 0: legacy; 1:eip2930 ; 2:eip1559"
                 onChange={handleChange}
               >
@@ -187,10 +196,11 @@ function Ethereum() {
                 inputProps={{
                   min: 0
                 }}
-                defaultValue={value}
+                value={value}
                 onChange={handleChange}
                 InputProps={{
-                  endAdornment: <InputAdornment position="end">Wei</InputAdornment>,
+                  startAdornment: <InputAdornment position="start">Wei</InputAdornment>,
+                  endAdornment: <Tooltip title="Clear" placement="right-end"><IconButton id="valuec" sx={{ visibility: value ? "visible" : "hidden" }} onClick={handleClear}><ClearIcon /></IconButton></Tooltip>,
                 }}
               />
             </FormControl>
@@ -206,8 +216,11 @@ function Ethereum() {
                 inputProps={{
                   min: 0
                 }}
-                defaultValue={nonce}
+                value={nonce}
                 onChange={handleChange}
+                InputProps={{
+                  endAdornment: <Tooltip title="Clear" placement="right-end"><IconButton id="noncec" sx={{ visibility: "visible" }} onClick={handleClear}><ClearIcon /></IconButton></Tooltip>,
+                }}
               />
             </FormControl>
           </Grid>
@@ -222,10 +235,11 @@ function Ethereum() {
                 inputProps={{
                   min: 1
                 }}
-                defaultValue={gasPrice}
+                value={gasPrice}
                 onChange={handleChange}
                 InputProps={{
-                  endAdornment: <InputAdornment position="end">Wei/Gas</InputAdornment>,
+                  startAdornment: <InputAdornment position="end">Wei/Gas</InputAdornment>,
+                  endAdornment: <Tooltip title="Clear" placement="right-end"><IconButton id="gasPricec" sx={{ visibility: gasPrice ? "visible" : "hidden" }} onClick={handleClear}><ClearIcon /></IconButton></Tooltip>,
                 }}
               />
             </FormControl>
@@ -241,10 +255,11 @@ function Ethereum() {
                 inputProps={{
                   min: 21000
                 }}
-                defaultValue={gasLimit}
+                value={gasLimit}
                 onChange={handleChange}
                 InputProps={{
-                  endAdornment: <InputAdornment position="end">Gas</InputAdornment>,
+                  startAdornment: <InputAdornment position="end">Gas</InputAdornment>,
+                  endAdornment: <Tooltip title="Clear" placement="right-end"><IconButton id="gasLimitc" sx={{ visibility: gasLimit ? "visible" : "hidden" }} onClick={handleClear}><ClearIcon /></IconButton></Tooltip>,
                 }}
               />
             </FormControl>
@@ -260,10 +275,11 @@ function Ethereum() {
                 inputProps={{
                   min: 1
                 }}
-                defaultValue={maxPriorityFeePerGas}
+                value={maxPriorityFeePerGas}
                 onChange={handleChange}
                 InputProps={{
-                  endAdornment: <InputAdornment position="end">Wei</InputAdornment>,
+                  startAdornment: <InputAdornment position="end">Wei</InputAdornment>,
+                  endAdornment: <Tooltip title="Clear" placement="right-end"><IconButton id="maxPriorityFeePerGasc" sx={{ visibility: maxPriorityFeePerGas ? "visible" : "hidden" }} onClick={handleClear}><ClearIcon /></IconButton></Tooltip>,
                 }}
               />
             </FormControl>
@@ -279,10 +295,11 @@ function Ethereum() {
                 inputProps={{
                   min: 1
                 }}
-                defaultValue={maxFeePerGas}
+                value={maxFeePerGas}
                 onChange={handleChange}
                 InputProps={{
-                  endAdornment: <InputAdornment position="end">Wei</InputAdornment>,
+                  startAdornment: <InputAdornment position="end">Wei</InputAdornment>,
+                  endAdornment: <Tooltip title="Clear" placement="right-end"><IconButton id="maxFeePerGasc" sx={{ visibility: maxFeePerGas ? "visible" : "hidden" }} onClick={handleClear}><ClearIcon /></IconButton></Tooltip>,
                 }}
               />
             </FormControl>
@@ -298,8 +315,11 @@ function Ethereum() {
                 sx={{ width: 1 }}
                 multiline
                 rows={3}
-                defaultValue={data}
+                value={data}
                 onChange={handleChange}
+                InputProps={{
+                  endAdornment: <Tooltip title="Clear" placement="right-end"><IconButton id="datac" sx={{ visibility: data ? "visible" : "hidden" }} onClick={handleClear}><ClearIcon /></IconButton></Tooltip>,
+                }}
               />
               <FormHelperText>{errorText}</FormHelperText>
             </FormControl>
@@ -314,10 +334,10 @@ function Ethereum() {
                 sx={{ width: 1 }}
                 multiline
                 rows={3}
-                defaultValue={txRaw}
+                value={txRaw}
                 InputProps={{
                   readOnly: true,
-                  endAdornment: <InputAdornment position="end" onClick={parseTx} ><PsychologyAltOutlinedIcon fontSize="large" color="success"></PsychologyAltOutlinedIcon></InputAdornment>,
+                  startAdornment: <InputAdornment position="start" onClick={parseTx} ><PsychologyAltOutlinedIcon fontSize="large" color="success"></PsychologyAltOutlinedIcon></InputAdornment>,
                 }}
               />
             </FormControl>
@@ -337,8 +357,11 @@ function Ethereum() {
                 sx={{ width: 1 }}
                 multiline
                 rows={3}
-                defaultValue={message}
+                value={message}
                 onChange={handleChange}
+                InputProps={{
+                  endAdornment: <Tooltip title="Clear" placement="right-end"><IconButton id="messagec" sx={{ visibility: message ? "visible" : "hidden" }} onClick={handleClear}><ClearIcon /></IconButton></Tooltip>,
+                }}
               />
             </FormControl>
           </Grid>
@@ -351,7 +374,7 @@ function Ethereum() {
                 sx={{ width: 1 }}
                 multiline
                 rows={1}
-                defaultValue={messageHash}
+                value={messageHash}
                 InputProps={{
                   readOnly: true,
                 }}
@@ -368,7 +391,7 @@ function Ethereum() {
                 sx={{ width: 1 }}
                 multiline
                 rows={3}
-                defaultValue={signature}
+                value={signature}
                 InputProps={{
                   readOnly: true,
                 }}
@@ -392,8 +415,11 @@ function Ethereum() {
                 multiline
                 rows={3}
                 error={errorTypedData}
-                defaultValue={JSON.stringify(typedData)}
+                value={typedData}
                 onChange={handleChange} 
+                InputProps={{
+                  endAdornment: <Tooltip title="Clear" placement="right-end"><IconButton id="typedDatac" sx={{ visibility: typedData ? "visible" : "hidden" }} onClick={handleClear}><ClearIcon /></IconButton></Tooltip>,
+                }}
               />
               <FormHelperText>{errorText}</FormHelperText>
             </FormControl>
@@ -407,7 +433,7 @@ function Ethereum() {
                 sx={{ width: 1 }}
                 multiline
                 rows={1}
-                defaultValue={messageHash}
+                value={messageHash}
                 InputProps={{
                   readOnly: true,
                 }}
@@ -424,7 +450,7 @@ function Ethereum() {
                 sx={{ width: 1 }}
                 multiline
                 rows={3}
-                defaultValue={signatureTypedData}
+                value={signatureTypedData}
                 InputProps={{
                   readOnly: true,
                 }}

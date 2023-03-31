@@ -1,9 +1,12 @@
-import { Button, Divider, InputAdornment, Grid, MenuItem, Container, TextField, FormControl } from "@mui/material";
+import { Tooltip, Button, Divider, InputAdornment, Grid, MenuItem, Container, TextField, FormControl } from "@mui/material";
 import cryptoStore from "../state/crypto-state";
+import ClearIcon from "@mui/icons-material/Clear";
+import IconButton from "@mui/material/IconButton";
 function Crypto() {
   const { cryptoTypes, cryptoType, privateKey, auxRand, signature, message, messageHash, signMessage,
-    handleChange, random
+    handleChange, handleClear, random
   } = cryptoStore()
+
   return (
     <div >
       <Container fixed>
@@ -36,6 +39,9 @@ function Crypto() {
                 color="success"
                 sx={{ width: 1 }}
                 value={privateKey}
+                InputProps={{
+                  endAdornment: <Tooltip title="Clear" placement="right-end"><IconButton id="privateKeyc" sx={{ visibility: privateKey ? "visible" : "hidden" }} onClick={handleClear}><ClearIcon /></IconButton></Tooltip>,
+                }}
                 onChange={handleChange}
               />
             </FormControl>
@@ -48,6 +54,9 @@ function Crypto() {
                 color="success"
                 sx={{ width: 1 }}
                 value={auxRand}
+                InputProps={{
+                  endAdornment: <Tooltip title="Clear" placement="right-end"><IconButton id="auxRandc" sx={{ visibility: auxRand ? "visible" : "hidden" }} onClick={handleClear}><ClearIcon /></IconButton></Tooltip>,
+                }}
                 onChange={handleChange}
               />
             </FormControl>
@@ -62,10 +71,11 @@ function Crypto() {
                 color="success"
                 sx={{ width: 1 }}
                 multiline
-                rows={3}
+                rows={1}
                 value={message}
                 InputProps={{
-                  endAdornment: <InputAdornment id="random" position="end" onClick={random} ><h3 style={{ color: 'green' }}>Random</h3></InputAdornment>,
+                  startAdornment: <InputAdornment id="random" position="start" onClick={random} ><h3 style={{ color: 'green' }}>Random</h3></InputAdornment>,
+                  endAdornment: <Tooltip title="Clear" placement="right-end"><IconButton id="messagec" sx={{ visibility: message ? "visible" : "hidden" }} onClick={handleClear}><ClearIcon /></IconButton></Tooltip>,
                 }}
                 onChange={handleChange}
               />
@@ -106,7 +116,7 @@ function Crypto() {
           </Grid>
         </Grid>
         <FormControl fullWidth sx={{ m: 1 }} variant="standard">
-          <Button id="signMessage" onClick={signMessage} variant="contained" color="success" disabled={privateKey.trim() == "" || privateKey.trim().length < 64} >sign message</Button>
+          <Button id="signMessage" onClick={signMessage} variant="contained" color="success" disabled={privateKey.trim() == "" || privateKey.trim().length < 64 ||message.trim() == "" || message.trim().length < 64} >sign message</Button>
         </FormControl>
       </Container>
     </div>
