@@ -218,6 +218,7 @@ function Ethereum() {
                 }}
                 value={nonce}
                 onChange={handleChange}
+                
                 InputProps={{
                   endAdornment: <Tooltip title="Clear" placement="right-end"><IconButton id="noncec" sx={{ visibility: "visible" }} onClick={handleClear}><ClearIcon /></IconButton></Tooltip>,
                 }}
@@ -238,7 +239,7 @@ function Ethereum() {
                 value={gasPrice}
                 onChange={handleChange}
                 InputProps={{
-                  startAdornment: <InputAdornment position="end">Wei/Gas</InputAdornment>,
+                  startAdornment: <InputAdornment position="start">Wei/Gas</InputAdornment>,
                   endAdornment: <Tooltip title="Clear" placement="right-end"><IconButton id="gasPricec" sx={{ visibility: gasPrice ? "visible" : "hidden" }} onClick={handleClear}><ClearIcon /></IconButton></Tooltip>,
                 }}
               />
@@ -258,7 +259,7 @@ function Ethereum() {
                 value={gasLimit}
                 onChange={handleChange}
                 InputProps={{
-                  startAdornment: <InputAdornment position="end">Gas</InputAdornment>,
+                  startAdornment: <InputAdornment position="start">Gas</InputAdornment>,
                   endAdornment: <Tooltip title="Clear" placement="right-end"><IconButton id="gasLimitc" sx={{ visibility: gasLimit ? "visible" : "hidden" }} onClick={handleClear}><ClearIcon /></IconButton></Tooltip>,
                 }}
               />
@@ -278,7 +279,7 @@ function Ethereum() {
                 value={maxPriorityFeePerGas}
                 onChange={handleChange}
                 InputProps={{
-                  startAdornment: <InputAdornment position="end">Wei</InputAdornment>,
+                  startAdornment: <InputAdornment position="start">Wei</InputAdornment>,
                   endAdornment: <Tooltip title="Clear" placement="right-end"><IconButton id="maxPriorityFeePerGasc" sx={{ visibility: maxPriorityFeePerGas ? "visible" : "hidden" }} onClick={handleClear}><ClearIcon /></IconButton></Tooltip>,
                 }}
               />
@@ -298,7 +299,7 @@ function Ethereum() {
                 value={maxFeePerGas}
                 onChange={handleChange}
                 InputProps={{
-                  startAdornment: <InputAdornment position="end">Wei</InputAdornment>,
+                  startAdornment: <InputAdornment position="start">Wei</InputAdornment>,
                   endAdornment: <Tooltip title="Clear" placement="right-end"><IconButton id="maxFeePerGasc" sx={{ visibility: maxFeePerGas ? "visible" : "hidden" }} onClick={handleClear}><ClearIcon /></IconButton></Tooltip>,
                 }}
               />

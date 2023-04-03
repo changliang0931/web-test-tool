@@ -92,7 +92,7 @@ const useStore = create<EthereumState>((set, get) => ({
             label: 'eip1559',
         }
     ],
-    mnemonic: !storage.get(storage.keys.LOCAL_TEST_MNEMONIC) ? ";gauge hole clog property soccer idea cycle stadium utility slice hold chief" : storage.get(storage.keys.LOCAL_TEST_MNEMONIC),
+    mnemonic: !storage.get(storage.keys.LOCAL_TEST_MNEMONIC) ? "gauge hole clog property soccer idea cycle stadium utility slice hold chief" : storage.get(storage.keys.LOCAL_TEST_MNEMONIC),
     errorMnemonic: false,
     path: ETHEREUM_DEFAULT_PATH,
     errorText: "",

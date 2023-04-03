@@ -1,16 +1,16 @@
-import { Button, Divider, Grid, FormHelperText, Container, TextField, FormControl, InputAdornment, MenuItem, } from "@mui/material";
+import { Button, Divider, Tooltip, Grid, FormHelperText, Container, TextField, FormControl, InputAdornment, MenuItem, } from "@mui/material";
 import myStore from "../state/aptos-state";
-
+import ClearIcon from "@mui/icons-material/Clear";
+import IconButton from "@mui/material/IconButton";
 function Aptos() {
-  const { mnemonic, errorMnemonic, errorText, path, publicKey, privateKey, address, errorTo, to, chainId, modules, func, module, typeTag, typeTags, funcs, amount, genMnemonic, handleChange, obtainAccount, signTx, signMessage, parseTx, expTimeStamp, message, signature, gasUnitPrice,
-    maxGasAmount, sequenceNumber, payload, txRaw
+  const { mnemonic, errorMnemonic, errorText, path, publicKey, privateKey, address, errorTo, to, chainId, modules, func, module, typeTag, typeTags, funcs, amount, handleClear, handleChange, obtainAccount, signTx, signMessage, expTimeStamp, message, signature, gasUnitPrice,
+    maxGasAmount, sequenceNumber, payload, txRaw,
+    setMnemonic
   } = myStore()
+  
   return (
     <div >
       <Container fixed>
-        {/* <Divider>
-          <h1>Aptos Wallet Test Tool</h1>
-        </Divider> */}
         <Divider><h3>Mnemonic-Key-Derivation-Address</h3></Divider>
         <Grid container spacing={2}>
           <Grid item xs={12}>
@@ -23,12 +23,12 @@ function Aptos() {
                 sx={{ width: 1 }}
                 multiline
                 rows={2}
-                defaultValue={mnemonic}
+                value={mnemonic}
                 error={errorMnemonic}
                 onChange={handleChange}
-                // InputProps={{
-                //   endAdornment: <InputAdornment position="end" onClick={genMnemonic}>Gen</InputAdornment>,
-                // }}
+                InputProps={{
+                  endAdornment: <Tooltip title="Clear" placement="right-end" onClick={handleClear} ><IconButton id="mnemonicc" sx={{ visibility: mnemonic ? "visible" : "hidden" }} ><ClearIcon /></IconButton></Tooltip>,
+                }}
               />
               <FormHelperText>{errorText}</FormHelperText>
             </FormControl>
@@ -40,9 +40,12 @@ function Aptos() {
                 label="Path"
                 color="success"
                 sx={{ width: 1 }}
-                defaultValue={path}
+                value={path}
                 onChange={handleChange}
                 helperText="Default Path: m/44'/637'/0'/0'/0'"
+                InputProps={{
+                  endAdornment: <Tooltip title="Clear" placement="right-end"><IconButton id="pathc" sx={{ visibility: path ? "visible" : "hidden" }} onClick={handleClear}><ClearIcon /></IconButton></Tooltip>,
+                }}
               />
             </FormControl>
           </Grid>
@@ -56,6 +59,7 @@ function Aptos() {
                 InputProps={{
                   value: publicKey,
                   readOnly: true,
+
                 }}
               />
             </FormControl>
@@ -119,8 +123,11 @@ function Aptos() {
                 color="info"
                 error={errorTo}
                 sx={{ width: 1 }}
-                defaultValue={to}
+                value={to}
                 onChange={handleChange}
+                InputProps={{
+                  endAdornment: <Tooltip title="Clear" placement="right-end"><IconButton id="toc" sx={{ visibility: to ? "visible" : "hidden" }} onClick={handleClear}><ClearIcon /></IconButton></Tooltip>,
+                }}
               />
               <FormHelperText>{errorText}</FormHelperText>
             </FormControl>
@@ -132,12 +139,12 @@ function Aptos() {
                 id="typeTag"
                 label="TypeTag"
                 name="typeTag"
-                defaultValue={typeTag}
+                value={typeTag}
                 helperText=" Tip : 0x1::aptos_coin::AptosCoin"
                 onChange={handleChange}
               >
                 {typeTags.map((option: any) => (
-                  <MenuItem id={option}  key={option} value={option}>
+                  <MenuItem id={option} key={option} value={option}>
                     {option}
                   </MenuItem>
                 ))}
@@ -151,7 +158,7 @@ function Aptos() {
                 id="module"
                 label="Module"
                 name="module"
-                defaultValue={module}
+                value={module}
                 helperText=" Tip : 0x1::aptos_account"
                 onChange={handleChange}
               >
@@ -171,7 +178,7 @@ function Aptos() {
                 id="func"
                 label="Func"
                 name="func"
-                defaultValue={func}
+                value={func}
                 helperText=" Tip : transfer"
                 onChange={handleChange}
               >
@@ -195,8 +202,11 @@ function Aptos() {
                 inputProps={{
                   min: 1,
                 }}
-                defaultValue={chainId}
+                value={chainId}
                 onChange={handleChange}
+                InputProps={{
+                  endAdornment: <Tooltip title="Clear" placement="right-end"><IconButton id="chainIdc" sx={{ visibility: chainId ? "visible" : "hidden" }} onClick={handleClear}><ClearIcon /></IconButton></Tooltip>,
+                }}
                 helperText="ChainId  1:mainnet ;  2:testnet; 38:devnet"
               />
             </FormControl>
@@ -211,8 +221,11 @@ function Aptos() {
                 inputProps={{
                   min: 1,
                 }}
-                defaultValue={gasUnitPrice}
+                value={gasUnitPrice}
                 onChange={handleChange}
+                InputProps={{
+                  endAdornment: <Tooltip title="Clear" placement="right-end"><IconButton id="gasUnitPricec" sx={{ visibility: gasUnitPrice ? "visible" : "hidden" }} onClick={handleClear}><ClearIcon /></IconButton></Tooltip>,
+                }}
               />
             </FormControl>
           </Grid>
@@ -228,8 +241,11 @@ function Aptos() {
                 inputProps={{
                   min: 1,
                 }}
-                defaultValue={amount}
+                value={amount}
                 onChange={handleChange}
+                InputProps={{
+                  endAdornment: <Tooltip title="Clear" placement="right-end"><IconButton id="amountc" sx={{ visibility: amount ? "visible" : "hidden" }} onClick={handleClear}><ClearIcon /></IconButton></Tooltip>,
+                }}
               />
             </FormControl>
           </Grid>
@@ -245,10 +261,12 @@ function Aptos() {
                 inputProps={{
                   min: 21000
                 }}
-                defaultValue={maxGasAmount}
+                value={maxGasAmount}
                 onChange={handleChange}
+
                 InputProps={{
-                  endAdornment: <InputAdornment position="end">Gas</InputAdornment>,
+                  startAdornment: <InputAdornment position="start">Gas</InputAdornment>,
+                  endAdornment: <Tooltip title="Clear" placement="right-end"><IconButton id="maxGasAmountc" sx={{ visibility: maxGasAmount ? "visible" : "hidden" }} onClick={handleClear}><ClearIcon /></IconButton></Tooltip>,
                 }}
               />
             </FormControl>
@@ -264,8 +282,11 @@ function Aptos() {
                 inputProps={{
                   min: 1,
                 }}
-                defaultValue={sequenceNumber}
+                value={sequenceNumber}
                 onChange={handleChange}
+                InputProps={{
+                  endAdornment: <Tooltip title="Clear" placement="right-end"><IconButton id="sequenceNumberc" sx={{ visibility: sequenceNumber ? "visible" : "hidden" }} onClick={handleClear}><ClearIcon /></IconButton></Tooltip>,
+                }}
               />
             </FormControl>
           </Grid>
@@ -279,8 +300,11 @@ function Aptos() {
                 inputProps={{
                   min: 1,
                 }}
-                defaultValue={expTimeStamp}
+                value={expTimeStamp}
                 onChange={handleChange}
+                InputProps={{
+                  endAdornment: <Tooltip title="Clear" placement="right-end"><IconButton id="expTimeStampc" sx={{ visibility: expTimeStamp ? "visible" : "hidden" }} onClick={handleClear}><ClearIcon /></IconButton></Tooltip>,
+                }}
               />
             </FormControl>
           </Grid>
@@ -293,9 +317,9 @@ function Aptos() {
                 sx={{ width: 1 }}
                 multiline
                 rows={3}
-                defaultValue={payload}
+                value={payload}
                 InputProps={{
-                  readOnly: true,
+                  readOnly: true
                 }}
               />
             </FormControl>
@@ -309,10 +333,9 @@ function Aptos() {
                 sx={{ width: 1 }}
                 multiline
                 rows={2}
-                defaultValue={txRaw}
+                value={txRaw}
                 InputProps={{
                   readOnly: true,
-                  endAdornment: <InputAdornment position="end" onClick={parseTx} >x</InputAdornment>,
                 }}
               />
             </FormControl>
@@ -334,8 +357,11 @@ function Aptos() {
                 sx={{ width: 1 }}
                 multiline
                 rows={3}
-                defaultValue={message}
+                value={message}
                 onChange={handleChange}
+                InputProps={{
+                  endAdornment: <Tooltip title="Clear" placement="right-end"><IconButton id="messagec" sx={{ visibility: message ? "visible" : "hidden" }} onClick={handleClear}><ClearIcon /></IconButton></Tooltip>,
+                }}
               />
             </FormControl>
           </Grid>
@@ -348,7 +374,7 @@ function Aptos() {
                 sx={{ width: 1 }}
                 multiline
                 rows={3}
-                defaultValue={signature}
+                value={signature}
                 InputProps={{
                   readOnly: true,
                 }}
