@@ -9,6 +9,7 @@ const Home = Loadable(lazy(() => import('../pages/Home')));
 const EosPage = Loadable(lazy(() => import('../pages/Eos')));
 const TronPage = Loadable(lazy(() => import('../pages/Tron')));
 const CryptoPage = Loadable(lazy(() => import('../pages/crypto')));
+const XrpPage = Loadable(lazy(() => import('../pages/Xrp')));
 const MainRoutes = {
     path: '/',
     element: <Layout />,
@@ -36,6 +37,10 @@ const MainRoutes = {
         {
             path: 'polkadot',
             element: <EosPage />
+        },
+        {
+            path: 'xrp',
+            element: <XrpPage />
         },
         {
             path: 'crypto',
