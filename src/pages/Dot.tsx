@@ -1,20 +1,17 @@
-import { Button, Divider, Grid, FormHelperText, Container, TextField, FormControl, InputAdornment, MenuItem, } from "@mui/material";
+import { Tooltip, Button, Divider, FormHelperText, Grid, MenuItem, Container, TextField, FormControl,IconButton } from "@mui/material";
 import dotStore from "../state/dot-state";
-
+import ClearIcon from "@mui/icons-material/Clear";
 function Dot() {
   const { mnemonic, keypairType, keypairTypes, errorMnemonic, errorText, path, publicKey, privateKey, address,
     // maxNetUsageWords, maxCpuUsageMs, delaySec, expiration, refBlockNum, refBlockPrefix, actions, errorActions, contextFreeActions, transactionExtensions, contextFreeData, 
     signature,
     message,
-    signMessage, handleChange, obtainAccount,
+    signMessage, handleChange, obtainAccount,handleClear
     // signTx, 
   } = dotStore()
   return (
     <div >
       <Container fixed>
-        {/* <Divider>
-          <h1>Dot Wallet Test Tool</h1>
-        </Divider> */}
         <Divider><h3>Mnemonic-Key-Derivation-Address</h3></Divider>
         <Grid container spacing={2}>
           <Grid item xs={12}>
@@ -27,12 +24,12 @@ function Dot() {
                 sx={{ width: 1 }}
                 multiline
                 rows={2}
-                defaultValue={mnemonic}
+                value={mnemonic}
                 error={errorMnemonic}
                 onChange={handleChange}
-              // InputProps={{
-              //   endAdornment: <InputAdornment position="end" onClick={genMnemonic}>Gen</InputAdornment>,
-              // }}
+                InputProps={{
+                  endAdornment: <Tooltip title="Clear" placement="right-end" onClick={handleClear} ><IconButton id="mnemonicc" sx={{ visibility: mnemonic ? "visible" : "hidden" }} ><ClearIcon /></IconButton></Tooltip>,
+                }}
               />
               <FormHelperText>{errorText}</FormHelperText>
             </FormControl>
@@ -62,9 +59,12 @@ function Dot() {
                 label="Path"
                 color="success"
                 sx={{ width: 1 }}
-                defaultValue={path}
+                value={path}
                 onChange={handleChange}
                 helperText="Default Path: //polkadot//0 "
+                InputProps={{
+                  endAdornment: <Tooltip title="Clear" placement="right-end"><IconButton id="pathc" sx={{ visibility: path ? "visible" : "hidden" }} onClick={handleClear}><ClearIcon /></IconButton></Tooltip>,
+                }}
               />
             </FormControl>
           </Grid>
@@ -126,7 +126,7 @@ function Dot() {
                 id="chainId"
                 label="ChainId"
                 name="chainId"
-                defaultValue={chainId}
+                value={chainId}
                 helperText=" Tip : Mainnet: aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906"
                 onChange={handleChange}
               >
@@ -149,7 +149,7 @@ function Dot() {
                 inputProps={{
                   min: 0
                 }}
-                defaultValue={maxNetUsageWords}
+                value={maxNetUsageWords}
                 onChange={handleChange}
               />
             </FormControl>
@@ -166,7 +166,7 @@ function Dot() {
                 inputProps={{
                   min: 0
                 }}
-                defaultValue={maxCpuUsageMs}
+                value={maxCpuUsageMs}
                 onChange={handleChange}
               />
             </FormControl>
@@ -182,7 +182,7 @@ function Dot() {
                 inputProps={{
                   min: 0
                 }}
-                defaultValue={delaySec}
+                value={delaySec}
                 onChange={handleChange}
               />
 
@@ -194,7 +194,7 @@ function Dot() {
                 id="expiration"
                 label="expiration"
                 color="info"
-                defaultValue={expiration}
+                value={expiration}
                 onChange={handleChange}
               />
             </FormControl>
@@ -211,7 +211,7 @@ function Dot() {
                   min: 10000,
                   max: 99999
                 }}
-                defaultValue={refBlockNum}
+                value={refBlockNum}
                 onChange={handleChange}
               />
             </FormControl>
@@ -227,7 +227,7 @@ function Dot() {
                   min: 100000000,
                   max: 999999999
                 }}
-                defaultValue={refBlockPrefix}
+                value={refBlockPrefix}
                 onChange={handleChange}
               />
             </FormControl>
@@ -242,7 +242,7 @@ function Dot() {
                 sx={{ width: 1 }}
                 multiline
                 rows={3}
-                defaultValue={JSON.stringify(actions)}
+                value={JSON.stringify(actions)}
                 onChange={handleChange}
               />
               <FormHelperText>{errorText}</FormHelperText>
@@ -259,7 +259,7 @@ function Dot() {
                 sx={{ width: 1 }}
                 multiline
                 rows={3}
-                // defaultValue={signature}
+                // value={signature}
                 InputProps={{
                   value: signature,
                   readOnly: true,
@@ -284,8 +284,11 @@ function Dot() {
                 sx={{ width: 1 }}
                 multiline
                 rows={3}
-                defaultValue={message}
+                value={message}
                 onChange={handleChange}
+                InputProps={{
+                  endAdornment: <Tooltip title="Clear" placement="right-end"><IconButton id="messagec" sx={{ visibility: message ? "visible" : "hidden" }} onClick={handleClear}><ClearIcon /></IconButton></Tooltip>,
+                }}
               />
             </FormControl>
           </Grid>
@@ -298,7 +301,7 @@ function Dot() {
                 sx={{ width: 1 }}
                 multiline
                 rows={1}
-                defaultValue={messageHash}
+                value={messageHash}
                 InputProps={{
                   readOnly: true,
                 }}
@@ -315,10 +318,11 @@ function Dot() {
                 sx={{ width: 1 }}
                 multiline
                 rows={3}
-                defaultValue={signature}
+                value={signature}
                 InputProps={{
                   readOnly: true,
                 }}
+
               />
             </FormControl>
           </Grid>

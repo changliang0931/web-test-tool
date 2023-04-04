@@ -345,7 +345,7 @@ function Ethereum() {
           </Grid>
         </Grid>
         <FormControl fullWidth sx={{ m: 1 }} variant="standard">
-          <Button id="signTx" onClick={signTx} variant="contained" color="info" disabled={address.trim() == ""} >sign transation</Button>
+          <Button id="signTx" onClick={signTx} variant="contained" color="info" disabled={address!.trim() == ""} >sign transation</Button>
         </FormControl>
         <Divider><h3>Message-Sign</h3></Divider>
         <Grid container spacing={2}>
@@ -401,7 +401,7 @@ function Ethereum() {
           </Grid>
         </Grid>
         <FormControl fullWidth sx={{ m: 1 }} variant="standard">
-          <Button id="signMessage" onClick={signMessage} variant="contained" color="secondary" disabled={address.trim() == ""} >sign message</Button>
+          <Button id="signMessage" onClick={signMessage} variant="contained" color="secondary" disabled={address!.trim() == ""} >sign message</Button>
         </FormControl>
 
         <Divider><h3>Typed-Data-Sign</h3></Divider>
@@ -460,7 +460,7 @@ function Ethereum() {
           </Grid>
         </Grid>
         <FormControl fullWidth sx={{ m: 1 }} variant="standard">
-          <Button id="signTypedData" onClick={signTypedData} variant="contained" color="warning" disabled={address.trim() == ""} >sign type data</Button>
+          <Button id="signTypedData" onClick={signTypedData} variant="contained" color="warning" disabled={address!.trim() == ""} >sign type data</Button>
         </FormControl>
       </Container>
     </div>

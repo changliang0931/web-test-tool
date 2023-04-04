@@ -1,17 +1,14 @@
-import { Button, Divider, Grid, FormHelperText, Container, TextField, FormControl, InputAdornment, } from "@mui/material";
+import { Button, Divider, Tooltip, Grid, FormHelperText, Container, TextField, FormControl,  IconButton } from "@mui/material";
 import tronStore from "../state/tron-state";
-
+import ClearIcon from "@mui/icons-material/Clear";
 function Tron() {
   const { mnemonic, errorMnemonic, errorText, path, publicKey, privateKey, address,
     refBlockBytes, refBlockNum, refBlockHash, expiration, timestamp, feeLimit, contracts, errorContracts, payload, signature,
-    genMnemonic, handleChange, obtainAccount, signTx,
+    handleClear, handleChange, obtainAccount, signTx,
   } = tronStore()
   return (
     <div >
       <Container fixed>
-        {/* <Divider>
-          <h1>Tron Wallet Test Tool</h1>
-        </Divider> */}
         <Divider><h3>Mnemonic-Key-Derivation-Address</h3></Divider>
         <Grid container spacing={2}>
           <Grid item xs={12}>
@@ -24,12 +21,12 @@ function Tron() {
                 sx={{ width: 1 }}
                 multiline
                 rows={2}
-                defaultValue={mnemonic}
+                value={mnemonic}
                 error={errorMnemonic}
                 onChange={handleChange}
-              // InputProps={{
-              //   endAdornment: <InputAdornment position="end" onClick={genMnemonic}>Gen</InputAdornment>,
-              // }}
+                InputProps={{
+                  endAdornment: <Tooltip title="Clear" placement="right-end" onClick={handleClear} ><IconButton id="mnemonicc" sx={{ visibility: mnemonic ? "visible" : "hidden" }} ><ClearIcon /></IconButton></Tooltip>,
+                }}
               />
               <FormHelperText>{errorText}</FormHelperText>
             </FormControl>
@@ -41,9 +38,12 @@ function Tron() {
                 label="Path"
                 color="success"
                 sx={{ width: 1 }}
-                defaultValue={path}
+                value={path}
                 onChange={handleChange}
                 helperText="Default Path: m/44'/195'/0'/0/0"
+                InputProps={{
+                  endAdornment: <Tooltip title="Clear" placement="right-end"><IconButton id="pathc" sx={{ visibility: path ? "visible" : "hidden" }} onClick={handleClear}><ClearIcon /></IconButton></Tooltip>,
+                }}
               />
             </FormControl>
           </Grid>
@@ -104,8 +104,11 @@ function Tron() {
                 label="RefBlockHash"
                 color="info"
                 sx={{ width: 1 }}
-                defaultValue={refBlockHash}
+                value={refBlockHash}
                 onChange={handleChange}
+                InputProps={{
+                  endAdornment: <Tooltip title="Clear" placement="right-end"><IconButton id="refBlockHashc" sx={{ visibility: refBlockHash ? "visible" : "hidden" }} onClick={handleClear}><ClearIcon /></IconButton></Tooltip>,
+                }}
               />
             </FormControl>
           </Grid>
@@ -116,8 +119,11 @@ function Tron() {
                 label="RefBlockBytes"
                 color="info"
                 sx={{ width: 1 }}
-                defaultValue={refBlockBytes}
+                value={refBlockBytes}
                 onChange={handleChange}
+                InputProps={{
+                  endAdornment: <Tooltip title="Clear" placement="right-end"><IconButton id="refBlockBytesc" sx={{ visibility: refBlockBytes ? "visible" : "hidden" }} onClick={handleClear}><ClearIcon /></IconButton></Tooltip>,
+                }}
               />
             </FormControl>
           </Grid>
@@ -132,8 +138,11 @@ function Tron() {
                 inputProps={{
                   min: 0
                 }}
-                defaultValue={refBlockNum}
+                value={refBlockNum}
                 onChange={handleChange}
+                InputProps={{
+                  endAdornment: <Tooltip title="Clear" placement="right-end"><IconButton id="refBlockNumc" sx={{ visibility: refBlockNum ? "visible" : "hidden" }} onClick={handleClear}><ClearIcon /></IconButton></Tooltip>,
+                }}
               />
             </FormControl>
           </Grid>
@@ -143,8 +152,11 @@ function Tron() {
                 id="expiration"
                 label="Expiration"
                 color="info"
-                defaultValue={expiration}
+                value={expiration}
                 onChange={handleChange}
+                InputProps={{
+                  endAdornment: <Tooltip title="Clear" placement="right-end"><IconButton id="expirationc" sx={{ visibility: expiration ? "visible" : "hidden" }} onClick={handleClear}><ClearIcon /></IconButton></Tooltip>,
+                }}
               />
             </FormControl>
           </Grid>
@@ -156,8 +168,11 @@ function Tron() {
                 label="Timestamp"
                 color="info"
                 type="number"
-                defaultValue={timestamp}
+                value={timestamp}
                 onChange={handleChange}
+                InputProps={{
+                  endAdornment: <Tooltip title="Clear" placement="right-end"><IconButton id="timestampc" sx={{ visibility: timestamp ? "visible" : "hidden" }} onClick={handleClear}><ClearIcon /></IconButton></Tooltip>,
+                }}
               />
             </FormControl>
           </Grid>
@@ -172,8 +187,11 @@ function Tron() {
                   min: 0,
                   max: 999999999
                 }}
-                defaultValue={feeLimit}
+                value={feeLimit}
                 onChange={handleChange}
+                InputProps={{
+                  endAdornment: <Tooltip title="Clear" placement="right-end"><IconButton id="feeLimitc" sx={{ visibility: feeLimit ? "visible" : "hidden" }} onClick={handleClear}><ClearIcon /></IconButton></Tooltip>,
+                }}
               />
             </FormControl>
           </Grid>
@@ -187,8 +205,11 @@ function Tron() {
                 sx={{ width: 1 }}
                 multiline
                 rows={3}
-                defaultValue={JSON.stringify(contracts)}
+                value={contracts}
                 onChange={handleChange}
+                InputProps={{
+                  endAdornment: <Tooltip title="Clear" placement="right-end"><IconButton id="contractsc" sx={{ visibility: contracts ? "visible" : "hidden" }} onClick={handleClear}><ClearIcon /></IconButton></Tooltip>,
+                }}
               />
               <FormHelperText>{errorText}</FormHelperText>
             </FormControl>
@@ -202,7 +223,6 @@ function Tron() {
                 sx={{ width: 1 }}
                 multiline
                 rows={3}
-                // defaultValue={signature}
                 InputProps={{
                   value: payload,
                   readOnly: true,
@@ -219,7 +239,6 @@ function Tron() {
                 sx={{ width: 1 }}
                 multiline
                 rows={3}
-                // defaultValue={signature}
                 InputProps={{
                   value: signature,
                   readOnly: true,

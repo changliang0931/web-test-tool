@@ -1,18 +1,10 @@
 import create from "zustand";
-import { Polkadot, POLKADOT_DEFAULT_PATH, generateMnemonic, validateMnemonic } from "wallet-web-lib";
-interface DotState {
+import { Polkadot, POLKADOT_DEFAULT_PATH, validateMnemonic } from "wallet-web-lib";
+import { MainState, MainStore } from '../state/main-state';
+interface DotState extends MainState {
     // 'ed25519' | 'sr25519' | 'ecdsa' | 'ethereum';
     keypairTypes: Array<string>;
-    mnemonic: string;
     keypairType: string;
-    path: string;
-    errorMnemonic: boolean;
-    errorText: string;
-    publicKey: string;
-    privateKey: string;
-    address: string;
-
-    
     // expiration: string;
     // refBlockNum: number;
     // refBlockPrefix: number;
@@ -24,19 +16,8 @@ interface DotState {
     // actions: Action[];
     // errorActions: boolean;
     // transactionExtensions?: [number, string][];
-    signature: string;
-    message: string;
     messageHash: string;
-    setMnemonic: (mnemonic: string) => void;
     setKeypairType: (keypairType: string) => void;
-
-    setErrorMnemonic: (error: boolean) => void;
-    setErrorText: (errorMsg: string) => void;
-
-    setPath: (path: string) => void;
-    setPublicKey: (pubkey: string) => void;
-    setPrivateKey: (priKey: string) => void;
-    setAddress: (address: string) => void;
     // setExpiration: (expiration: string) => void;
     // setRefBlockNum: (refBlockNum: number) => void;
     // setRefBlockPrefix: (refBlockPrefix: number) => void;
@@ -48,26 +29,12 @@ interface DotState {
     // setActions: (actions: Action[]) => void;
     // setErrorActions: (error: boolean) => void;
     // setTransactionExtensions: (transactionExtensions: [number, string][]) => void;
-    setSignature: (signature: string) => void;
-    setMessage: (message: string) => void;
-    genMnemonic: () => void;
-    obtainAccount: () => void;
-    signTx: () => void;
-    signMessage: () => void;
-    parseTx: () => void;
-    handleChange: (event: any) => void;
 }
 const useStore = create<DotState>((set: any, get: any) => ({
+    ...MainStore(set),
     keypairTypes: ['ed25519', 'sr25519', 'ecdsa'],
-    mnemonic: "gauge hole clog property soccer idea cycle stadium utility slice hold chief",
-    errorMnemonic: false,
     keypairType: "ed25519",
     path: POLKADOT_DEFAULT_PATH,
-    errorText: "",
-    publicKey: "",
-    privateKey: "",
-    address: "",
-    message: "",
     messageHash: "",
     // expiration: "2020-08-06T09:50:56",
     // refBlockNum: 13949,
@@ -80,23 +47,7 @@ const useStore = create<DotState>((set: any, get: any) => ({
     // actions: [{"account":"eosio.token","name":"transfer","authorization":[{"actor":"zijunzimo555","permission":"active"}],"data":{"from":"zijunzimo555","to":"jubitertest4","quantity":"50.0000 EOS","memo":"from jwallet_core"}}],
     // errorActions: false,
     // transactionExtensions: [],
-    signature: "",
-    setMnemonic: (mnemonic: string) => {
-        const { setErrorMnemonic, setErrorText } = get()
-        if (!validateMnemonic(mnemonic)) {
-            setErrorMnemonic(true);
-            setErrorText("Mnemonic invalid ")
-        }
-        set({ mnemonic: mnemonic })
-    },
     setKeypairType: (keypairType: string) => set({ keypairType: keypairType }),
-    setPath: (path: string) => set({ path: path }),
-    setErrorMnemonic: (error: boolean) => set({ errorMnemonic: error }),
-    setErrorText: (msg: string) => set({ errorText: msg }),
-    setPublicKey: (pubKey: string) => set({ publicKey: pubKey }),
-    setPrivateKey: (priKey: string) => set({ privateKey: priKey }),
-    setAddress: (address: string) => set({ address: address }),
-    setMessage: (message: string) => set({ message: message }),
     // setExpiration: (expiration: string) => set({ expiration: expiration }),
     // setRefBlockNum: (refBlockNum: number) => set({ refBlockNum: refBlockNum }),
     // setRefBlockPrefix: (refBlockPrefix: number) => set({ refBlockPrefix: refBlockPrefix }),
@@ -108,7 +59,6 @@ const useStore = create<DotState>((set: any, get: any) => ({
     // setActions: (actions: Action[]) => set({ actions: actions }),
     // setErrorActions: (error: boolean) => set({ errorActions: error }),
     // setTransactionExtensions: (transactionExtensions: [number, string][]) => set({ transactionExtensions: transactionExtensions }),
-    setSignature: (signature: string) => set({ signature: signature }),
     signTx: async () => {
         // const { setErrorText, setSignature, mnemonic, path, 
         //     // expiration, refBlockNum, refBlockPrefix, maxNetUsageWords, maxCpuUsageMs, delaySec, actions, contextFreeActions, contextFreeData, transactionExtensions 
@@ -129,21 +79,14 @@ const useStore = create<DotState>((set: any, get: any) => ({
         // setErrorText("");
     },
     signMessage: () => {
-        const { mnemonic, path, keypairType, setErrorText, message,setSignature } = get()
+        const { mnemonic, path, keypairType, setErrorText, message, setSignature } = get()
         try {
             const account = new Polkadot(mnemonic, path, keypairType);
-            const signature  = account.signMessage(message);
+            const signature = account.signMessage(message);
             setSignature(signature);
         } catch (err: any) {
             setErrorText("Mnemonic with less than 12 words have low entropy and may be guessed by an attacker. ")
         }
-    },
-    genMnemonic: () => {
-        const { setMnemonic, setErrorMnemonic, setErrorText } = get()
-        const mnemoic = generateMnemonic()
-        setMnemonic(mnemoic)
-        setErrorMnemonic(false)
-        setErrorText("")
     },
     obtainAccount: () => {
         const { mnemonic, path, setErrorMnemonic, keypairType, setErrorText, setPublicKey, setAddress, setPrivateKey } = get()
@@ -161,20 +104,13 @@ const useStore = create<DotState>((set: any, get: any) => ({
             setErrorText("Mnemonic with less than 12 words have low entropy and may be guessed by an attacker. ")
             setErrorMnemonic(true)
         }
-    },
-    parseTx: () => {
-    },
-    handleChange: (event: any) => {
-        const { setAddress, setErrorMnemonic, setMnemonic, setPath, setPublicKey, setErrorText, setKeypairType,setMessage,setSignature
+    }, handleChange: (event: any) => {
+        const { setAddress, setErrorMnemonic, setMnemonic, setPath, setPublicKey, setErrorText, setKeypairType, setMessage, setSignature
             // setExpiration, setRefBlockNum, setRefBlockPrefix, setMaxNetUsageWords, setMaxCpuUsageMs, setDelaySec, setContextFreeActions, setContextFreeData, setActions, setErrorActions, setTransactionExtensions 
         } = get()
         let value = event.target.value;
         let id = event.target.id || event.target.name;
         if (id === "mnemonic") {
-            if (validateMnemonic(value)) {
-                setErrorMnemonic(false)
-                setErrorText("")
-            }
             setMnemonic(value);
         } else if (id === "path") {
             setPath(value.trim());
@@ -221,6 +157,53 @@ const useStore = create<DotState>((set: any, get: any) => ({
             // } else if (id === "contextFreeData") {
             //     setContextFreeData(value);
         }
-    }
+    },
+    handleClear: (event: any) => {
+        const { setMnemonic, setPath, setKeypairType, setMessage
+            // setExpiration, setRefBlockNum, setRefBlockPrefix, setMaxNetUsageWords, setMaxCpuUsageMs, setDelaySec, setContextFreeActions, setContextFreeData, setActions, setErrorActions, setTransactionExtensions 
+        } = get()
+        let id = event.currentTarget.id;
+        if (id === "mnemonic") {
+            setMnemonic("");
+        } else if (id === "pathc") {
+            setPath("");
+        } else if (id === "messagec") {
+            setMessage("")
+            // } else if (id === "signature") {
+            //     setSignature(value);
+            // } else if (id === "refBlockNum") {
+            //     setRefBlockNum(parseInt(value));
+            // } else if (id === "refBlockPrefix") {
+            //     setRefBlockPrefix(parseInt(value));
+            // } else if (id === "maxNetUsageWords") {
+            //     setMaxNetUsageWords(parseInt(value));
+            // } else if (id === "maxCpuUsageMs") {
+            //     setMaxCpuUsageMs(parseInt(value));
+            // } else if (id === "delaySec") {
+            //     setDelaySec(parseInt(value));
+            // } else if (id === "actions") {
+            //     try {
+            //         if(value.trim() === "" ){
+            //             setErrorActions(true);
+            //             // setActions();
+            //             setErrorText("Actions  invalid ")
+            //             return
+            //         }
+            //         const actions = JSON.parse(value);
+            //         setErrorActions(false);
+            //         setActions(actions);
+            //         setErrorText("")
+            //     } catch (error:any) {
+            //         setErrorActions(true);
+            //         setErrorText("Actions  invalid "+ error.message)
+            //     }
+            // } else if (id === "transactionExtensions") {
+            //     setTransactionExtensions(value);
+            // } else if (id === "contextFreeActions") {
+            //     setContextFreeActions(value);
+            // } else if (id === "contextFreeData") {
+            //     setContextFreeData(value);
+        }
+    },
 }));
 export default useStore;

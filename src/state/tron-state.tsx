@@ -1,117 +1,84 @@
 import create from "zustand";
-import { Tron, TRON_DEFAULT_PATH, generateMnemonic, validateMnemonic } from "wallet-web-lib";
-interface TronState {
-    mnemonic: string;
-    path: string;
-    errorMnemonic: boolean;
-    errorText: string;
-    publicKey: string;
-    privateKey: string;
-    address: string;
-
+import { Tron, TRON_DEFAULT_PATH, BigNumber, validateMnemonic } from "wallet-web-lib";
+import { MainState, MainStore } from '../state/main-state';
+interface TronState  extends MainState {
     refBlockBytes: string;
-    refBlockNum: number;
+    refBlockNum: string;
     refBlockHash: string;
     expiration: string;
-    timestamp: number;
-    feeLimit: number;
-    contracts: Object[];
+    timestamp: string;
+    feeLimit: string;
+    contracts: string;
     errorContracts: boolean;
-    signature: string;
     payload: string;
-    setMnemonic: (mnemonic: string) => void;
-    setErrorMnemonic: (error: boolean) => void;
-    setErrorText: (errorMsg: string) => void;
-
-    setPath: (path: string) => void;
-    setPublicKey: (pubkey: string) => void;
-    setPrivateKey: (priKey: string) => void;
-    setAddress: (address: string) => void;
-
+    
     setRefBlockBytes: (refBlockBytes: string) => void;
-    setRefBlockNum: (refBlockNum: number) => void;
+    setRefBlockNum: (refBlockNum: string) => void;
     setRefBlockHash: (refBlockHash: string) => void;
     setExpiration: (expiration: string) => void;
-    setTimestamp: (timestamp: number) => void;
-    setFeeLimit: (feeLimit: number) => void;
-    setContracts: (contracts: []) => void;
+    setTimestamp: (timestamp: string) => void;
+    setFeeLimit: (feeLimit: string) => void;
+    setContracts: (contracts: string) => void;
     setErrorContracts: (errorContracts: boolean) => void;
-    setSignature: (signature: string) => void;
     setPayload: (payload: string) => void;
-    genMnemonic: () => void;
-    obtainAccount: () => void;
-    signTx: () => void;
-    parseTx: () => void;
-    handleChange: (event: any) => void;
 }
 const useStore = create<TronState>((set: any, get: any) => ({
-    mnemonic: "gauge hole clog property soccer idea cycle stadium utility slice hold chief",
-    errorMnemonic: false,
+    ...MainStore(set),
     path: TRON_DEFAULT_PATH,
-    errorText: "",
-    publicKey: "",
-    privateKey: "",
-    address: "",
     refBlockBytes: "9148",
-    refBlockNum: 0,
+    refBlockNum: "0",
     refBlockHash: "2b72b05b7674b257",
     expiration: "2021-09-28T14:46:18",
-    timestamp: 1603346193445,
-    feeLimit: 0,
-    contracts: [{ "name": "transfer", "to_address": "TLb2e2uRhzxvrxMcC8VkL2N7zmxYyg3Vfc", "amount": 1000000000000000000 }],
+    timestamp: "1603346193445",
+    feeLimit: "0",
+    contracts: `[{ "name": "transfer", "to_address": "TLb2e2uRhzxvrxMcC8VkL2N7zmxYyg3Vfc", "amount": 1000000000000000000 }]`,
     errorContracts: false,
-    signature: "",
     payload: "",
-    setMnemonic: (mnemonic: string) => {
-        const { setErrorMnemonic, setErrorText } = get()
+    setRefBlockBytes: (refBlockBytes: string) => set({ refBlockBytes: refBlockBytes }),
+    setRefBlockNum: (refBlockNum: string) => set({ refBlockNum: refBlockNum }),
+    setRefBlockHash: (refBlockHash: string) => set({ refBlockHash: refBlockHash }),
+    setExpiration: (expiration: string) => set({ expiration: expiration }),
+    setTimestamp: (timestamp: string) => set({ timestamp: timestamp }),
+    setFeeLimit: (feeLimit: string) => set({ feeLimit: feeLimit }),
+    setPayload: (payload: string) => set({ payload: payload }),
+    setContracts: (contracts: string) => set({ contracts: contracts }),
+    setErrorContracts: (errorContracts: boolean) => set({ errorContracts: errorContracts }),
+    signTx: async () => {
+        const { setErrorText, setErrorMnemonic, setErrorContracts, setPayload, setSignature, mnemonic, path,
+            refBlockBytes, refBlockNum, refBlockHash, expiration, timestamp, feeLimit, contracts
+        } = get()
         if (!validateMnemonic(mnemonic)) {
             setErrorMnemonic(true);
             setErrorText("Mnemonic invalid ")
+            return;
         }
-        set({ mnemonic: mnemonic })
-    },
-    setPath: (path: string) => set({ path: path }),
-    setErrorMnemonic: (error: boolean) => set({ errorMnemonic: error }),
-    setErrorText: (msg: string) => set({ errorText: msg }),
-    setPublicKey: (pubKey: string) => set({ publicKey: pubKey }),
-    setPrivateKey: (priKey: string) => set({ privateKey: priKey }),
-    setAddress: (address: string) => set({ address: address }),
-    setRefBlockBytes: (refBlockBytes: string) => set({ refBlockBytes: refBlockBytes }),
-    setRefBlockNum: (refBlockNum: number) => set({ refBlockNum: refBlockNum }),
-    setRefBlockHash: (refBlockHash: string) => set({ refBlockHash: refBlockHash }),
-    setExpiration: (expiration: string) => set({ expiration: expiration }),
-    setTimestamp: (timestamp: number) => set({ timestamp: timestamp }),
-    setFeeLimit: (feeLimit: number) => set({ feeLimit: feeLimit }),
-    setSignature: (signature: string) => set({ signature: signature }),
-    setPayload: (payload: string) => set({ payload: payload }),
-    setContracts: (contracts: Object[]) => set({ contracts: contracts }),
-    setErrorContracts: (errorContracts: boolean) => set({ errorContracts: errorContracts }),
-    signTx: async () => {
-        const { setErrorText, setPayload, setSignature, mnemonic, path,
-            refBlockBytes, refBlockNum, refBlockHash, expiration, timestamp, feeLimit, contracts
-        } = get()
+        if (contracts.trim() === "") {
+            setErrorContracts(true);
+            setErrorText("Contracts  invalid ")
+            return
+        }
+        try {
+            JSON.parse(contracts);
+        } catch (error: any) {
+            setErrorContracts(true);
+            setErrorText("Contracts  invalid " + error.message)
+            return;
+        }
         const account = new Tron(mnemonic, path);
         let transaction = {
             ref_block_bytes: refBlockBytes || "9148",
-            ref_block_num: refBlockNum || 0,
+            ref_block_num: BigNumber.from(refBlockNum).toNumber() || 0,
             ref_block_hash: refBlockHash || "2b72b05b7674b257",
             expiration: expiration || "2021-09-28T14:46:18",
-            timestamp: timestamp || 1603346193445,
-            fee_limit: feeLimit || 0,
-            contracts: contracts
+            timestamp: BigNumber.from(timestamp).toNumber() || 1603346193445,
+            fee_limit: BigNumber.from(feeLimit).toNumber() || 0,
+            contracts: JSON.parse(contracts)
         }
         setSignature("")
         const signaturer = await account.signTransaction(transaction);
         setPayload(signaturer.raw_data_hex)
         setSignature(JSON.stringify(signaturer))
         setErrorText("");
-    },
-    genMnemonic: () => {
-        const { setMnemonic, setErrorMnemonic, setErrorText } = get()
-        const mnemoic = generateMnemonic()
-        setMnemonic(mnemoic)
-        setErrorMnemonic(false)
-        setErrorText("")
     },
     obtainAccount: () => {
         const { mnemonic, path, setErrorMnemonic, setErrorText, setPublicKey, setAddress, setPrivateKey } = get()
@@ -130,19 +97,13 @@ const useStore = create<TronState>((set: any, get: any) => ({
             setErrorMnemonic(true)
         }
     },
-    parseTx: () => {
-    },
     handleChange: (event: any) => {
-        const { setAddress, setErrorMnemonic, setMnemonic, setPath, setPrivateKey, setPublicKey, setErrorText,
-            setRefBlockBytes, setRefBlockNum, setRefBlockHash, setExpiration, setTimestamp, setFeeLimit, setErrorContracts, setContracts
+        const { setAddress, setMnemonic, setPath, setPrivateKey, setPublicKey,
+            setRefBlockBytes, setRefBlockNum, setRefBlockHash, setExpiration, setTimestamp, setFeeLimit, setContracts
         } = get()
         let value = event.target.value;
         let id = event.target.id || event.target.name;
         if (id === "mnemonic") {
-            if (validateMnemonic(value)) {
-                setErrorMnemonic(false)
-                setErrorText("")
-            }
             setMnemonic(value);
         } else if (id === "path") {
             setPath(value.trim());
@@ -155,30 +116,42 @@ const useStore = create<TronState>((set: any, get: any) => ({
         } else if (id === "expiration") {
             setExpiration(value);
         } else if (id === "refBlockNum") {
-            setRefBlockNum(parseInt(value));
+            setRefBlockNum(value);
         } else if (id === "refBlockBytes") {
             setRefBlockBytes(value);
         } else if (id === "refBlockHash") {
             setRefBlockHash(value);
         } else if (id === "timestamp") {
-            setTimestamp(parseInt(value));
+            setTimestamp(value);
         } else if (id === "feeLimit") {
-            setFeeLimit(parseInt(value));
+            setFeeLimit(value);
         } else if (id === "contracts") {
-            try {
-                if (value.trim() === "") {
-                    setErrorContracts(true);
-                    setErrorText("Contracts  invalid ")
-                    return
-                }
-                const contracts = JSON.parse(value);
-                setErrorContracts(false);
-                setContracts(contracts);
-                setErrorText("")
-            } catch (error: any) {
-                setErrorContracts(true);
-                setErrorText("Contracts  invalid " + error.message)
-            }
+            setContracts(value);
+        }
+    },
+    handleClear: (event: any) => {
+        const { setMnemonic, setPath,
+            setRefBlockBytes, setRefBlockNum, setRefBlockHash, setExpiration, setTimestamp, setFeeLimit, setContracts
+        } = get()
+        let id = event.currentTarget.id;
+        if (id === "mnemonicc") {
+            setMnemonic("");
+        } else if (id === "pathc") {
+            setPath("");
+        } else if (id === "expirationc") {
+            setExpiration("");
+        } else if (id === "refBlockNumc") {
+            setRefBlockNum("");
+        } else if (id === "refBlockBytesc") {
+            setRefBlockBytes("");
+        } else if (id === "refBlockHashc") {
+            setRefBlockHash("");
+        } else if (id === "timestampc") {
+            setTimestamp("");
+        } else if (id === "feeLimitc") {
+            setFeeLimit("");
+        } else if (id === "contractsc") {
+            setContracts("");
         }
     }
 }));

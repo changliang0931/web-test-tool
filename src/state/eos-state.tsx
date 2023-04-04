@@ -1,118 +1,92 @@
 import create from "zustand";
-import { Eos, EOS_CHAIN_ID, EOS_DEFAULT_PATH, generateMnemonic, validateMnemonic, ApiInterfaces, Action } from "wallet-web-lib"
-
-interface EosState {
+import { Eos, BigNumber, EOS_CHAIN_ID, EOS_DEFAULT_PATH, validateMnemonic, ApiInterfaces, Action } from "wallet-web-lib"
+import { MainState, MainStore } from '../state/main-state';
+interface EosState extends MainState {
     chainIds: Array<string>;
-    mnemonic: string;
-    path: string;
-    errorMnemonic: boolean;
-    errorText: string;
-    publicKey: string;
-    privateKey: string;
-    address: string;
 
     chainId: string;
     expiration: string;
-    refBlockNum: number;
-    refBlockPrefix: number;
-    maxNetUsageWords: number;
-    maxCpuUsageMs: number;
-    delaySec: number;
+    refBlockNum: string;
+    refBlockPrefix: string;
+    maxNetUsageWords: string;
+    maxCpuUsageMs: string;
+    delaySec: string;
     contextFreeActions: Action[];
     contextFreeData?: Uint8Array[];
-    actions: Action[];
+    actions: string;
     errorActions: boolean;
     transactionExtensions?: [number, string][];
-    signature: string;
 
-    setMnemonic: (mnemonic: string) => void;
-    setErrorMnemonic: (error: boolean) => void;
-    setErrorText: (errorMsg: string) => void;
-
-    setPath: (path: string) => void;
-    setPublicKey: (pubkey: string) => void;
-    setPrivateKey: (priKey: string) => void;
-    setAddress: (address: string) => void;
     setChainId: (chainId: string) => void;
     setExpiration: (expiration: string) => void;
-    setRefBlockNum: (refBlockNum: number) => void;
-    setRefBlockPrefix: (refBlockPrefix: number) => void;
-    setMaxNetUsageWords: (maxNetUsageWords: number) => void;
-    setMaxCpuUsageMs: (maxCpuUsageMs: number) => void;
-    setDelaySec: (delaySec: number) => void;
+    setRefBlockNum: (refBlockNum: string) => void;
+    setRefBlockPrefix: (refBlockPrefix: string) => void;
+    setMaxNetUsageWords: (maxNetUsageWords: string) => void;
+    setMaxCpuUsageMs: (maxCpuUsageMs: string) => void;
+    setDelaySec: (delaySec: string) => void;
     setContextFreeActions: (contextFreeActions: Array<any>) => void;
     setContextFreeData: (contextFreeData: Uint8Array[]) => void;
-    setActions: (actions: Action[]) => void;
+    setActions: (actions: string) => void;
     setErrorActions: (error: boolean) => void;
     setTransactionExtensions: (transactionExtensions: [number, string][]) => void;
-    setSignature: (signature: string) => void;
-
-    genMnemonic: () => void;
-    obtainAccount: () => void;
-    signTx: () => void;
-    parseTx: () => void;
-    handleChange: (event: any) => void;
 }
 const useStore = create<EosState>((set, get) => ({
+    ...MainStore(set),
     chainIds: ["aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906"],
-    mnemonic: "gauge hole clog property soccer idea cycle stadium utility slice hold chief",
-    errorMnemonic: false,
     path: EOS_DEFAULT_PATH,
-    errorText: "",
-    publicKey: "",
-    privateKey: "",
-    address: "",
     chainId: EOS_CHAIN_ID.mainnet,
     expiration: "2020-08-06T09:50:56",
-    refBlockNum: 13949,
-    refBlockPrefix: 241701672,
-    maxNetUsageWords: 0,
-    maxCpuUsageMs: 0,
-    delaySec: 0,
+    refBlockNum: "13949",
+    refBlockPrefix: "241701672",
+    maxNetUsageWords: "0",
+    maxCpuUsageMs: "0",
+    delaySec: "0",
     contextFreeActions: [],
     contextFreeData: [],
-    actions: [{"account":"eosio.token","name":"transfer","authorization":[{"actor":"zijunzimo555","permission":"active"}],"data":{"from":"zijunzimo555","to":"jubitertest4","quantity":"50.0000 EOS","memo":"from jwallet_core"}}],
+    actions: `[{ "account": "eosio.token", "name": "transfer", "authorization": [{ "actor": "zijunzimo555", "permission": "active" }], "data": { "from": "zijunzimo555", "to": "jubitertest4", "quantity": "50.0000 EOS", "memo": "from jwallet_core" } }]`,
     errorActions: false,
     transactionExtensions: [],
-    signature: "",
-    setMnemonic: (mnemonic: string) => {
-        const { setErrorMnemonic, setErrorText } = get()
-        if (!validateMnemonic(mnemonic)) {
-            setErrorMnemonic(true);
-            setErrorText("Mnemonic invalid ")
-        }
-        set({ mnemonic: mnemonic })
-    },
-    setPath: (path: string) => set({ path: path }),
-    setErrorMnemonic: (error: boolean) => set({ errorMnemonic: error }),
-    setErrorText: (msg: string) => set({ errorText: msg }),
-    setPublicKey: (pubKey: string) => set({ publicKey: pubKey }),
-    setPrivateKey: (priKey: string) => set({ privateKey: priKey }),
-    setAddress: (address: string) => set({ address: address }),
     setChainId: (chainId: string) => set({ chainId: chainId }),
     setExpiration: (expiration: string) => set({ expiration: expiration }),
-    setRefBlockNum: (refBlockNum: number) => set({ refBlockNum: refBlockNum }),
-    setRefBlockPrefix: (refBlockPrefix: number) => set({ refBlockPrefix: refBlockPrefix }),
-    setMaxNetUsageWords: (maxNetUsageWords: number) => set({ maxNetUsageWords: maxNetUsageWords }),
-    setMaxCpuUsageMs: (maxCpuUsageMs: number) => set({ maxCpuUsageMs: maxCpuUsageMs }),
-    setDelaySec: (delaySec: number) => set({ delaySec: delaySec }),
+    setRefBlockNum: (refBlockNum: string) => set({ refBlockNum: refBlockNum }),
+    setRefBlockPrefix: (refBlockPrefix: string) => set({ refBlockPrefix: refBlockPrefix }),
+    setMaxNetUsageWords: (maxNetUsageWords: string) => set({ maxNetUsageWords: maxNetUsageWords }),
+    setMaxCpuUsageMs: (maxCpuUsageMs: string) => set({ maxCpuUsageMs: maxCpuUsageMs }),
+    setDelaySec: (delaySec: string) => set({ delaySec: delaySec }),
     setContextFreeActions: (contextFreeActions: Action[]) => set({ contextFreeActions: contextFreeActions }),
     setContextFreeData: (contextFreeData: Uint8Array[]) => set({ contextFreeData: contextFreeData }),
-    setActions: (actions: Action[]) => set({ actions: actions }),
+    setActions: (actions: string) => set({ actions: actions }),
     setErrorActions: (error: boolean) => set({ errorActions: error }),
     setTransactionExtensions: (transactionExtensions: [number, string][]) => set({ transactionExtensions: transactionExtensions }),
-    setSignature: (signature: string) => set({ signature: signature }),
     signTx: async () => {
-        const { setErrorText, setSignature,setErrorActions, mnemonic, path, expiration, refBlockNum, refBlockPrefix, maxNetUsageWords, maxCpuUsageMs, delaySec, actions, contextFreeActions, contextFreeData, transactionExtensions } = get()
+        const { setErrorText, setSignature, setErrorMnemonic, setErrorActions, setActions, mnemonic, path, expiration, refBlockNum, refBlockPrefix, maxNetUsageWords, maxCpuUsageMs, delaySec, actions, contextFreeActions, contextFreeData, transactionExtensions } = get()
+        if (!validateMnemonic(mnemonic)) {
+            setErrorText("Mnemonic invalid ")
+            setErrorMnemonic(true)
+            return
+        }
+        if (actions.trim() == "") {
+            setErrorActions(true);
+            setActions("");
+            setErrorText("Actions  invalid ")
+            return
+        }
+        try {
+            JSON.parse(actions);
+        } catch (error: any) {
+            setErrorActions(true);
+            setErrorText("Actions  invalid " + error.message)
+            return;
+        }
         const account = new Eos(mnemonic, path);
         let transaction: ApiInterfaces.Transaction = {
             expiration: expiration,
-            ref_block_num: refBlockNum,
-            ref_block_prefix: refBlockPrefix,
-            max_net_usage_words: maxNetUsageWords || 0,
-            max_cpu_usage_ms: maxCpuUsageMs || 0,
-            delay_sec: delaySec || 0,
-            actions: actions,
+            ref_block_num: BigNumber.from(refBlockNum).toNumber(),
+            ref_block_prefix: BigNumber.from(refBlockPrefix).toNumber(),
+            max_net_usage_words: BigNumber.from(maxNetUsageWords).toNumber() || 0,
+            max_cpu_usage_ms: BigNumber.from(maxCpuUsageMs).toNumber() || 0,
+            delay_sec: BigNumber.from(delaySec).toNumber() || 0,
+            actions: JSON.parse(actions),
             // context_free_actions: contextFreeData, 
             // transaction_extensions: transactionExtensions || []
         }
@@ -120,14 +94,6 @@ const useStore = create<EosState>((set, get) => ({
         const { signatures } = await account.signTransaction(transaction);
         setSignature(signatures)
         setErrorText("");
-    },
-
-    genMnemonic: () => {
-        const { setMnemonic, setErrorMnemonic, setErrorText } = get()
-        const mnemoic = generateMnemonic()
-        setMnemonic(mnemoic)
-        setErrorMnemonic(false)
-        setErrorText("")
     },
     obtainAccount: () => {
         const { mnemonic, path, setErrorMnemonic, setErrorText, setPublicKey, setAddress, setPrivateKey } = get()
@@ -146,17 +112,11 @@ const useStore = create<EosState>((set, get) => ({
             setErrorMnemonic(true)
         }
     },
-    parseTx: () => {
-    },
     handleChange: (event: any) => {
-        const { setAddress, setErrorMnemonic, setMnemonic, setChainId, setPath, setPrivateKey, setPublicKey, setErrorText, setExpiration, setRefBlockNum, setRefBlockPrefix, setMaxNetUsageWords, setMaxCpuUsageMs, setDelaySec, setContextFreeActions, setContextFreeData, setActions, setErrorActions, setTransactionExtensions } = get()
+        const { setAddress, setMnemonic, setChainId, setPath, setPrivateKey, setPublicKey, setExpiration, setRefBlockNum, setRefBlockPrefix, setMaxNetUsageWords, setMaxCpuUsageMs, setDelaySec, setContextFreeActions, setContextFreeData, setActions, setTransactionExtensions } = get()
         let value = event.target.value;
         let id = event.target.id || event.target.name;
         if (id === "mnemonic") {
-            if (validateMnemonic(value)) {
-                setErrorMnemonic(false)
-                setErrorText("")
-            }
             setMnemonic(value);
         } else if (id === "path") {
             setPath(value.trim());
@@ -171,31 +131,17 @@ const useStore = create<EosState>((set, get) => ({
         } else if (id === "expiration") {
             setExpiration(value);
         } else if (id === "refBlockNum") {
-            setRefBlockNum(parseInt(value));
+            setRefBlockNum(value);
         } else if (id === "refBlockPrefix") {
-            setRefBlockPrefix(parseInt(value));
+            setRefBlockPrefix(value);
         } else if (id === "maxNetUsageWords") {
-            setMaxNetUsageWords(parseInt(value));
+            setMaxNetUsageWords(value);
         } else if (id === "maxCpuUsageMs") {
-            setMaxCpuUsageMs(parseInt(value));
+            setMaxCpuUsageMs(value);
         } else if (id === "delaySec") {
-            setDelaySec(parseInt(value));
+            setDelaySec(value);
         } else if (id === "actions") {
-            try {
-                if(value.trim() == "" ){
-                    setErrorActions(true);
-                    // setActions();
-                    setErrorText("Actions  invalid ")
-                    return
-                }
-                const actions = JSON.parse(value);
-                setErrorActions(false);
-                setActions(actions);
-                setErrorText("")
-            } catch (error:any) {
-                setErrorActions(true);
-                setErrorText("Actions  invalid "+ error.message)
-            }
+            setActions(value);
         } else if (id === "transactionExtensions") {
             setTransactionExtensions(value);
         } else if (id === "contextFreeActions") {
@@ -203,6 +149,37 @@ const useStore = create<EosState>((set, get) => ({
         } else if (id === "contextFreeData") {
             setContextFreeData(value);
         }
+    }, handleClear: (event: any) => {
+        const { setMnemonic, setChainId, setPath, setExpiration, setRefBlockNum, setRefBlockPrefix, setMaxNetUsageWords, setMaxCpuUsageMs, setDelaySec, setActions, setTransactionExtensions, setContextFreeActions, setContextFreeData, } = get()
+        let id = event.currentTarget.id;
+        if (id === "mnemonicc") {
+            setMnemonic("");
+        } else if (id === "pathc") {
+            setPath("");
+        } else if (id === "chainIdc") {
+            setChainId("")
+        } else if (id === "expirationc") {
+            setExpiration("")
+        } else if (id === "refBlockNumc") {
+            setRefBlockNum("");
+        } else if (id === "refBlockPrefixc") {
+            setRefBlockPrefix("");
+        } else if (id === "maxNetUsageWordsc") {
+            setMaxNetUsageWords("");
+        } else if (id === "maxCpuUsageMsc") {
+            setMaxCpuUsageMs("");
+        } else if (id === "delaySecc") {
+            setDelaySec("");
+        } else if (id === "actionsc") {
+            setActions("");
+        }
+        // else if (id === "transactionExtensionsc") {
+        //     setTransactionExtensions("");
+        // } else if (id === "contextFreeActionsc") {
+        //     setContextFreeActions("");
+        // } else if (id === "contextFreeDatac") {
+        //     setContextFreeData("");
+        // }
     }
 }));
 export default useStore;

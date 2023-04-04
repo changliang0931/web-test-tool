@@ -12,6 +12,9 @@ const storage = {
     },
     keys: {
         LOCAL_TEST_MNEMONIC: "LOCAL_TEST_MNEMONIC"
+    },
+    CONSTANTS: {
+        DEFAULT_MNEMONIC: "gauge hole clog property soccer idea cycle stadium utility slice hold chief"
     }
 }
 export default storage;

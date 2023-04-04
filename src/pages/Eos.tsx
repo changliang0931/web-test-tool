@@ -1,15 +1,12 @@
-import { Button, Divider, Grid, FormHelperText, Container, TextField, FormControl, InputAdornment, MenuItem, } from "@mui/material";
+import { Tooltip, Button, Divider, Grid, MenuItem, Container, TextField, FormControl,FormHelperText ,IconButton} from "@mui/material";
 import eosStore from "../state/eos-state";
-
+import ClearIcon from "@mui/icons-material/Clear";
 function Eos() {
-  const { mnemonic, errorMnemonic, errorText, path, publicKey, privateKey, address, chainIds, chainId, maxNetUsageWords, maxCpuUsageMs, delaySec, expiration, refBlockNum, refBlockPrefix, actions, errorActions, contextFreeActions, transactionExtensions, contextFreeData, genMnemonic, handleChange, obtainAccount, signTx, signature,
+  const { mnemonic, errorMnemonic, errorText, path, publicKey, privateKey, address, chainIds, chainId, maxNetUsageWords, maxCpuUsageMs, delaySec, expiration, refBlockNum, refBlockPrefix, actions, errorActions, contextFreeActions, transactionExtensions, contextFreeData, handleChange, obtainAccount, signTx,handleClear, signature,
   } = eosStore()
   return (
     <div >
       <Container fixed>
-        {/* <Divider>
-          <h1>Eos Wallet Test Tool</h1>
-        </Divider> */}
         <Divider><h3>Mnemonic-Key-Derivation-Address</h3></Divider>
         <Grid container spacing={2}>
           <Grid item xs={12}>
@@ -18,16 +15,15 @@ function Eos() {
                 id="mnemonic"
                 label="Mnemonic"
                 color="success"
-                placeholder="gauge hole clog property soccer idea cycle stadium utility slice hold chief"
                 sx={{ width: 1 }}
                 multiline
                 rows={2}
-                defaultValue={mnemonic}
+                value={mnemonic}
                 error={errorMnemonic}
                 onChange={handleChange}
-              // InputProps={{
-              //   endAdornment: <InputAdornment position="end" onClick={genMnemonic}>Gen</InputAdornment>,
-              // }}
+                InputProps={{
+                  endAdornment: <Tooltip title="Clear" placement="right-end"><IconButton id="mnemonicc" sx={{ visibility: mnemonic ? "visible" : "hidden" }} onClick={handleClear}><ClearIcon /></IconButton></Tooltip>,
+                }}
               />
               <FormHelperText>{errorText}</FormHelperText>
             </FormControl>
@@ -39,9 +35,12 @@ function Eos() {
                 label="Path"
                 color="success"
                 sx={{ width: 1 }}
-                defaultValue={path}
+                value={path}
                 onChange={handleChange}
                 helperText="Default Path: m/44'/194'/0'/0/0"
+                InputProps={{
+                  endAdornment: <Tooltip title="Clear" placement="right-end"><IconButton id="pathc" sx={{ visibility: path ? "visible" : "hidden" }} onClick={handleClear}><ClearIcon /></IconButton></Tooltip>,
+                }}
               />
             </FormControl>
           </Grid>
@@ -102,7 +101,7 @@ function Eos() {
                 id="chainId"
                 label="ChainId"
                 name="chainId"
-                defaultValue={chainId}
+                value={chainId}
                 helperText=" Tip : Mainnet: aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906"
                 onChange={handleChange}
               >
@@ -125,8 +124,11 @@ function Eos() {
                 inputProps={{
                   min: 0
                 }}
-                defaultValue={maxNetUsageWords}
+                value={maxNetUsageWords}
                 onChange={handleChange}
+                InputProps={{
+                  endAdornment: <Tooltip title="Clear" placement="right-end"><IconButton id="maxNetUsageWordsc" sx={{ visibility: maxNetUsageWords ? "visible" : "hidden" }} onClick={handleClear}><ClearIcon /></IconButton></Tooltip>,
+                }}
               />
             </FormControl>
           </Grid>
@@ -142,8 +144,11 @@ function Eos() {
                 inputProps={{
                   min: 0
                 }}
-                defaultValue={maxCpuUsageMs}
+                value={maxCpuUsageMs}
                 onChange={handleChange}
+                InputProps={{
+                  endAdornment: <Tooltip title="Clear" placement="right-end"><IconButton id="maxCpuUsageMsc" sx={{ visibility: maxCpuUsageMs ? "visible" : "hidden" }} onClick={handleClear}><ClearIcon /></IconButton></Tooltip>,
+                }}
               />
             </FormControl>
           </Grid>
@@ -158,8 +163,11 @@ function Eos() {
                 inputProps={{
                   min: 0
                 }}
-                defaultValue={delaySec}
+                value={delaySec}
                 onChange={handleChange}
+                InputProps={{
+                  endAdornment: <Tooltip title="Clear" placement="right-end"><IconButton id="delaySecc" sx={{ visibility: delaySec ? "visible" : "hidden" }} onClick={handleClear}><ClearIcon /></IconButton></Tooltip>,
+                }}
               />
 
             </FormControl>
@@ -168,10 +176,13 @@ function Eos() {
             <FormControl fullWidth sx={{ m: 1 }} variant="standard">
               <TextField
                 id="expiration"
-                label="expiration"
+                label="Expiration"
                 color="info"
-                defaultValue={expiration}
+                value={expiration}
                 onChange={handleChange}
+                InputProps={{
+                  endAdornment: <Tooltip title="Clear" placement="right-end"><IconButton id="expirationc" sx={{ visibility: expiration ? "visible" : "hidden" }} onClick={handleClear}><ClearIcon /></IconButton></Tooltip>,
+                }}
               />
             </FormControl>
           </Grid>
@@ -187,8 +198,11 @@ function Eos() {
                   min: 10000,
                   max: 99999
                 }}
-                defaultValue={refBlockNum}
+                value={refBlockNum}
                 onChange={handleChange}
+                InputProps={{
+                  endAdornment: <Tooltip title="Clear" placement="right-end"><IconButton id="refBlockNumc" sx={{ visibility: refBlockNum ? "visible" : "hidden" }} onClick={handleClear}><ClearIcon /></IconButton></Tooltip>,
+                }}
               />
             </FormControl>
           </Grid>
@@ -203,8 +217,11 @@ function Eos() {
                   min: 100000000,
                   max: 999999999
                 }}
-                defaultValue={refBlockPrefix}
+                value={refBlockPrefix}
                 onChange={handleChange}
+                InputProps={{
+                  endAdornment: <Tooltip title="Clear" placement="right-end"><IconButton id="refBlockPrefixc" sx={{ visibility: refBlockPrefix ? "visible" : "hidden" }} onClick={handleClear}><ClearIcon /></IconButton></Tooltip>,
+                }}
               />
             </FormControl>
           </Grid>
@@ -218,8 +235,11 @@ function Eos() {
                 sx={{ width: 1 }}
                 multiline
                 rows={3}
-                defaultValue={JSON.stringify(actions)}
+                value={actions}
                 onChange={handleChange}
+                InputProps={{
+                  endAdornment: <Tooltip title="Clear" placement="right-end"><IconButton id="actionsc" sx={{ visibility: actions ? "visible" : "hidden" }} onClick={handleClear}><ClearIcon /></IconButton></Tooltip>,
+                }}
               />
               <FormHelperText>{errorText}</FormHelperText>
             </FormControl>
@@ -233,7 +253,7 @@ function Eos() {
                 sx={{ width: 1 }}
                 multiline
                 rows={1}
-                defaultValue={contextFreeActions}
+                value={contextFreeActions}
                 onChange={handleChange}
               />
             </FormControl>
@@ -247,7 +267,7 @@ function Eos() {
                 sx={{ width: 1 }}
                 multiline
                 rows={1}
-                defaultValue={contextFreeData}
+                value={contextFreeData}
                 onChange={handleChange}
               />
             </FormControl>
@@ -261,7 +281,7 @@ function Eos() {
                 sx={{ width: 1 }}
                 multiline
                 rows={1}
-                defaultValue={transactionExtensions}
+                value={transactionExtensions}
                 onChange={handleChange}
               />
             </FormControl>
@@ -276,7 +296,7 @@ function Eos() {
                 sx={{ width: 1 }}
                 multiline
                 rows={3}
-                // defaultValue={signature}
+                // value={signature}
                 InputProps={{
                   value: signature,
                   readOnly: true,

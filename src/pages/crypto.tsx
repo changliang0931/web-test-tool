@@ -1,7 +1,6 @@
-import { Tooltip, Button, Divider, InputAdornment, Grid, MenuItem, Container, TextField, FormControl } from "@mui/material";
+import { Tooltip, Button, Divider, InputAdornment, Grid, MenuItem, Container, TextField, FormControl,IconButton } from "@mui/material";
 import cryptoStore from "../state/crypto-state";
 import ClearIcon from "@mui/icons-material/Clear";
-import IconButton from "@mui/material/IconButton";
 function Crypto() {
   const { cryptoTypes, cryptoType, privateKey, auxRand, signature, message, messageHash, signMessage,
     handleChange, handleClear, random

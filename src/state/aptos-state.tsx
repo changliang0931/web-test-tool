@@ -1,19 +1,11 @@
 import create from "zustand";
 import { Aptos, BigNumber, APTOS_TYPE_TAGS, APTOS_DEFAULT_PATH, APTOS_FUNCS, APTOS_MODULE, validateMnemonic } from "wallet-web-lib"
-import storage from '../state/storage';
+import { MainState, MainStore } from '../state/main-state';
 //https://aptos.dev/
-interface EthereumState {
+interface EthereumState extends MainState {
     typeTags: Array<string>;
     modules: Array<string>;
     funcs: Array<string>;
-
-    mnemonic: string;
-    path: string;
-    errorMnemonic: boolean;
-    errorText: string;
-    publicKey: string;
-    privateKey: string;
-    address: string;
 
     module: string;
     func: string;
@@ -26,22 +18,8 @@ interface EthereumState {
     expTimeStamp: string;
     chainId: string;
     payload: string;
-
     txRaw: string;
     errorTo: boolean;
-    signature: string;
-    message: string;
-
-    setMnemonic: (mnemonic: string) => void;
-    setErrorMnemonic: (error: boolean) => void;
-    setErrorTo: (error: boolean) => void;
-    setErrorText: (errorMsg: string) => void;
-
-    setPath: (path: string) => void;
-    setPublicKey: (pubkey: string) => void;
-    setPrivateKey: (priKey: string) => void;
-    setAddress: (address: string) => void;
-    obtainAccount: () => void;
 
     setTo: (to: string) => void;
     setAmount: (amount: string) => void;
@@ -57,26 +35,14 @@ interface EthereumState {
 
     setTxRaw: (txRaw: string) => void;
     setPayload: (payload: string) => void;
-
-    signTx: () => void;
-    setSignature: (signature: string) => void;
-    setMessage: (message: string) => void;
-    signMessage: () => void;
-
-    handleChange: (event: any) => void;
-    handleClear: (event: any) => void;
 }
 const useStore = create<EthereumState>((set, get) => ({
+    ...MainStore(set),
     typeTags: ["", APTOS_TYPE_TAGS.aptos_coin],
     modules: [APTOS_MODULE["0x1::aptos_account"], APTOS_MODULE["0x1::coin"]],
     funcs: [APTOS_FUNCS.transfer],
-    mnemonic: !storage.get(storage.keys.LOCAL_TEST_MNEMONIC) ? "gauge hole clog property soccer idea cycle stadium utility slice hold chief" : storage.get(storage.keys.LOCAL_TEST_MNEMONIC),
-    errorMnemonic: false,
+
     path: APTOS_DEFAULT_PATH,
-    errorText: "",
-    publicKey: "",
-    privateKey: "",
-    address: "",
     to: "0x3a7b36b20e29eeed9d8ee36573c3cda92c71587a6561a0ab6facb6fcf9f2cb60",
     errorTo: false,
     amount: "1000000",
@@ -89,17 +55,7 @@ const useStore = create<EthereumState>((set, get) => ({
     module: APTOS_MODULE["0x1::aptos_account"],
     typeTag: "",
     txRaw: "",
-    signature: "",
-    message: "",
     func: APTOS_FUNCS.transfer,
-
-    setMnemonic: (mnemonic: string) => set({ mnemonic: mnemonic }),
-    setPath: (path: string) => set({ path: path }),
-    setErrorMnemonic: (error: boolean) => set({ errorMnemonic: error }),
-    setErrorText: (msg: string) => set({ errorText: msg }),
-    setPublicKey: (pubKey: string) => set({ publicKey: pubKey }),
-    setPrivateKey: (priKey: string) => set({ privateKey: priKey }),
-    setAddress: (address: string) => set({ address: address }),
     obtainAccount: () => {
         const { mnemonic, path, setErrorMnemonic, setErrorText, setPublicKey, setAddress, setPrivateKey } = get()
         try {
@@ -140,10 +96,8 @@ const useStore = create<EthereumState>((set, get) => ({
         setTxRaw(tx.raw);
         setErrorText("");
     },
-    setSignature: (signature: string) => set({ signature: signature }),
-    setMessage: (message: string) => set({ message: message }),
     signMessage: async () => {
-        const { setSignature, mnemonic,setErrorMnemonic,setErrorText, path, message } = get()
+        const { setSignature, mnemonic, setErrorMnemonic, setErrorText, path, message } = get()
         setSignature("")
         if (validateMnemonic(mnemonic)) {
             setErrorMnemonic(false)

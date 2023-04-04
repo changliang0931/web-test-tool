@@ -1,21 +1,9 @@
 import create from "zustand";
 import { Ethereum, parseEthereumTx, validateMnemonic, isHexString, isEthereumAddress, ETHEREUM_DEFAULT_PATH, ETHEREUM_ZERO_ADDRESS, BigNumber, EthereumTypedData } from "wallet-web-lib"
-import storage from '../state/storage';
-interface EthereumState {
-    mnemonic: string;
-    path: string;
-    errorMnemonic: boolean;
-
-    errorText: string;
-    publicKey: string;
-    privateKey: string;
-    address: string;
-    signature: string;
-    message: string;
+import { MainState, MainStore } from '../state/main-state';
+interface EthereumState extends MainState {
     messageHash: string;
     transactionTypes: any;
-
-
     to: string;
     value: string;
     nonce: string;
@@ -28,26 +16,17 @@ interface EthereumState {
     data: string;
     txRaw: string;
     display1559: string;
-    errorTo: boolean;
-    errorData: boolean;
     typedData: string;
     signatureTypedData: string;
-    errorTypedData: boolean;
-    setMnemonic: (mnemonic: string) => void;
 
-    setErrorMnemonic: (error: boolean) => void;
+    errorTo: boolean;
+    errorData: boolean;
+    errorTypedData: boolean;
+
     setErrorTo: (error: boolean) => void;
     setErrorData: (error: boolean) => void;
 
-    setErrorText: (errorMsg: string) => void;
     setErrorTypedData: (errorTypedData: boolean) => void;
-
-    setPath: (path: string) => void;
-    setPublicKey: (pubkey: string) => void;
-    setPrivateKey: (priKey: string) => void;
-    setAddress: (address: string) => void;
-    obtainAccount: () => void;
-
 
     setTo: (to: string) => void;
     setValue: (value: string) => void;
@@ -61,23 +40,16 @@ interface EthereumState {
     setTxRaw: (txRaw: string) => void;
     setData: (data: string) => void;
     setDisplay1559: (display1559: string) => void;
-    signTx: () => void;
 
-
-
-
-    setSignature: (signature: string) => void;
-    setMessage: (message: string) => void;
     setMessageHash: (messageHash: string) => void;
     setTypedData: (typedData: string) => void;
     setSignatureTypedData: (signatureTypedData: string) => void;
-    signMessage: () => void;
+
     signTypedData: () => void;
     parseTx: () => void;
-    handleChange: (event: any) => void;
-    handleClear: (event: any) => void;
 }
-const useStore = create<EthereumState>((set, get) => ({
+const useStore = create<EthereumState>((set: any, get: any) => ({
+    ...MainStore(set),
     transactionTypes: [
         {
             value: 0,
@@ -92,13 +64,7 @@ const useStore = create<EthereumState>((set, get) => ({
             label: 'eip1559',
         }
     ],
-    mnemonic: !storage.get(storage.keys.LOCAL_TEST_MNEMONIC) ? "gauge hole clog property soccer idea cycle stadium utility slice hold chief" : storage.get(storage.keys.LOCAL_TEST_MNEMONIC),
-    errorMnemonic: false,
     path: ETHEREUM_DEFAULT_PATH,
-    errorText: "",
-    publicKey: "",
-    privateKey: "",
-    address: "",
     to: ETHEREUM_ZERO_ADDRESS,
     value: "100000000",
     nonce: "0",
@@ -111,8 +77,6 @@ const useStore = create<EthereumState>((set, get) => ({
     type: "0",
     txRaw: "",
     display1559: "none",
-    signature: "",
-    message: "",
     messageHash: "",
     errorTo: false,
     errorData: false,
@@ -120,21 +84,7 @@ const useStore = create<EthereumState>((set, get) => ({
     ,
     signatureTypedData: "",
     errorTypedData: false,
-    setMnemonic: (mnemonic: string) => {
-        const { setErrorMnemonic, setErrorText } = get()
-        if (!validateMnemonic(mnemonic)) {
-            setErrorMnemonic(true);
-            setErrorText("Mnemonic invalid ")
-        }
-        set({ mnemonic: mnemonic })
-    },
-    setPath: (path: string) => set({ path: path }),
-    setErrorMnemonic: (error: boolean) => set({ errorMnemonic: error }),
-    setErrorText: (msg: string) => set({ errorText: msg }),
     setErrorTypedData: (errorTypedData: boolean) => set({ errorTypedData: errorTypedData }),
-    setPublicKey: (pubKey: string) => set({ publicKey: pubKey }),
-    setPrivateKey: (priKey: string) => set({ privateKey: priKey }),
-    setAddress: (address: string) => set({ address: address }),
     obtainAccount: () => {
         const { setErrorText, mnemonic, path, setErrorMnemonic, setPublicKey, setAddress, setPrivateKey } = get()
         const isMn = validateMnemonic(mnemonic)
@@ -145,9 +95,9 @@ const useStore = create<EthereumState>((set, get) => ({
                 return
             }
             const account = new Ethereum(mnemonic, path)
-            setPublicKey(account.publicKey)
-            setPrivateKey(account.privateKey)
-            setAddress(account.address)
+            setPublicKey!(account.publicKey)
+            setPrivateKey!(account.privateKey)
+            setAddress!(account.address)
             setErrorText("")
         } catch (err: any) {
             setErrorText("Mnemonic with less than 12 words have low entropy and may be guessed by an attacker. ")
@@ -209,8 +159,6 @@ const useStore = create<EthereumState>((set, get) => ({
         setErrorText("")
         setTxRaw(sigTx)
     },
-    setSignature: (signature: string) => set({ signature: signature }),
-    setMessage: (message: string) => set({ message: message }),
     setTypedData: (typedData: string) => set({ typedData: typedData }),
     setMessageHash: (messageHash: string) => set({ messageHash: messageHash }),
     signMessage: async () => {
@@ -218,21 +166,20 @@ const useStore = create<EthereumState>((set, get) => ({
         setSignature("")
         setMessageHash("");
         const wallet = new Ethereum(mnemonic, path);
-        const messageHash = await wallet.message2Hash(message);
+        const messageHash = await wallet.message2Hash(message!);
         setMessageHash(messageHash);
-        const signature = await wallet.signMessage(message);
-
+        const signature = await wallet.signMessage(message!);
         setSignature(signature)
     },
     signTypedData: async () => {
         const { mnemonic, path, typedData, setSignatureTypedData, setErrorTypedData, setErrorText } = get()
         setSignatureTypedData("");
+        if (typedData.trim() === "") {
+            setErrorTypedData(true);
+            setErrorText("TypedData  invalid ")
+            return
+        }
         try {
-            if (typedData.trim() === "") {
-                setErrorTypedData(true);
-                setErrorText("TypedData  invalid ")
-                return
-            }
             JSON.parse(typedData);
         } catch (error: any) {
             setErrorTypedData(true);
@@ -294,10 +241,6 @@ const useStore = create<EthereumState>((set, get) => ({
             value = value.trim()
             setPath(value);
         } else if (id === "mnemonic") {
-            if (validateMnemonic(value)) {
-                setErrorMnemonic(false)
-                setErrorText("")
-            }
             setMnemonic(value);
         } else if (id === "privateKey") {
             setPrivateKey(value);
@@ -348,6 +291,5 @@ const useStore = create<EthereumState>((set, get) => ({
             setTypedData("");
         }
     },
-
 }));
 export default useStore;
