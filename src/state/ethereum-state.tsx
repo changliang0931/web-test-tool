@@ -162,14 +162,14 @@ const useStore = create<EthereumState>((set: any, get: any) => ({
     setTypedData: (typedData: string) => set({ typedData: typedData }),
     setMessageHash: (messageHash: string) => set({ messageHash: messageHash }),
     signMessage: async () => {
-        const { setSignature, mnemonic, path, message, setMessageHash } = get()
-        setSignature("")
+        const { setMsgSignature, mnemonic, path, message, setMessageHash } = get()
+        setMsgSignature("")
         setMessageHash("");
         const wallet = new Ethereum(mnemonic, path);
         const messageHash = await wallet.message2Hash(message!);
         setMessageHash(messageHash);
         const signature = await wallet.signMessage(message!);
-        setSignature(signature)
+        setMsgSignature(signature)
     },
     signTypedData: async () => {
         const { mnemonic, path, typedData, setSignatureTypedData, setErrorTypedData, setErrorText } = get()

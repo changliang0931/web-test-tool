@@ -2,7 +2,7 @@ import { Button, Divider, Tooltip, Grid, FormHelperText, Container, TextField, F
 import myStore from "../state/aptos-state";
 import ClearIcon from "@mui/icons-material/Clear";
 function Aptos() {
-  const { mnemonic, errorMnemonic, errorText, path, publicKey, privateKey, address, errorTo, to, chainId, modules, func, module, typeTag, typeTags, funcs, amount, handleClear, handleChange, obtainAccount, signTx, signMessage,setMessage,random ,expTimeStamp, message, signature, gasUnitPrice,
+  const { mnemonic, errorMnemonic, errorText, path, publicKey, privateKey, address, errorTo, to, chainId, modules, func, module, typeTag, typeTags, funcs, amount, handleClear, handleChange, obtainAccount, signTx, signMessage,setMessage,random ,expTimeStamp, message, msgSignature, gasUnitPrice,
     maxGasAmount, sequenceNumber, payload, txRaw,
     setMnemonic
   } = myStore()
@@ -368,13 +368,13 @@ function Aptos() {
           <Grid item xs={12}>
             <FormControl fullWidth sx={{ m: 1 }} variant="standard">
               <TextField
-                id="signature"
+                id="msgSignature"
                 label="Signature"
                 color="secondary"
                 sx={{ width: 1 }}
                 multiline
                 rows={3}
-                value={signature}
+                value={msgSignature}
                 InputProps={{
                   readOnly: true,
                 }}

@@ -97,14 +97,14 @@ const useStore = create<EthereumState>((set, get) => ({
         setErrorText("");
     },
     signMessage: async () => {
-        const { setSignature, mnemonic, setErrorMnemonic, setErrorText, path, message } = get()
-        setSignature("")
+        const { setMsgSignature, mnemonic, setErrorMnemonic, setErrorText, path, message } = get()
+        setMsgSignature("")
         if (validateMnemonic(mnemonic)) {
             setErrorMnemonic(false)
             setErrorText("")
         }
         const account = new Aptos(mnemonic, path);
-        setSignature(account.signMessage(message));
+        setMsgSignature(account.signMessage(message));
     },
     setErrorTo: (error: boolean) => set({ errorTo: error }),
     handleChange: (event: any) => {

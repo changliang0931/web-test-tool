@@ -277,7 +277,7 @@ function Dot() {
           <Grid item xs={12}>
             <FormControl fullWidth sx={{ m: 1 }} variant="standard">
               <TextField
-                id="signature"
+                id="msgSignature"
                 label="Signature"
                 color="secondary"
                 sx={{ width: 1 }}
