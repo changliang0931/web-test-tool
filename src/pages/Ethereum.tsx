@@ -9,7 +9,7 @@ import storage from '../state/storage';
 function Ethereum() {
   const { mnemonic, errorMnemonic, errorText, path, publicKey, privateKey, address,
     to, nonce, data, value, gasLimit, gasPrice, maxFeePerGas, maxPriorityFeePerGas,
-    type, chainId, txRaw, errorTo, errorData, transactionTypes, display1559, message, messageHash, signature, errorTypedData, typedData, signatureTypedData,
+    type, chainId, txRaw, errorTo, errorData, transactionTypes, display1559, message, messageHash, signature, errorTypedData, typedData, signatureTypedData,setMessage,random,
     signMessage, handleChange, handleClear,obtainAccount, signTx, parseTx, signTypedData } = myStore()
   if (storage.get(storage.keys.LOCAL_TEST_MNEMONIC)) {
     //    obtainAccount();
@@ -361,6 +361,7 @@ function Ethereum() {
                 value={message}
                 onChange={handleChange}
                 InputProps={{
+                  startAdornment: <InputAdornment id="random" position="start" onClick={()=>{setMessage(random(64))}} ><h3 style={{ color: 'green' }}>Random</h3></InputAdornment>,
                   endAdornment: <Tooltip title="Clear" placement="right-end"><IconButton id="messagec" sx={{ visibility: message ? "visible" : "hidden" }} onClick={handleClear}><ClearIcon /></IconButton></Tooltip>,
                 }}
               />

@@ -1,13 +1,9 @@
-import { Tooltip, Button, Divider, FormHelperText, Grid, MenuItem, Container, TextField, FormControl,IconButton } from "@mui/material";
+import { Tooltip, Button, Divider, FormHelperText, Grid, MenuItem, Container, TextField, FormControl, IconButton,InputAdornment } from "@mui/material";
 import dotStore from "../state/dot-state";
 import ClearIcon from "@mui/icons-material/Clear";
 function Dot() {
-  const { mnemonic, keypairType, keypairTypes, errorMnemonic, errorText, path, publicKey, privateKey, address,
-    // maxNetUsageWords, maxCpuUsageMs, delaySec, expiration, refBlockNum, refBlockPrefix, actions, errorActions, contextFreeActions, transactionExtensions, contextFreeData, 
-    signature,
-    message,
-    signMessage, handleChange, obtainAccount,handleClear
-    // signTx, 
+  const { mnemonic, keypairType, keypairTypes, errorMnemonic, errorText, path, publicKey, privateKey, address, blockHash, nonce, specVersion, transactionVersion, tip, call, signature,msgSignature, message,setMessage,random,
+    signTx, signMessage, handleChange, obtainAccount, handleClear,
   } = dotStore()
   return (
     <div >
@@ -117,139 +113,109 @@ function Dot() {
             </FormControl>
           </Grid>
         </Grid>
-        {/* <Divider><h3>Transaction-Sign</h3></Divider>
+        <Divider><h3>Transaction-Sign</h3></Divider>
         <Grid container spacing={2}>
-          <Grid item xs={12}>
+          <Grid item xs={4}>
             <FormControl fullWidth sx={{ m: 1 }} variant="standard">
               <TextField
-                select
-                id="chainId"
-                label="ChainId"
-                name="chainId"
-                value={chainId}
-                helperText=" Tip : Mainnet: aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906"
+                id="transactionVersion"
+                label="TransactionVersion"
+                color="info"
+                type="number"
+                inputProps={{
+                  min: 0
+                }}
+                value={transactionVersion}
                 onChange={handleChange}
-              >
-                {chainIds.map((option: any) => (
-                  <MenuItem id={option} key={option} value={option}>
-                    {option}
-                  </MenuItem>
-                ))}
-              </TextField>
+                InputProps={{
+                  endAdornment: <Tooltip title="Clear" placement="right-end" onClick={handleClear} ><IconButton id="transactionVersionc" sx={{ visibility: transactionVersion ? "visible" : "hidden" }} ><ClearIcon /></IconButton></Tooltip>,
+                }}
+              />
             </FormControl>
           </Grid>
           <Grid item xs={4}>
             <FormControl fullWidth sx={{ m: 1 }} variant="standard">
               <TextField
-                id="maxNetUsageWords"
-                label="MaxNetUsageWords"
+                id="nonce"
+                label="nonce"
                 color="info"
                 sx={{ width: 1 }}
                 type="number"
                 inputProps={{
                   min: 0
                 }}
-                value={maxNetUsageWords}
+                value={nonce}
                 onChange={handleChange}
+                InputProps={{
+                  endAdornment: <Tooltip title="Clear" placement="right-end" onClick={handleClear} ><IconButton id="noncec" sx={{ visibility: nonce ? "visible" : "hidden" }} ><ClearIcon /></IconButton></Tooltip>,
+                }}
               />
             </FormControl>
           </Grid>
-
           <Grid item xs={4}>
             <FormControl fullWidth sx={{ m: 1 }} variant="standard">
               <TextField
-                id="maxCpuUsageMs"
-                label="MaxCpuUsageMs"
+                id="specVersion"
+                label="specVersion"
                 color="info"
                 sx={{ width: 1 }}
                 type="number"
                 inputProps={{
                   min: 0
                 }}
-                value={maxCpuUsageMs}
+                value={specVersion}
                 onChange={handleChange}
+                InputProps={{
+                  endAdornment: <Tooltip title="Clear" placement="right-end" onClick={handleClear} ><IconButton id="specVersionc" sx={{ visibility: specVersion ? "visible" : "hidden" }} ><ClearIcon /></IconButton></Tooltip>,
+                }}
               />
             </FormControl>
           </Grid>
-          <Grid item xs={4}>
+          <Grid item xs={6}>
             <FormControl fullWidth sx={{ m: 1 }} variant="standard">
               <TextField
-                id="delaySec"
-                label="DelaySec"
+                id="blockHash"
+                label="BlockHash"
                 color="info"
                 sx={{ width: 1 }}
-                type="number"
-                inputProps={{
-                  min: 0
+                value={blockHash}
+                onChange={handleChange}
+                InputProps={{
+                  endAdornment: <Tooltip title="Clear" placement="right-end" onClick={handleClear} ><IconButton id="blockHashc" sx={{ visibility: blockHash ? "visible" : "hidden" }} ><ClearIcon /></IconButton></Tooltip>,
                 }}
-                value={delaySec}
-                onChange={handleChange}
-              />
-
-            </FormControl>
-          </Grid>
-          <Grid item xs={4}>
-            <FormControl fullWidth sx={{ m: 1 }} variant="standard">
-              <TextField
-                id="expiration"
-                label="expiration"
-                color="info"
-                value={expiration}
-                onChange={handleChange}
               />
             </FormControl>
           </Grid>
-
-          <Grid item xs={4}>
+          <Grid item xs={6}>
             <FormControl fullWidth sx={{ m: 1 }} variant="standard">
               <TextField
-                id="refBlockNum"
-                label="RefBlockNum"
+                id="tip"
+                label="Tip"
                 color="info"
-                type="number"
-                inputProps={{
-                  min: 10000,
-                  max: 99999
-                }}
-                value={refBlockNum}
+                value={tip}
                 onChange={handleChange}
-              />
-            </FormControl>
-          </Grid>
-          <Grid item xs={4}>
-            <FormControl fullWidth sx={{ m: 1 }} variant="standard">
-              <TextField
-                id="refBlockPrefix"
-                label="RefBlockPrefix"
-                color="info"
-                type="number"
-                inputProps={{
-                  min: 100000000,
-                  max: 999999999
+                InputProps={{
+                  endAdornment: <Tooltip title="Clear" placement="right-end" onClick={handleClear} ><IconButton id="infoc" sx={{ visibility: tip ? "visible" : "hidden" }} ><ClearIcon /></IconButton></Tooltip>,
                 }}
-                value={refBlockPrefix}
-                onChange={handleChange}
               />
             </FormControl>
           </Grid>
           <Grid item xs={12}>
-            <FormControl fullWidth sx={{ m: 1 }} error={errorActions} variant="standard">
+            <FormControl fullWidth sx={{ m: 1 }} variant="standard">
               <TextField
-                id="actions"
-                label="Actions"
+                id="call"
+                label="Call"
                 color="info"
-                error={errorActions}
                 sx={{ width: 1 }}
                 multiline
                 rows={3}
-                value={JSON.stringify(actions)}
-                onChange={handleChange}
+                value={call}
+                InputProps={{
+                  endAdornment: <Tooltip title="Clear" placement="right-end" onClick={handleClear} ><IconButton id="callc" sx={{ visibility: call ? "visible" : "hidden" }} ><ClearIcon /></IconButton></Tooltip>,
+                }}
               />
-              <FormHelperText>{errorText}</FormHelperText>
             </FormControl>
           </Grid>
-        
-
           <Grid item xs={12}>
             <FormControl fullWidth sx={{ m: 1 }} variant="standard">
               <TextField
@@ -259,7 +225,6 @@ function Dot() {
                 sx={{ width: 1 }}
                 multiline
                 rows={3}
-                // value={signature}
                 InputProps={{
                   value: signature,
                   readOnly: true,
@@ -269,9 +234,8 @@ function Dot() {
           </Grid>
         </Grid>
         <FormControl fullWidth sx={{ m: 1 }} variant="standard">
-          <Button id="signTx" onClick={signTx} variant="contained" color="info" disabled={publicKey.trim() == "" && !errorActions} >sign transation</Button>
-        </FormControl> */}
-
+          <Button id="signTx" onClick={signTx} variant="contained" color="info" disabled={publicKey.trim() == ""} >sign transation</Button>
+        </FormControl>
 
         <Divider><h3>Message-Sign</h3></Divider>
         <Grid container spacing={2}>
@@ -287,6 +251,7 @@ function Dot() {
                 value={message}
                 onChange={handleChange}
                 InputProps={{
+                  startAdornment: <InputAdornment id="random" position="start" onClick={()=>{setMessage(random(64))}} ><h4 style={{ color: 'green' }}>Random</h4></InputAdornment>,
                   endAdornment: <Tooltip title="Clear" placement="right-end"><IconButton id="messagec" sx={{ visibility: message ? "visible" : "hidden" }} onClick={handleClear}><ClearIcon /></IconButton></Tooltip>,
                 }}
               />
@@ -318,11 +283,10 @@ function Dot() {
                 sx={{ width: 1 }}
                 multiline
                 rows={3}
-                value={signature}
+                value={msgSignature}
                 InputProps={{
                   readOnly: true,
                 }}
-
               />
             </FormControl>
           </Grid>

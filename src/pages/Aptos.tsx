@@ -2,7 +2,7 @@ import { Button, Divider, Tooltip, Grid, FormHelperText, Container, TextField, F
 import myStore from "../state/aptos-state";
 import ClearIcon from "@mui/icons-material/Clear";
 function Aptos() {
-  const { mnemonic, errorMnemonic, errorText, path, publicKey, privateKey, address, errorTo, to, chainId, modules, func, module, typeTag, typeTags, funcs, amount, handleClear, handleChange, obtainAccount, signTx, signMessage, expTimeStamp, message, signature, gasUnitPrice,
+  const { mnemonic, errorMnemonic, errorText, path, publicKey, privateKey, address, errorTo, to, chainId, modules, func, module, typeTag, typeTags, funcs, amount, handleClear, handleChange, obtainAccount, signTx, signMessage,setMessage,random ,expTimeStamp, message, signature, gasUnitPrice,
     maxGasAmount, sequenceNumber, payload, txRaw,
     setMnemonic
   } = myStore()
@@ -359,6 +359,7 @@ function Aptos() {
                 value={message}
                 onChange={handleChange}
                 InputProps={{
+                  startAdornment: <InputAdornment id="random" position="start" onClick={()=>{setMessage(random(64))}} ><h3 style={{ color: 'green' }}>Random</h3></InputAdornment>,
                   endAdornment: <Tooltip title="Clear" placement="right-end"><IconButton id="messagec" sx={{ visibility: message ? "visible" : "hidden" }} onClick={handleClear}><ClearIcon /></IconButton></Tooltip>,
                 }}
               />

@@ -1,34 +1,26 @@
 import create from "zustand";
-import { Polkadot, POLKADOT_DEFAULT_PATH, validateMnemonic } from "wallet-web-lib";
+import { Polkadot, BigNumber, POLKADOT_DEFAULT_PATH, validateMnemonic } from "wallet-web-lib";
 import { MainState, MainStore } from '../state/main-state';
 interface DotState extends MainState {
     // 'ed25519' | 'sr25519' | 'ecdsa' | 'ethereum';
     keypairTypes: Array<string>;
     keypairType: string;
-    // expiration: string;
-    // refBlockNum: number;
-    // refBlockPrefix: number;
-    // maxNetUsageWords: number;
-    // maxCpuUsageMs: number;
-    // delaySec: number;
-    // contextFreeActions: Action[];
-    // contextFreeData?: Uint8Array[];
-    // actions: Action[];
-    // errorActions: boolean;
-    // transactionExtensions?: [number, string][];
+    genesisHash: string;
+    blockHash: string;
+    nonce: string;
+    specVersion: string;
+    transactionVersion: string;
+    tip: string;
+    call: string;
     messageHash: string;
     setKeypairType: (keypairType: string) => void;
-    // setExpiration: (expiration: string) => void;
-    // setRefBlockNum: (refBlockNum: number) => void;
-    // setRefBlockPrefix: (refBlockPrefix: number) => void;
-    // setMaxNetUsageWords: (maxNetUsageWords: number) => void;
-    // setMaxCpuUsageMs: (maxCpuUsageMs: number) => void;
-    // setDelaySec: (delaySec: number) => void;
-    // setContextFreeActions: (contextFreeActions: Array<any>) => void;
-    // setContextFreeData: (contextFreeData: Uint8Array[]) => void;
-    // setActions: (actions: Action[]) => void;
-    // setErrorActions: (error: boolean) => void;
-    // setTransactionExtensions: (transactionExtensions: [number, string][]) => void;
+    setGenesisHash: (genesisHash: string) => void;
+    setBlockHash: (blockHash: string) => void;
+    setNonce: (nonce: string) => void;
+    setSpecVersion: (specVersion: string) => void;
+    setTransactionVersion: (transactionVersion: string) => void;
+    setTip: (tip: string) => void;
+    setCall: (call: string) => void;
 }
 const useStore = create<DotState>((set: any, get: any) => ({
     ...MainStore(set),
@@ -36,57 +28,87 @@ const useStore = create<DotState>((set: any, get: any) => ({
     keypairType: "ed25519",
     path: POLKADOT_DEFAULT_PATH,
     messageHash: "",
-    // expiration: "2020-08-06T09:50:56",
-    // refBlockNum: 13949,
-    // refBlockPrefix: 241701672,
-    // maxNetUsageWords: 0,
-    // maxCpuUsageMs: 0,
-    // delaySec: 0,
-    // contextFreeActions: [],
-    // contextFreeData: [],
-    // actions: [{"account":"eosio.token","name":"transfer","authorization":[{"actor":"zijunzimo555","permission":"active"}],"data":{"from":"zijunzimo555","to":"jubitertest4","quantity":"50.0000 EOS","memo":"from jwallet_core"}}],
-    // errorActions: false,
-    // transactionExtensions: [],
+    genesisHash: "91b171bb158e2d3848fa23a9f1c25182fb8e20313b2c1eb49219da7a70ce90c3",
+    blockHash: "5d2143bb808626d63ad7e1cda70fa8697059d670a992e82cd440fbb95ea40351",
+    nonce: "0",
+    specVersion: "9130",
+    transactionVersion: "8",
+    tip: "",
+    call: `{"name":"transfer_keep_alive","transfer_keep_alive":{"keep_alive":true,"dest":"5FCAiG8aXJBYh4QLMViWhn8ZHBM3VjX2D6DK1uWvZC43wG2P","value":"100000"}}
+    `,
     setKeypairType: (keypairType: string) => set({ keypairType: keypairType }),
-    // setExpiration: (expiration: string) => set({ expiration: expiration }),
-    // setRefBlockNum: (refBlockNum: number) => set({ refBlockNum: refBlockNum }),
-    // setRefBlockPrefix: (refBlockPrefix: number) => set({ refBlockPrefix: refBlockPrefix }),
-    // setMaxNetUsageWords: (maxNetUsageWords: number) => set({ maxNetUsageWords: maxNetUsageWords }),
-    // setMaxCpuUsageMs: (maxCpuUsageMs: number) => set({ maxCpuUsageMs: maxCpuUsageMs }),
-    // setDelaySec: (delaySec: number) => set({ delaySec: delaySec }),
-    // setContextFreeActions: (contextFreeActions: Action[]) => set({ contextFreeActions: contextFreeActions }),
-    // setContextFreeData: (contextFreeData: Uint8Array[]) => set({ contextFreeData: contextFreeData }),
-    // setActions: (actions: Action[]) => set({ actions: actions }),
-    // setErrorActions: (error: boolean) => set({ errorActions: error }),
-    // setTransactionExtensions: (transactionExtensions: [number, string][]) => set({ transactionExtensions: transactionExtensions }),
+    setGenesisHash: (genesisHash: string) => set({ genesisHash: genesisHash }),
+    setBlockHash: (blockHash: string) => set({ blockHash: blockHash }),
+    setNonce: (nonce: string) => set({ nonce: nonce }),
+    setSpecVersion: (specVersion: string) => set({ specVersion: specVersion }),
+    setTransactionVersion: (transactionVersion: string) => set({ transactionVersion: transactionVersion }),
+    setTip: (tip: string) => set({ tip: tip }),
+    setCall: (call: string) => set({ call: call }),
     signTx: async () => {
-        // const { setErrorText, setSignature, mnemonic, path, 
-        //     // expiration, refBlockNum, refBlockPrefix, maxNetUsageWords, maxCpuUsageMs, delaySec, actions, contextFreeActions, contextFreeData, transactionExtensions 
-        // } = get()
-        // const account = new Tron(mnemonic, path);
-        // // let transaction: ApiInterfaces.Transaction = {
-        // //     expiration: expiration,
-        // //     ref_block_num: refBlockNum,
-        // //     ref_block_prefix: refBlockPrefix,
-        // //     max_net_usage_words: maxNetUsageWords || 0,
-        // //     max_cpu_usage_ms: maxCpuUsageMs || 0,
-        // //     delay_sec: delaySec || 0,
-        // //     actions: actions,
-        // // }
-        // setSignature("")
-        // const { signatures } = await account.signTransaction(transaction);
-        // setSignature(signatures)
-        // setErrorText("");
+        const { setErrorText, setSignature, mnemonic, path, keypairType, blockHash, nonce, specVersion, transactionVersion, tip, call, setErrorMnemonic, getGenesisHash } = get()
+        const account = new Polkadot(mnemonic, path, keypairType);
+        if (!validateMnemonic(mnemonic)) {
+            setErrorText("Mnemonic invalid ")
+            setErrorMnemonic(true)
+            return;
+        }
+        if (call.trim() === "") {
+            return;
+        }
+        let callObj;
+        try {
+            callObj = JSON.parse(call);
+            if (call.indexOf("transfer") > -1) {
+                callObj = { balances_call: callObj };
+            } else {
+                callObj = { staking_call: callObj };
+            }
+        } catch (error) {
+            return;
+        }
+        let transaction = {
+            "genesisHash": getGenesisHash("Polkadot"),
+            "blockHash": blockHash || "",
+            "nonce": BigNumber.from(nonce).toNumber() || 1,
+            "specVersion": BigNumber.from(specVersion).toNumber() || 9130,
+            "transaction_version": BigNumber.from(transactionVersion).toNumber() || 8,
+            "tip": tip || "",
+            "era": {
+                "blockNumber": 0,
+                "eraPeriod": 64
+            },
+            ...callObj,
+        }
+        setSignature("");
+        let signature = await account.signTransaction(transaction);
+        setSignature(signature);
+        setErrorText("");
     },
     signMessage: () => {
-        const { mnemonic, path, keypairType, setErrorText, message, setSignature } = get()
+        const { mnemonic, path, keypairType, setErrorText, message, setMsgSignature, setErrorMnemonic } = get()
+        if (!validateMnemonic(mnemonic)) {
+            setErrorText("Mnemonic invalid ")
+            setErrorMnemonic(true)
+            return;
+        }
         try {
             const account = new Polkadot(mnemonic, path, keypairType);
             const signature = account.signMessage(message);
-            setSignature(signature);
+            setMsgSignature(signature);
         } catch (err: any) {
             setErrorText("Mnemonic with less than 12 words have low entropy and may be guessed by an attacker. ")
         }
+    },
+    getGenesisHash: (type: string) => {
+        let genesisHash;
+        if (type === "Polkadot") {//Polkadot
+            genesisHash = "91b171bb158e2d3848fa23a9f1c25182fb8e20313b2c1eb49219da7a70ce90c3"
+        } else if (type === "Kusama") {//Kusama
+            genesisHash = "91b171bb158e2d3848fa23a9f1c25182fb8e20313b2c1eb49219da7a70ce90c3"
+        } else {//Testnet
+            genesisHash = "e143f23803ac50e8f6f8e62695d1ce9e4e1d68aa36c1cd2cfd15340213f3423e"
+        }
+        return genesisHash;
     },
     obtainAccount: () => {
         const { mnemonic, path, setErrorMnemonic, keypairType, setErrorText, setPublicKey, setAddress, setPrivateKey } = get()
@@ -105,8 +127,7 @@ const useStore = create<DotState>((set: any, get: any) => ({
             setErrorMnemonic(true)
         }
     }, handleChange: (event: any) => {
-        const { setAddress, setErrorMnemonic, setMnemonic, setPath, setPublicKey, setErrorText, setKeypairType, setMessage, setSignature
-            // setExpiration, setRefBlockNum, setRefBlockPrefix, setMaxNetUsageWords, setMaxCpuUsageMs, setDelaySec, setContextFreeActions, setContextFreeData, setActions, setErrorActions, setTransactionExtensions 
+        const { setAddress, setMnemonic, setPath, setPublicKey, setKeypairType, setMessage, setSignature, setNonce, setSpecVersion, setGenesisHash, setBlockHash, setTransactionVersion, setTip, setCall
         } = get()
         let value = event.target.value;
         let id = event.target.id || event.target.name;
@@ -124,85 +145,46 @@ const useStore = create<DotState>((set: any, get: any) => ({
             setMessage(value)
         } else if (id === "signature") {
             setSignature(value);
-            // } else if (id === "refBlockNum") {
-            //     setRefBlockNum(parseInt(value));
-            // } else if (id === "refBlockPrefix") {
-            //     setRefBlockPrefix(parseInt(value));
-            // } else if (id === "maxNetUsageWords") {
-            //     setMaxNetUsageWords(parseInt(value));
-            // } else if (id === "maxCpuUsageMs") {
-            //     setMaxCpuUsageMs(parseInt(value));
-            // } else if (id === "delaySec") {
-            //     setDelaySec(parseInt(value));
-            // } else if (id === "actions") {
-            //     try {
-            //         if(value.trim() === "" ){
-            //             setErrorActions(true);
-            //             // setActions();
-            //             setErrorText("Actions  invalid ")
-            //             return
-            //         }
-            //         const actions = JSON.parse(value);
-            //         setErrorActions(false);
-            //         setActions(actions);
-            //         setErrorText("")
-            //     } catch (error:any) {
-            //         setErrorActions(true);
-            //         setErrorText("Actions  invalid "+ error.message)
-            //     }
-            // } else if (id === "transactionExtensions") {
-            //     setTransactionExtensions(value);
-            // } else if (id === "contextFreeActions") {
-            //     setContextFreeActions(value);
-            // } else if (id === "contextFreeData") {
-            //     setContextFreeData(value);
+        } else if (id === "nonce") {
+            setNonce(value);
+        } else if (id === "genesisHash") {
+            setGenesisHash(value);
+        } else if (id === "blockHash") {
+            setBlockHash(value);
+        } else if (id === "specVersion") {
+            setSpecVersion(value);
+        } else if (id === "transactionVersion") {
+            setTransactionVersion(value);
+        } else if (id === "tip") {
+            setTip(value);
+        } else if (id === "call") {
+            setCall(value);
         }
     },
     handleClear: (event: any) => {
-        const { setMnemonic, setPath, setKeypairType, setMessage
-            // setExpiration, setRefBlockNum, setRefBlockPrefix, setMaxNetUsageWords, setMaxCpuUsageMs, setDelaySec, setContextFreeActions, setContextFreeData, setActions, setErrorActions, setTransactionExtensions 
+        const { setMnemonic, setPath, setMessage, setNonce, setSpecVersion, setGenesisHash, setBlockHash, setTransactionVersion, setTip, setCall
         } = get()
         let id = event.currentTarget.id;
         if (id === "mnemonic") {
             setMnemonic("");
         } else if (id === "pathc") {
             setPath("");
+        } else if (id === "noncec") {
+            setNonce("")
         } else if (id === "messagec") {
             setMessage("")
-            // } else if (id === "signature") {
-            //     setSignature(value);
-            // } else if (id === "refBlockNum") {
-            //     setRefBlockNum(parseInt(value));
-            // } else if (id === "refBlockPrefix") {
-            //     setRefBlockPrefix(parseInt(value));
-            // } else if (id === "maxNetUsageWords") {
-            //     setMaxNetUsageWords(parseInt(value));
-            // } else if (id === "maxCpuUsageMs") {
-            //     setMaxCpuUsageMs(parseInt(value));
-            // } else if (id === "delaySec") {
-            //     setDelaySec(parseInt(value));
-            // } else if (id === "actions") {
-            //     try {
-            //         if(value.trim() === "" ){
-            //             setErrorActions(true);
-            //             // setActions();
-            //             setErrorText("Actions  invalid ")
-            //             return
-            //         }
-            //         const actions = JSON.parse(value);
-            //         setErrorActions(false);
-            //         setActions(actions);
-            //         setErrorText("")
-            //     } catch (error:any) {
-            //         setErrorActions(true);
-            //         setErrorText("Actions  invalid "+ error.message)
-            //     }
-            // } else if (id === "transactionExtensions") {
-            //     setTransactionExtensions(value);
-            // } else if (id === "contextFreeActions") {
-            //     setContextFreeActions(value);
-            // } else if (id === "contextFreeData") {
-            //     setContextFreeData(value);
+        } else if (id === "genesisHashc") {
+            setGenesisHash("");
+        } else if (id === "blockHashc") {
+            setBlockHash("");
+        } else if (id === "specVersionc") {
+            setSpecVersion("");
+        } else if (id === "transactionVersionc") {
+            setTransactionVersion("");
+        } else if (id === "tipc") {
+            setTip("");
+        } else if (id === "callc") {
+            setCall("");
         }
     },
 }));

@@ -10,7 +10,7 @@ export interface MainState {
 
     message: string;
     signature: string;
-
+    msgSignature: string;
     errorMnemonic: boolean;
     errorText: string;
     setMnemonic: (mnemonic: string) => void;
@@ -25,10 +25,11 @@ export interface MainState {
 
     setMessage: (message: string) => void;
     setSignature: (signature: string) => void;
+    setMsgSignature: (msgSignature: string) => void;
 
     handleChange?: (event: any) => void;
     handleClear?: (event: any) => void;
-    random?: (len?: number) => void;
+    random: (len?: number) => string;
 
     obtainAccount?: () => void;
     signTx?: () => void;
@@ -44,6 +45,7 @@ const MainStore = (set: any) => ({
     address: "",
     message: "",
     signature: "",
+    msgSignature: "",
     setMnemonic: (mnemonic: string) => set({ mnemonic: mnemonic }),
     setErrorMnemonic: (error: boolean) => set({ error: error }),
     setErrorText: (errorMsg: string) => set({ errorMsg: errorMsg }),
@@ -53,7 +55,7 @@ const MainStore = (set: any) => ({
     setAddress: (address: string) => set({ address: address }),
     setMessage: (message: string) => set({ message: message }),
     setSignature: (signature: string) => set({ signature: signature }),
-
+    setMsgSignature: (msgSignature: string) => set({ msgSignature: msgSignature }),
     handleChange: (event: any) => { },
     handleClear: (event: any) => { },
     random: (len: number = 32) => {
