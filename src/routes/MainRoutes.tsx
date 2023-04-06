@@ -7,6 +7,7 @@ const Aptos = Loadable(lazy(() => import('../pages/Aptos')));
 const Ethereum = Loadable(lazy(() => import('../pages/Ethereum')));
 const Home = Loadable(lazy(() => import('../pages/Home')));
 const EosPage = Loadable(lazy(() => import('../pages/Eos')));
+const FilPage = Loadable(lazy(() => import('../pages/Fil')));
 const TronPage = Loadable(lazy(() => import('../pages/Tron')));
 const CryptoPage = Loadable(lazy(() => import('../pages/crypto')));
 const XrpPage = Loadable(lazy(() => import('../pages/Xrp')));
@@ -29,6 +30,9 @@ const MainRoutes = {
         {
             path: 'eos',
             element: <EosPage />
+        },{
+            path: 'fil',
+            element: <FilPage />
         },
         {
             path: 'tron',
