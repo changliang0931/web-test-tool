@@ -40,7 +40,7 @@ function Fil() {
                 sx={{ width: 1 }}
                 value={path}
                 onChange={handleChange}
-                helperText="Default Path: m/44'/144'/0'/0'/0'"
+                helperText="Default Path: m/44'/461'/0'/0/0"
                 InputProps={{
                   endAdornment: <Tooltip title="Clear" placement="right-end"><IconButton id="pathc" sx={{ visibility: path ? "visible" : "hidden" }} onClick={handleClear}><ClearIcon /></IconButton></Tooltip>,
                 }}
