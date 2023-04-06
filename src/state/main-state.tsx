@@ -10,6 +10,8 @@ export interface MainState {
 
     message: string;
     signature: string;
+    transaction: string;
+    jsonTransaction: string;
     msgSignature: string;
     errorMnemonic: boolean;
     errorText: string;
@@ -25,6 +27,8 @@ export interface MainState {
 
     setMessage: (message: string) => void;
     setSignature: (signature: string) => void;
+    setTransaction: (transaction: string) => void;
+    setJsonTransaction: (jsonTransaction: string) => void;
     setMsgSignature: (msgSignature: string) => void;
 
     handleChange?: (event: any) => void;
@@ -45,6 +49,8 @@ const MainStore = (set: any) => ({
     address: "",
     message: "",
     signature: "",
+    transaction: "",
+    jsonTransaction: "",
     msgSignature: "",
     setMnemonic: (mnemonic: string) => set({ mnemonic: mnemonic }),
     setErrorMnemonic: (error: boolean) => set({ error: error }),
@@ -55,6 +61,8 @@ const MainStore = (set: any) => ({
     setAddress: (address: string) => set({ address: address }),
     setMessage: (message: string) => set({ message: message }),
     setSignature: (signature: string) => set({ signature: signature }),
+    setTransaction: (transaction: string) => set({ transaction: transaction }),
+    setJsonTransaction: (jsonTransaction: string) => set({ jsonTransaction: jsonTransaction }),
     setMsgSignature: (msgSignature: string) => set({ msgSignature: msgSignature }),
     handleChange: (event: any) => { },
     handleClear: (event: any) => { },
