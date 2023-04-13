@@ -139,6 +139,7 @@ function Xrp() {
                 multiline
                 rows={3}
                 value={transaction}
+                onChange={handleChange}
                 InputProps={{
                   endAdornment: <Tooltip title="Clear" placement="right-end" onClick={handleClear} ><IconButton id="transactionc" sx={{ visibility: transaction ? "visible" : "hidden" }} ><ClearIcon /></IconButton></Tooltip>,
                 }}

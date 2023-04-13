@@ -195,7 +195,7 @@ function Dot() {
                 value={tip}
                 onChange={handleChange}
                 InputProps={{
-                  endAdornment: <Tooltip title="Clear" placement="right-end" onClick={handleClear} ><IconButton id="infoc" sx={{ visibility: tip ? "visible" : "hidden" }} ><ClearIcon /></IconButton></Tooltip>,
+                  endAdornment: <Tooltip title="Clear" placement="right-end" onClick={handleClear} ><IconButton id="tipc" sx={{ visibility: tip ? "visible" : "hidden" }} ><ClearIcon /></IconButton></Tooltip>,
                 }}
               />
             </FormControl>
