@@ -1,8 +1,8 @@
-import { Tooltip, Button, Divider, Grid, MenuItem, Container, TextField, FormControl,FormHelperText ,IconButton} from "@mui/material";
+import { Tooltip, Button, Divider, Grid, MenuItem, Container, TextField, FormControl, FormHelperText, IconButton } from "@mui/material";
 import eosStore from "../state/eos-state";
 import ClearIcon from "@mui/icons-material/Clear";
 function Eos() {
-  const { mnemonic, errorMnemonic, errorText, path, publicKey, privateKey, address, chainIds, chainId, maxNetUsageWords, maxCpuUsageMs, delaySec, expiration, refBlockNum, refBlockPrefix, actions, errorActions, contextFreeActions, transactionExtensions, contextFreeData, handleChange, obtainAccount, signTx,handleClear, signature,
+  const { mnemonic, errorMnemonic, errorText, path, publicKey, privateKey, address, chainIds, chainId, maxNetUsageWords, maxCpuUsageMs, delaySec, expiration, refBlockNum, refBlockPrefix, actions, errorActions, txRaw, contextFreeActions, transactionExtensions, contextFreeData, handleChange, obtainAccount, signTx, handleClear, signature,
   } = eosStore()
   return (
     <div >
@@ -286,7 +286,22 @@ function Eos() {
               />
             </FormControl>
           </Grid> */}
-
+          <Grid item xs={12}>
+            <FormControl fullWidth sx={{ m: 1 }} variant="standard">
+              <TextField
+                id="txRaw"
+                label="TxRaw"
+                color="info"
+                sx={{ width: 1 }}
+                multiline
+                rows={3}
+                value={txRaw}
+                InputProps={{
+                  readOnly: true,
+                }}
+              />
+            </FormControl>
+          </Grid>
           <Grid item xs={12}>
             <FormControl fullWidth sx={{ m: 1 }} variant="standard">
               <TextField

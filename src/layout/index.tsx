@@ -86,8 +86,9 @@ export default function MainLayout() {
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
       <AppBar position="fixed" open={false}>
-        <Toolbar>
-
+        <Toolbar 
+        // sx={{backgroundColor:'#263348'}}
+        >
           <IconButton
             color="inherit"
             aria-label="open drawer"
@@ -100,7 +101,7 @@ export default function MainLayout() {
           >
             <WalletIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
           </IconButton>
-          <Breadcrumbs aria-label="breadcrumb">
+          <Breadcrumbs aria-label="breadcrumb" >
             <Link
               underline="hover"
               sx={{ display: 'flex', alignItems: 'center', textTransform: 'capitalize' }}
@@ -142,7 +143,7 @@ export default function MainLayout() {
         <Divider />
         <Menus />
       </Drawer>
-      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+      <Box component="main" sx={{ flexGrow: 1, p: 3 ,color:'#263348'}}>
         <DrawerHeader />
         <Content />
       </Box>

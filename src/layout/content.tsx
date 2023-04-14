@@ -16,7 +16,7 @@ const Content = () => {
             <Route key="aptos" path="aptos" element={<Aptos />} />
             <Route key="ethereum" path="ethereum" element={<Ethereum />} />
             <Route key="eos" path="eos" element={<Eos />} />
-            <Route key="fil" path="fil" element={<Fil />} />
+            <Route key="filecoin" path="filecoin" element={<Fil />} />
             <Route key="tron" path="tron" element={<Tron />} />
             <Route key="polkadot" path="polkadot" element={<Dot />} />
             <Route key="xrp" path="xrp" element={<Xrp />} />

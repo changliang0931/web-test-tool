@@ -30,8 +30,8 @@ const MainRoutes = {
         {
             path: 'eos',
             element: <EosPage />
-        },{
-            path: 'fil',
+        }, {
+            path: 'filecoin',
             element: <FilPage />
         },
         {

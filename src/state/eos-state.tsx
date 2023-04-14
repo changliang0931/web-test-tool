@@ -1,5 +1,5 @@
 import create from "zustand";
-import { Eos, BigNumber, EOS_CHAIN_ID, EOS_DEFAULT_PATH, validateMnemonic, ApiInterfaces, Action } from "wallet-web-lib"
+import { Eos, BigNumber, EOS_CHAIN_ID, EOS_DEFAULT_PATH, validateMnemonic, ApiInterfaces, Action, uint8ArrayTohex } from "wallet-web-lib"
 import { MainState, MainStore } from '../state/main-state';
 interface EosState extends MainState {
     chainIds: Array<string>;
@@ -16,7 +16,7 @@ interface EosState extends MainState {
     actions: string;
     errorActions: boolean;
     transactionExtensions?: [number, string][];
-
+    txRaw: string;
     setChainId: (chainId: string) => void;
     setExpiration: (expiration: string) => void;
     setRefBlockNum: (refBlockNum: string) => void;
@@ -29,6 +29,7 @@ interface EosState extends MainState {
     setActions: (actions: string) => void;
     setErrorActions: (error: boolean) => void;
     setTransactionExtensions: (transactionExtensions: [number, string][]) => void;
+    setTxRaw: (txRaw: string) => void;
 }
 const useStore = create<EosState>((set, get) => ({
     ...MainStore(set),
@@ -46,6 +47,7 @@ const useStore = create<EosState>((set, get) => ({
     actions: `[{ "account": "eosio.token", "name": "transfer", "authorization": [{ "actor": "zijunzimo555", "permission": "active" }], "data": { "from": "zijunzimo555", "to": "jubitertest4", "quantity": "50.0000 EOS", "memo": "from jwallet_core" } }]`,
     errorActions: false,
     transactionExtensions: [],
+    txRaw: "",
     setChainId: (chainId: string) => set({ chainId: chainId }),
     setExpiration: (expiration: string) => set({ expiration: expiration }),
     setRefBlockNum: (refBlockNum: string) => set({ refBlockNum: refBlockNum }),
@@ -58,8 +60,9 @@ const useStore = create<EosState>((set, get) => ({
     setActions: (actions: string) => set({ actions: actions }),
     setErrorActions: (error: boolean) => set({ errorActions: error }),
     setTransactionExtensions: (transactionExtensions: [number, string][]) => set({ transactionExtensions: transactionExtensions }),
+    setTxRaw: (txRaw: string) => set({ txRaw: txRaw }),
     signTx: async () => {
-        const { setErrorText, setSignature, setErrorMnemonic, setErrorActions, setActions, mnemonic, path, expiration, refBlockNum, refBlockPrefix, maxNetUsageWords, maxCpuUsageMs, delaySec, actions, contextFreeActions, contextFreeData, transactionExtensions } = get()
+        const { setErrorText, setSignature, setErrorMnemonic, setErrorActions, setActions, mnemonic, path, expiration, refBlockNum, refBlockPrefix, maxNetUsageWords, maxCpuUsageMs, delaySec, actions, setTxRaw, contextFreeActions, contextFreeData, transactionExtensions } = get()
         if (!validateMnemonic(mnemonic)) {
             setErrorText("Mnemonic invalid ")
             setErrorMnemonic(true)
@@ -90,8 +93,10 @@ const useStore = create<EosState>((set, get) => ({
             // context_free_actions: contextFreeData, 
             // transaction_extensions: transactionExtensions || []
         }
-        setSignature("")
-        const { signatures } = await account.signTransaction(transaction);
+        setSignature("");
+        setTxRaw("");
+        const { signatures, serializedTransaction } = await account.signTransaction(transaction);
+        setTxRaw(uint8ArrayTohex(serializedTransaction));
         setSignature(signatures)
         setErrorText("");
     },

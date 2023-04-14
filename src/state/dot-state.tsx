@@ -165,7 +165,7 @@ const useStore = create<DotState>((set: any, get: any) => ({
         const { setMnemonic, setPath, setMessage, setNonce, setSpecVersion, setGenesisHash, setBlockHash, setTransactionVersion, setTip, setCall
         } = get()
         let id = event.currentTarget.id;
-        if (id === "mnemonic") {
+        if (id === "mnemonicc") {
             setMnemonic("");
         } else if (id === "pathc") {
             setPath("");

@@ -210,6 +210,7 @@ function Dot() {
                 multiline
                 rows={3}
                 value={call}
+                onChange={handleChange}
                 InputProps={{
                   endAdornment: <Tooltip title="Clear" placement="right-end" onClick={handleClear} ><IconButton id="callc" sx={{ visibility: call ? "visible" : "hidden" }} ><ClearIcon /></IconButton></Tooltip>,
                 }}
