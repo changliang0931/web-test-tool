@@ -2,7 +2,9 @@ import { Tooltip, Button, Divider, Grid, MenuItem, Container, TextField, FormCon
 import eosStore from "../state/eos-state";
 import ClearIcon from "@mui/icons-material/Clear";
 function Eos() {
-  const { mnemonic, errorMnemonic, errorText, path, publicKey, privateKey, address, chainIds, chainId, maxNetUsageWords, maxCpuUsageMs, delaySec, expiration, refBlockNum, refBlockPrefix, actions, errorActions, txRaw, contextFreeActions, transactionExtensions, contextFreeData, handleChange, obtainAccount, signTx, handleClear, signature,
+  const { mnemonic, errorMnemonic, errorText, path, publicKey, privateKey, address, chainIds, chainId, maxNetUsageWords, maxCpuUsageMs, delaySec, expiration, refBlockNum, refBlockPrefix, actions, errorActions, txRaw,
+    // contextFreeActions, transactionExtensions, contextFreeData,
+    handleChange, obtainAccount, signTx, handleClear, signature,
   } = eosStore()
   return (
     <div >
@@ -88,7 +90,7 @@ function Eos() {
           </Grid>
           <Grid item xs={12}>
             <FormControl fullWidth sx={{ m: 1 }} variant="standard">
-              <Button id="obtainAccount" onClick={obtainAccount} variant="contained" color="success" disabled={!(mnemonic.trim() != "" && path.trim() != "")}  >Get Account</Button>
+              <Button id="obtainAccount" onClick={obtainAccount} variant="contained" color="success" disabled={!(mnemonic.trim() !== "" && path.trim() !== "")}  >Get Account</Button>
             </FormControl>
           </Grid>
         </Grid>
@@ -321,7 +323,7 @@ function Eos() {
           </Grid>
         </Grid>
         <FormControl fullWidth sx={{ m: 1 }} variant="standard">
-          <Button id="signTx" onClick={signTx} variant="contained" color="info" disabled={publicKey.trim() == "" && !errorActions} >sign transation</Button>
+          <Button id="signTx" onClick={signTx} variant="contained" color="info" disabled={publicKey.trim() === "" && !errorActions} >sign transation</Button>
         </FormControl>
       </Container>
     </div>

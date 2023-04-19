@@ -248,7 +248,7 @@ function Tron() {
           </Grid>
         </Grid>
         <FormControl fullWidth sx={{ m: 1 }} variant="standard">
-          <Button id="signTx" onClick={signTx} variant="contained" color="info" disabled={publicKey.trim() == "" && !errorContracts} >sign transation</Button>
+          <Button id="signTx" onClick={signTx} variant="contained" color="info" disabled={publicKey.trim() === "" && !errorContracts} >sign transation</Button>
         </FormControl>
       </Container>
     </div>

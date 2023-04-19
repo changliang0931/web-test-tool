@@ -1,5 +1,5 @@
 import create from "zustand";
-import { Xrp, BigNumber, XRP_DEFAULT_PATH, validateMnemonic, XRP_TRANSACTION_TYPE } from "wallet-web-lib";
+import { Xrp, XRP_DEFAULT_PATH, validateMnemonic, XRP_TRANSACTION_TYPE } from "wallet-web-lib";
 import { MainState, MainStore } from './main-state';
 interface XrpState extends MainState {
     transactionTypes: string[];
@@ -16,7 +16,7 @@ const useStore = create<XrpState>((set: any, get: any) => ({
     transaction: '{"TransactionType":"Payment","Account":"rhP2Fs6XobyXGGUwJYagkZ5AV5gEaqzwZv","Destination":"ra5nK24KXen9AHvsdFTKHSANinZseWnPcX","Amount":{"currency":"USD","value":"1","issuer":"rhP2Fs6XobyXGGUwJYagkZ5AV5gEaqzwZv"},"Fee":"12","Flags":2147483648,"Sequence":2}',
     setTransactionType: (transactionType: string) => set({ transactionType: transactionType }),
     signTx: async () => {
-        const { setErrorText, setSignature, mnemonic, path, transaction, transactionType, setErrorMnemonic } = get()
+        const { setErrorText, setSignature, mnemonic, path, transaction, setErrorMnemonic } = get()
         const account = new Xrp(mnemonic, path);
         if (!validateMnemonic(mnemonic)) {
             setErrorText("Mnemonic invalid ")

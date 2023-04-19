@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Link as ToPage, useLocation } from "react-router-dom"
+import { useLocation } from "react-router-dom"
 import { styled, useTheme, Theme, CSSObject } from '@mui/material/styles';
 import { Box, Breadcrumbs, Link, Toolbar, CssBaseline, Divider, IconButton, Drawer as MuiDrawer, Typography } from '@mui/material';
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
@@ -80,7 +80,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 );
 
 export default function MainLayout() {
-  const theme = useTheme();
+  // const theme = useTheme();
   const location = useLocation();
   return (
     <Box sx={{ display: 'flex' }}>
@@ -111,7 +111,7 @@ export default function MainLayout() {
               <HomeIcon sx={{ mr: 0.8 }} fontSize="medium" />
               Home
             </Link>
-            {location.pathname != "/" ?
+            {location.pathname !== "/" ?
               <Link
                 underline="none"
                 sx={{ display: 'flex', alignItems: 'center', textTransform: 'capitalize' }}

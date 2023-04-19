@@ -2,7 +2,7 @@ import { Tooltip, Button, Divider, FormHelperText, Grid, MenuItem, Container, Te
 import dotStore from "../state/dot-state";
 import ClearIcon from "@mui/icons-material/Clear";
 function Dot() {
-  const { mnemonic, keypairType, keypairTypes, errorMnemonic, errorText, path, publicKey, privateKey, address, blockHash, nonce, specVersion, transactionVersion, tip, call, signature,msgSignature, message,setMessage,random,
+  const { mnemonic, keypairType, keypairTypes, errorMnemonic, errorText, path, publicKey,  address, blockHash, nonce, specVersion, transactionVersion, tip, call, signature,msgSignature, message,setMessage,random,
     signTx, signMessage, handleChange, obtainAccount, handleClear,
   } = dotStore()
   return (
@@ -235,7 +235,7 @@ function Dot() {
           </Grid>
         </Grid>
         <FormControl fullWidth sx={{ m: 1 }} variant="standard">
-          <Button id="signTx" onClick={signTx} variant="contained" color="info" disabled={publicKey.trim() == ""} >sign transation</Button>
+          <Button id="signTx" onClick={signTx} variant="contained" color="info" disabled={publicKey.trim() === ""} >sign transation</Button>
         </FormControl>
 
         <Divider><h3>Message-Sign</h3></Divider>
@@ -293,7 +293,7 @@ function Dot() {
           </Grid>
         </Grid>
         <FormControl fullWidth sx={{ m: 1 }} variant="standard">
-          <Button id="signMessage" onClick={signMessage} variant="contained" color="secondary" disabled={address.trim() == ""} >sign message</Button>
+          <Button id="signMessage" onClick={signMessage} variant="contained" color="secondary" disabled={address.trim() === ""} >sign message</Button>
         </FormControl>
       </Container>
     </div>

@@ -90,7 +90,7 @@ function Xrp() {
           </Grid>
           <Grid item xs={12}>
             <FormControl fullWidth sx={{ m: 1 }} variant="standard">
-              <Button id="obtainAccount" onClick={obtainAccount} variant="contained" color="success" disabled={!(mnemonic.trim() != "" && path.trim() != "")} >Get Account</Button>
+              <Button id="obtainAccount" onClick={obtainAccount} variant="contained" color="success" disabled={!(mnemonic.trim() !== "" && path.trim() !== "")} >Get Account</Button>
             </FormControl>
           </Grid>
         </Grid>
@@ -165,7 +165,7 @@ function Xrp() {
           </Grid>
         </Grid>
         <FormControl fullWidth sx={{ m: 1 }} variant="standard">
-          <Button id="signTx" onClick={signTx} variant="contained" color="info" disabled={address.trim() == ""} >sign transation</Button>
+          <Button id="signTx" onClick={signTx} variant="contained" color="info" disabled={address.trim() === ""} >sign transation</Button>
         </FormControl>
 
       </Container>

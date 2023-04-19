@@ -1,9 +1,10 @@
-import { Tooltip, Button, Divider, InputAdornment, Grid, MenuItem, Container, TextField, FormControl,IconButton } from "@mui/material";
+import { Tooltip, Button, Divider, InputAdornment, Grid, MenuItem, Container, TextField, FormControl, IconButton } from "@mui/material";
 import cryptoStore from "../state/crypto-state";
 import ClearIcon from "@mui/icons-material/Clear";
 function Crypto() {
-  const { cryptoTypes, cryptoType, privateKey, auxRand, signature, message, messageHash, signMessage,
-    handleChange, handleClear, random
+  const { cryptoTypes, cryptoType, privateKey, auxRand, signature, message,
+    // messageHash, 
+    signMessage, handleChange, handleClear, random
   } = cryptoStore()
 
   return (
@@ -45,7 +46,7 @@ function Crypto() {
               />
             </FormControl>
           </Grid>
-          <Grid item xs={12} display={cryptoType == 'Schnorr' ? 'block' : 'none'}>
+          <Grid item xs={12} display={cryptoType === 'Schnorr' ? 'block' : 'none'}>
             <FormControl fullWidth sx={{ m: 1 }} variant="standard">
               <TextField
                 id="auxRand"
@@ -115,7 +116,7 @@ function Crypto() {
           </Grid>
         </Grid>
         <FormControl fullWidth sx={{ m: 1 }} variant="standard">
-          <Button id="signMessage" onClick={signMessage} variant="contained" color="success" disabled={privateKey.trim() == "" || privateKey.trim().length < 64 ||message.trim() == "" || message.trim().length < 64} >sign message</Button>
+          <Button id="signMessage" onClick={signMessage} variant="contained" color="success" disabled={privateKey.trim() === "" || privateKey.trim().length < 64 || message.trim() === "" || message.trim().length < 64} >sign message</Button>
         </FormControl>
       </Container>
     </div>

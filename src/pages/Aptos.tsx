@@ -3,9 +3,7 @@ import myStore from "../state/aptos-state";
 import ClearIcon from "@mui/icons-material/Clear";
 function Aptos() {
   const { mnemonic, errorMnemonic, errorText, path, publicKey, privateKey, address, errorTo, to, chainId, modules, func, module, typeTag, typeTags, funcs, amount, handleClear, handleChange, obtainAccount, signTx, signMessage,setMessage,random ,expTimeStamp, message, msgSignature, gasUnitPrice,
-    maxGasAmount, sequenceNumber, payload, txRaw,
-    setMnemonic
-  } = myStore()
+    maxGasAmount, sequenceNumber, payload, txRaw  } = myStore()
 
   return (
     <div >
@@ -93,7 +91,7 @@ function Aptos() {
           </Grid>
           <Grid item xs={12}>
             <FormControl fullWidth sx={{ m: 1 }} variant="standard">
-              <Button id="obtainAccount" onClick={obtainAccount} variant="contained" color="success" disabled={!(mnemonic.trim() != "" && path.trim() != "")} >Get Account</Button>
+              <Button id="obtainAccount" onClick={obtainAccount} variant="contained" color="success" disabled={!(mnemonic.trim() !== "" && path.trim() !== "")} >Get Account</Button>
             </FormControl>
           </Grid>
         </Grid>
@@ -342,7 +340,7 @@ function Aptos() {
         </Grid>
 
         <FormControl fullWidth sx={{ m: 1 }} variant="standard">
-          <Button id="signTx" onClick={signTx} variant="contained" color="info" disabled={address.trim() == ""} >sign transation</Button>
+          <Button id="signTx" onClick={signTx} variant="contained" color="info" disabled={address.trim() === ""} >sign transation</Button>
         </FormControl>
 
         <Divider><h3>Message-Sign</h3></Divider>
@@ -383,7 +381,7 @@ function Aptos() {
           </Grid>
         </Grid>
         <FormControl fullWidth sx={{ m: 1 }} variant="standard">
-          <Button id="signMessage" onClick={signMessage} variant="contained" color="secondary" disabled={address.trim() == ""} >sign message</Button>
+          <Button id="signMessage" onClick={signMessage} variant="contained" color="secondary" disabled={address.trim() === ""} >sign message</Button>
         </FormControl>
 
       </Container>

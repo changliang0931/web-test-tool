@@ -1,4 +1,4 @@
-import { List, Tooltip, Divider, ListItemButton, ListItem, ListItemIcon, ListItemText, Icon } from '@mui/material';
+import { List, Tooltip, Divider, ListItemButton, ListItem, ListItemIcon, ListItemText } from '@mui/material';
 import { Link as ToPage } from "react-router-dom"
 import Pages from '../pages';
 const Menus = () => {

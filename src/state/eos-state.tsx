@@ -62,13 +62,15 @@ const useStore = create<EosState>((set, get) => ({
     setTransactionExtensions: (transactionExtensions: [number, string][]) => set({ transactionExtensions: transactionExtensions }),
     setTxRaw: (txRaw: string) => set({ txRaw: txRaw }),
     signTx: async () => {
-        const { setErrorText, setSignature, setErrorMnemonic, setErrorActions, setActions, mnemonic, path, expiration, refBlockNum, refBlockPrefix, maxNetUsageWords, maxCpuUsageMs, delaySec, actions, setTxRaw, contextFreeActions, contextFreeData, transactionExtensions } = get()
+        const { setErrorText, setSignature, setErrorMnemonic, setErrorActions, setActions, mnemonic, path, expiration, refBlockNum, refBlockPrefix, maxNetUsageWords, maxCpuUsageMs, delaySec, actions, setTxRaw,
+            // contextFreeActions, contextFreeData, transactionExtensions
+        } = get()
         if (!validateMnemonic(mnemonic)) {
             setErrorText("Mnemonic invalid ")
             setErrorMnemonic(true)
             return
         }
-        if (actions.trim() == "") {
+        if (actions.trim() === "") {
             setErrorActions(true);
             setActions("");
             setErrorText("Actions  invalid ")
@@ -155,7 +157,9 @@ const useStore = create<EosState>((set, get) => ({
             setContextFreeData(value);
         }
     }, handleClear: (event: any) => {
-        const { setMnemonic, setChainId, setPath, setExpiration, setRefBlockNum, setRefBlockPrefix, setMaxNetUsageWords, setMaxCpuUsageMs, setDelaySec, setActions, setTransactionExtensions, setContextFreeActions, setContextFreeData, } = get()
+        const { setMnemonic, setChainId, setPath, setExpiration, setRefBlockNum, setRefBlockPrefix, setMaxNetUsageWords, setMaxCpuUsageMs, setDelaySec, setActions,
+            // setTransactionExtensions, setContextFreeActions, setContextFreeData,
+        } = get()
         let id = event.currentTarget.id;
         if (id === "mnemonicc") {
             setMnemonic("");

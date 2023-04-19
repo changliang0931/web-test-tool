@@ -202,7 +202,7 @@ const useStore = create<EthereumState>((set: any, get: any) => ({
     },
     handleChange: (event: any) => {
         const { setSignature, setErrorTo, setTo, setErrorData, setData, setValue, setChainId, setType, setAddress, setDisplay1559,
-            setMaxFeePerGas, setMaxPriorityFeePerGas, setErrorMnemonic, setNonce, setGasLimit, setGasPrice, setMessage, setMnemonic, setPath, setPrivateKey, setPublicKey, setErrorText, setTypedData, setErrorTypedData } = get()
+            setMaxFeePerGas, setMaxPriorityFeePerGas, setNonce, setGasLimit, setGasPrice, setMessage, setMnemonic, setPath, setPrivateKey, setPublicKey, setTypedData } = get()
         let value = event.target.value;
         let id = event.target.id || event.target.name;
         if (id === "to") {

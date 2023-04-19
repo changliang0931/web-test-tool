@@ -105,7 +105,7 @@ const useStore = create<XrpState>((set: any, get: any) => ({
         }
     },
     handleClear: (event: any) => {
-        const { setMnemonic, setPath, setTransaction,
+        const { setMnemonic, setPath,
             setTo, setNonce, setValue, setGasLimit, setGasFeeCap, setGasPremium, setMethod, setParams
         } = get()
         let id = event.currentTarget.id;
