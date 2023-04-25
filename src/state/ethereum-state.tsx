@@ -14,7 +14,6 @@ interface EthereumState extends MainState {
     chainId: string;
     type: string;
     data: string;
-    txRaw: string;
     display1559: string;
     typedData: string;
     signatureTypedData: string;
@@ -37,7 +36,6 @@ interface EthereumState extends MainState {
     setMaxFeePerGas: (maxFeePerGas: string) => void;
     setChainId: (chainId: string) => void;
     setType: (type: string) => void;
-    setTxRaw: (txRaw: string) => void;
     setData: (data: string) => void;
     setDisplay1559: (display1559: string) => void;
 
@@ -75,7 +73,6 @@ const useStore = create<EthereumState>((set: any, get: any) => ({
     maxFeePerGas: "200000000",
     chainId: "1",
     type: "0",
-    txRaw: "",
     display1559: "none",
     messageHash: "",
     errorTo: false,
@@ -86,7 +83,7 @@ const useStore = create<EthereumState>((set: any, get: any) => ({
     errorTypedData: false,
     setErrorTypedData: (errorTypedData: boolean) => set({ errorTypedData: errorTypedData }),
     obtainAccount: () => {
-        const { setErrorText, mnemonic, path, setErrorMnemonic, setPublicKey, setAddress, setPrivateKey } = get()
+        const { setErrorText, mnemonic, path, setErrorMnemonic, setPublicKey, setAddress, setPrivateKey, publicKeyCompress } = get()
         const isMn = validateMnemonic(mnemonic)
         try {
             if (!isMn) {
@@ -95,7 +92,7 @@ const useStore = create<EthereumState>((set: any, get: any) => ({
                 return
             }
             const account = new Ethereum(mnemonic, path)
-            setPublicKey!(account.publicKey)
+            setPublicKey!(publicKeyCompress(account.publicKey))
             setPrivateKey!(account.privateKey)
             setAddress!(account.address)
             setErrorText("")
@@ -113,12 +110,11 @@ const useStore = create<EthereumState>((set: any, get: any) => ({
     setMaxFeePerGas: (maxFeePerGas: string) => set({ maxFeePerGas: maxFeePerGas }),
     setChainId: (chainId: string) => set({ chainId: chainId }),
     setType: (type: string) => set({ type: type }),
-    setTxRaw: (txRaw: string) => set({ txRaw: txRaw }),
     setData: (data: string) => set({ data: data }),
     setDisplay1559: (display1559: string) => set({ display1559: display1559 }),
     signTx: async () => {
-        const { setTxRaw, setErrorText, setErrorTo, setErrorData, mnemonic, path, to, address, nonce, gasLimit, gasPrice, maxFeePerGas, maxPriorityFeePerGas, data, value, type, chainId } = get()
-        setTxRaw("");
+        const { setErrorText, setErrorTo, setErrorData, mnemonic, path, to, address, nonce, gasLimit, gasPrice, maxFeePerGas, maxPriorityFeePerGas, data, value, type, chainId, setRawTransaction } = get()
+        setRawTransaction("");
         const wallet = new Ethereum(mnemonic, path);
         const isTo = isEthereumAddress(to);
         if (to.length > 0 && !isTo) {
@@ -157,7 +153,7 @@ const useStore = create<EthereumState>((set: any, get: any) => ({
         }
         let sigTx = await wallet.signTransaction(unSigTx);
         setErrorText("")
-        setTxRaw(sigTx)
+        setRawTransaction(sigTx)
     },
     setTypedData: (typedData: string) => set({ typedData: typedData }),
     setMessageHash: (messageHash: string) => set({ messageHash: messageHash }),
@@ -197,8 +193,8 @@ const useStore = create<EthereumState>((set: any, get: any) => ({
     setErrorData: (error: boolean) => set({ errorData: error }),
     setErrorTo: (error: boolean) => set({ errorTo: error }),
     parseTx: () => {
-        const { setTxRaw, txRaw } = get();
-        setTxRaw(parseEthereumTx(txRaw));
+        const { setRawTransaction, rawTransaction } = get();
+        setRawTransaction(parseEthereumTx(rawTransaction));
     },
     handleChange: (event: any) => {
         const { setSignature, setErrorTo, setTo, setErrorData, setData, setValue, setChainId, setType, setAddress, setDisplay1559,

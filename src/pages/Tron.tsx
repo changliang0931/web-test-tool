@@ -3,7 +3,7 @@ import tronStore from "../state/tron-state";
 import ClearIcon from "@mui/icons-material/Clear";
 function Tron() {
   const { mnemonic, errorMnemonic, errorText, path, publicKey, privateKey, address,
-    refBlockBytes, refBlockNum, refBlockHash, expiration, timestamp, feeLimit, contracts, errorContracts, payload, signature,
+    refBlockBytes, refBlockNum, refBlockHash, expiration, timestamp, feeLimit, contracts, errorContracts, payload, signature,rawTransaction,
     handleClear, handleChange, obtainAccount, signTx,
   } = tronStore()
   return (
@@ -242,6 +242,22 @@ function Tron() {
                 InputProps={{
                   value: signature,
                   readOnly: true,
+                }}
+              />
+            </FormControl>
+          </Grid>
+          <Grid item xs={12}>
+            <FormControl fullWidth sx={{ m: 1 }} variant="standard">
+              <TextField
+                id="txRaw"
+                label="TxRaw"
+                color="info"
+                sx={{ width: 1 }}
+                multiline
+                rows={3}
+                value={rawTransaction}
+                InputProps={{
+                  readOnly: true
                 }}
               />
             </FormControl>

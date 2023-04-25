@@ -17,8 +17,6 @@ interface EthereumState extends MainState {
     sequenceNumber: string;
     expTimeStamp: string;
     chainId: string;
-    payload: string;
-    txRaw: string;
     errorTo: boolean;
 
     setTo: (to: string) => void;
@@ -33,8 +31,6 @@ interface EthereumState extends MainState {
     setFunc: (func: string) => void;
     setTypeTag: (typeTag: string) => void;
 
-    setTxRaw: (txRaw: string) => void;
-    setPayload: (payload: string) => void;
 }
 const useStore = create<EthereumState>((set, get) => ({
     ...MainStore(set),
@@ -47,14 +43,12 @@ const useStore = create<EthereumState>((set, get) => ({
     errorTo: false,
     amount: "1000000",
     sequenceNumber: "0",
-    payload: "",
     gasUnitPrice: "5000",
     maxGasAmount: "100000",
     expTimeStamp: (Math.floor(Date.now() / 1000) + 20).toString(),
     chainId: "1",
     module: APTOS_MODULE["0x1::aptos_account"],
     typeTag: "",
-    txRaw: "",
     func: APTOS_FUNCS.transfer,
     obtainAccount: () => {
         const { mnemonic, path, setErrorMnemonic, setErrorText, setPublicKey, setAddress, setPrivateKey } = get()
@@ -83,17 +77,15 @@ const useStore = create<EthereumState>((set, get) => ({
     setModule: (module: string = APTOS_MODULE["0x1::aptos_account"]) => set({ module: module }),
     setFunc: (func: string = APTOS_FUNCS.transfer) => set({ func: func }),
     setTypeTag: (typeTag: string = "") => set({ typeTag: typeTag }),
-    setPayload: (payload: string) => set({ payload: payload }),
-    setTxRaw: (txRaw: string) => set({ txRaw: txRaw }),
     signTx: async () => {
-        const { setTxRaw, setErrorText, module, func, typeTag, sequenceNumber, setPayload, mnemonic, path, to, amount,
+        const { setRawTransaction, setErrorText, module, func, typeTag, sequenceNumber, setPayload, mnemonic, path, to, amount,
             maxGasAmount, gasUnitPrice, expTimeStamp, chainId } = get()
-        setTxRaw("");
+            setRawTransaction("");
         const account = new Aptos(mnemonic, path);
         const payload = account.getPayload(module, func, typeTag, to, BigNumber.from(amount).toNumber());
         setPayload(account.payload2Hex(payload));
         const tx = await account.signTransaction({ sequenceNumber: sequenceNumber, payload: payload, maxGasAmount: maxGasAmount, gasUnitPrice: gasUnitPrice, expTimeStamp: expTimeStamp, chainId: chainId, typeTag: typeTag, module: module, func: func, to: to, amount: amount });
-        setTxRaw(tx.raw);
+        setRawTransaction(tx.raw);
         setErrorText("");
     },
     signMessage: async () => {

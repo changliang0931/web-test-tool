@@ -3,7 +3,7 @@ import myStore from "../state/aptos-state";
 import ClearIcon from "@mui/icons-material/Clear";
 function Aptos() {
   const { mnemonic, errorMnemonic, errorText, path, publicKey, privateKey, address, errorTo, to, chainId, modules, func, module, typeTag, typeTags, funcs, amount, handleClear, handleChange, obtainAccount, signTx, signMessage,setMessage,random ,expTimeStamp, message, msgSignature, gasUnitPrice,
-    maxGasAmount, sequenceNumber, payload, txRaw  } = myStore()
+    maxGasAmount, sequenceNumber, payload, rawTransaction  } = myStore()
 
   return (
     <div >
@@ -330,7 +330,7 @@ function Aptos() {
                 sx={{ width: 1 }}
                 multiline
                 rows={2}
-                value={txRaw}
+                value={rawTransaction}
                 InputProps={{
                   readOnly: true,
                 }}

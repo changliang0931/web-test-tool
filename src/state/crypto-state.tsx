@@ -1,52 +1,28 @@
 import create from "zustand";
-import { Schnorr, Ecdsa, Ed25519, randomString } from "wallet-web-lib"
-interface CryptoState {
+import { Schnorr, Ecdsa, Ed25519, validateMnemonic, Bip32, ETHEREUM_DEFAULT_PATH } from "wallet-web-lib"
+import { MainState, MainStore } from '../state/main-state';
+interface CryptoState extends MainState {
     cryptoTypes: string[];
     cryptoType: string;
-    publicKey: string;
-    privateKey: string;
     auxRand: string;
-    signature: string;
-    message: string;
-    messageHash: string;
-    setPublicKey: (pubKey: string) => void;
-    setPrivateKey: (priKey: string) => void;
     setAuxRand: (auxRand: string) => void;
     setCryptoType: (cryptoType: string) => void;
-    setMessage: (message: string) => void;
-    setMessageHash: (messageHash: string) => void;
-    setSignature: (signature: string) => void;
-    signMessage: () => void;
-    random: () => void;
-    handleChange: (event: any) => void;
-    handleClear: (event: any) => void;
 }
 const useStore = create<CryptoState>((set, get) => ({
+    ...MainStore(set),
     cryptoTypes: ["Schnorr", "Ecdsa", "Ed25519"],
     cryptoType: "Schnorr",
-    publicKey: "03D534107F17143FD2D03476377A80A81FA9435D418D7CD0792E7547271F25D86F",
-    privateKey: "4B3867D80E66A985176A4942B98D523F0E1E7DFF8203A8DB85385636090EC67F",
+    path: ETHEREUM_DEFAULT_PATH,
     auxRand: "C87AA53824B4D7AE2EB035A2B5BBBCCC080E76CDC6D1692C4B0B62D798E6D906",
     signature: "",
     message: "243F6A8885A308D313198A2E03707344A4093822299F31D0082EFA98EC4E6C89",
-    messageHash: "",
-    setPublicKey: (pubKey: string) => set({ publicKey: pubKey }),
-    setPrivateKey: (priKey: string) => set({ privateKey: priKey }),
     setAuxRand: (auxRand: string) => set({ auxRand: auxRand }),
     setCryptoType: (cryptoType: string) => set({ cryptoType: cryptoType }),
-    setSignature: (signature: string) => set({ signature: signature }),
-    setMessage: (message: string) => set({ message: message }),
-    setMessageHash: (messageHash: string) => set({ messageHash: messageHash }),
-    random: () => {
-        const { setMessage } = get()
-        setMessage(randomString(32).toUpperCase());
-    },
     signMessage: async () => {
-        const { setSignature, message, privateKey, auxRand, cryptoType, setMessageHash } = get()
+        const { setSignature, message, privateKey, auxRand, cryptoType } = get()
         setSignature("")
-        setMessageHash("");
         let signature: string = "";
-        if(!message || !privateKey){
+        if (!message || !privateKey) {
             return;
         }
         if (cryptoType === "Schnorr") {
@@ -61,11 +37,29 @@ const useStore = create<CryptoState>((set, get) => ({
         }
         setSignature(signature.startsWith("0x") ? signature : ("0x" + signature));
     },
+    obtainAccount: () => {
+        const { setErrorText, mnemonic, path, setErrorMnemonic, setPublicKey, setPrivateKey } = get()
+        const isMn = validateMnemonic(mnemonic)
+        try {
+            if (!isMn) {
+                setErrorText("Mnemonic invalid ")
+                setErrorMnemonic(true)
+                return
+            }
+            const bip32 = new Bip32()
+            const account = bip32.deriveFromMnemonicAndPath(mnemonic, path)
+            setPublicKey(account.publicKey)
+            setPrivateKey(account.privateKey)
+            setErrorText("")
+        } catch (err: any) {
+            setErrorText("Mnemonic with less than 12 words have low entropy and may be guessed by an attacker. ")
+            setErrorMnemonic(true)
+        }
+    },
     handleChange: (event: any) => {
-        const { setMessage, setPrivateKey, setAuxRand, setCryptoType } = get()
+        const { setMessage, setPrivateKey, setAuxRand, setCryptoType, setPath, setMnemonic } = get()
         let value = event.target.value.trim();
         let id = event.target.id || event.target.name;
-        value = value.trim()
         if (id === "message") {
             setMessage(value);
         } else if (id === "privateKey") {
@@ -74,10 +68,15 @@ const useStore = create<CryptoState>((set, get) => ({
             setAuxRand(value);
         } else if (id === "cryptoType") {
             setCryptoType(value);
+        } else if (id === "path") {
+            value = value.trim()
+            setPath(value);
+        } else if (id === "mnemonic") {
+            setMnemonic(event.target.value);
         }
     },
     handleClear: (event: any) => {
-        const { setMessage, setPrivateKey, setAuxRand } = get()
+        const { setMessage, setPrivateKey, setAuxRand, setPath, setMnemonic } = get()
         let id = event.currentTarget.id;
         if (id === "messagec") {
             setMessage("");
@@ -85,6 +84,10 @@ const useStore = create<CryptoState>((set, get) => ({
             setPrivateKey("");
         } else if (id === "auxRandc") {
             setAuxRand("");
+        } else if (id === "pathc") {
+            setPath("");
+        } else if (id === "mnemonicc") {
+            setMnemonic("");
         }
     }
 }));

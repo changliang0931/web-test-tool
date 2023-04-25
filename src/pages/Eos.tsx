@@ -2,7 +2,7 @@ import { Tooltip, Button, Divider, Grid, MenuItem, Container, TextField, FormCon
 import eosStore from "../state/eos-state";
 import ClearIcon from "@mui/icons-material/Clear";
 function Eos() {
-  const { mnemonic, errorMnemonic, errorText, path, publicKey, privateKey, address, chainIds, chainId, maxNetUsageWords, maxCpuUsageMs, delaySec, expiration, refBlockNum, refBlockPrefix, actions, errorActions, txRaw,
+  const { mnemonic, errorMnemonic, errorText, path, publicKey, privateKey, address, chainIds, chainId, maxNetUsageWords, maxCpuUsageMs, delaySec, expiration, refBlockNum, refBlockPrefix, actions, errorActions, rawTransaction,
     // contextFreeActions, transactionExtensions, contextFreeData,
     handleChange, obtainAccount, signTx, handleClear, signature,
   } = eosStore()
@@ -297,7 +297,7 @@ function Eos() {
                 sx={{ width: 1 }}
                 multiline
                 rows={3}
-                value={txRaw}
+                value={rawTransaction}
                 InputProps={{
                   readOnly: true,
                 }}

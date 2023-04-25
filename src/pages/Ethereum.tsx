@@ -9,7 +9,7 @@ import storage from '../state/storage';
 function Ethereum() {
   const { mnemonic, errorMnemonic, errorText, path, publicKey, privateKey, address,
     to, nonce, data, value, gasLimit, gasPrice, maxFeePerGas, maxPriorityFeePerGas,
-    type, chainId, txRaw, errorTo, errorData, transactionTypes, display1559, message, messageHash, msgSignature, errorTypedData, typedData, signatureTypedData,setMessage,random,
+    type, chainId, rawTransaction, errorTo, errorData, transactionTypes, display1559, message, messageHash, msgSignature, errorTypedData, typedData, signatureTypedData,setMessage,random,
     signMessage, handleChange, handleClear,obtainAccount, signTx, parseTx, signTypedData } = myStore()
   if (storage.get(storage.keys.LOCAL_TEST_MNEMONIC)) {
     //    obtainAccount();
@@ -17,11 +17,6 @@ function Ethereum() {
   return (
     <div >
       <Container fixed>
-        {/* <Divider>
-          <h1>Ethereum Wallet Test Tool</h1>
-        </Divider>>
-          <h1>Ethereum Wallet Test Tool</h1>
-        </Divider> */}
         <Divider><h3>Mnemonic-Key-Derivation-Address</h3></Divider>
         <Grid container spacing={2}>
           <Grid item xs={12}>
@@ -335,7 +330,7 @@ function Ethereum() {
                 sx={{ width: 1 }}
                 multiline
                 rows={3}
-                value={txRaw}
+                value={rawTransaction}
                 InputProps={{
                   readOnly: true,
                   startAdornment: <InputAdornment position="start" onClick={parseTx} ><PsychologyAltOutlinedIcon fontSize="large" color="success"></PsychologyAltOutlinedIcon></InputAdornment>,

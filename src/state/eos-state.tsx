@@ -16,7 +16,6 @@ interface EosState extends MainState {
     actions: string;
     errorActions: boolean;
     transactionExtensions?: [number, string][];
-    txRaw: string;
     setChainId: (chainId: string) => void;
     setExpiration: (expiration: string) => void;
     setRefBlockNum: (refBlockNum: string) => void;
@@ -29,7 +28,6 @@ interface EosState extends MainState {
     setActions: (actions: string) => void;
     setErrorActions: (error: boolean) => void;
     setTransactionExtensions: (transactionExtensions: [number, string][]) => void;
-    setTxRaw: (txRaw: string) => void;
 }
 const useStore = create<EosState>((set, get) => ({
     ...MainStore(set),
@@ -47,7 +45,6 @@ const useStore = create<EosState>((set, get) => ({
     actions: `[{ "account": "eosio.token", "name": "transfer", "authorization": [{ "actor": "zijunzimo555", "permission": "active" }], "data": { "from": "zijunzimo555", "to": "jubitertest4", "quantity": "50.0000 EOS", "memo": "from jwallet_core" } }]`,
     errorActions: false,
     transactionExtensions: [],
-    txRaw: "",
     setChainId: (chainId: string) => set({ chainId: chainId }),
     setExpiration: (expiration: string) => set({ expiration: expiration }),
     setRefBlockNum: (refBlockNum: string) => set({ refBlockNum: refBlockNum }),
@@ -60,9 +57,8 @@ const useStore = create<EosState>((set, get) => ({
     setActions: (actions: string) => set({ actions: actions }),
     setErrorActions: (error: boolean) => set({ errorActions: error }),
     setTransactionExtensions: (transactionExtensions: [number, string][]) => set({ transactionExtensions: transactionExtensions }),
-    setTxRaw: (txRaw: string) => set({ txRaw: txRaw }),
     signTx: async () => {
-        const { setErrorText, setSignature, setErrorMnemonic, setErrorActions, setActions, mnemonic, path, expiration, refBlockNum, refBlockPrefix, maxNetUsageWords, maxCpuUsageMs, delaySec, actions, setTxRaw,
+        const { setErrorText, setSignature, setErrorMnemonic, setErrorActions, setActions, mnemonic, path, expiration, refBlockNum, refBlockPrefix, maxNetUsageWords, maxCpuUsageMs, delaySec, actions, setRawTransaction,
             // contextFreeActions, contextFreeData, transactionExtensions
         } = get()
         if (!validateMnemonic(mnemonic)) {
@@ -96,9 +92,9 @@ const useStore = create<EosState>((set, get) => ({
             // transaction_extensions: transactionExtensions || []
         }
         setSignature("");
-        setTxRaw("");
+        setRawTransaction("");
         const { signatures, serializedTransaction } = await account.signTransaction(transaction);
-        setTxRaw(uint8ArrayTohex(serializedTransaction));
+        setRawTransaction(uint8ArrayTohex(serializedTransaction));
         setSignature(signatures)
         setErrorText("");
     },

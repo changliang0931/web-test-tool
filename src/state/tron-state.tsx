@@ -10,7 +10,7 @@ interface TronState  extends MainState {
     feeLimit: string;
     contracts: string;
     errorContracts: boolean;
-    payload: string;
+  
     
     setRefBlockBytes: (refBlockBytes: string) => void;
     setRefBlockNum: (refBlockNum: string) => void;
@@ -20,7 +20,6 @@ interface TronState  extends MainState {
     setFeeLimit: (feeLimit: string) => void;
     setContracts: (contracts: string) => void;
     setErrorContracts: (errorContracts: boolean) => void;
-    setPayload: (payload: string) => void;
 }
 const useStore = create<TronState>((set: any, get: any) => ({
     ...MainStore(set),
@@ -33,19 +32,18 @@ const useStore = create<TronState>((set: any, get: any) => ({
     feeLimit: "0",
     contracts: `[{ "name": "transfer", "to_address": "TLb2e2uRhzxvrxMcC8VkL2N7zmxYyg3Vfc", "amount": 1000000000000000000 }]`,
     errorContracts: false,
-    payload: "",
+  
     setRefBlockBytes: (refBlockBytes: string) => set({ refBlockBytes: refBlockBytes }),
     setRefBlockNum: (refBlockNum: string) => set({ refBlockNum: refBlockNum }),
     setRefBlockHash: (refBlockHash: string) => set({ refBlockHash: refBlockHash }),
     setExpiration: (expiration: string) => set({ expiration: expiration }),
     setTimestamp: (timestamp: string) => set({ timestamp: timestamp }),
     setFeeLimit: (feeLimit: string) => set({ feeLimit: feeLimit }),
-    setPayload: (payload: string) => set({ payload: payload }),
     setContracts: (contracts: string) => set({ contracts: contracts }),
     setErrorContracts: (errorContracts: boolean) => set({ errorContracts: errorContracts }),
     signTx: async () => {
         const { setErrorText, setErrorMnemonic, setErrorContracts, setPayload, setSignature, mnemonic, path,
-            refBlockBytes, refBlockNum, refBlockHash, expiration, timestamp, feeLimit, contracts
+            refBlockBytes, refBlockNum, refBlockHash, expiration, timestamp, feeLimit, contracts,setRawTransaction
         } = get()
         if (!validateMnemonic(mnemonic)) {
             setErrorMnemonic(true);
@@ -75,8 +73,10 @@ const useStore = create<TronState>((set: any, get: any) => ({
             contracts: JSON.parse(contracts)
         }
         setSignature("")
+        setRawTransaction("");
         const signaturer = await account.signTransaction(transaction);
-        setPayload(signaturer.raw_data_hex)
+        setPayload(signaturer?.raw_data_hex);
+        setRawTransaction(signaturer?.hex);
         setSignature(JSON.stringify(signaturer))
         setErrorText("");
     },

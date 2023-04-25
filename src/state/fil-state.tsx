@@ -54,7 +54,7 @@ const useStore = create<XrpState>((set: any, get: any) => ({
         setErrorText("");
     },
     obtainAccount: () => {
-        const { mnemonic, path, setErrorMnemonic, setErrorText, setPublicKey, setAddress, setPrivateKey } = get()
+        const { mnemonic, path, setErrorMnemonic, setErrorText, setPublicKey, setAddress, setPrivateKey, publicKeyCompress } = get()
         try {
             if (!validateMnemonic(mnemonic)) {
                 setErrorText("Mnemonic invalid ")
@@ -62,7 +62,7 @@ const useStore = create<XrpState>((set: any, get: any) => ({
                 return
             }
             const account = new Fil(mnemonic, path);
-            setPublicKey(account.publicKey);
+            setPublicKey(publicKeyCompress(account.publicKey));
             setPrivateKey(account.privateKey);
             setAddress(account.address);
         } catch (err: any) {
