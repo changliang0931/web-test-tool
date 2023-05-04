@@ -37,7 +37,7 @@ const useStore = create<EthereumState>((set, get) => ({
     typeTags: ["", APTOS_TYPE_TAGS.aptos_coin],
     modules: [APTOS_MODULE["0x1::aptos_account"], APTOS_MODULE["0x1::coin"]],
     funcs: [APTOS_FUNCS.transfer],
-
+    message:"0x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
     path: APTOS_DEFAULT_PATH,
     to: "0x3a7b36b20e29eeed9d8ee36573c3cda92c71587a6561a0ab6facb6fcf9f2cb60",
     errorTo: false,
