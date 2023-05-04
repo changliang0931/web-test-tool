@@ -31,6 +31,7 @@ const useStore = create<DotState>((set: any, get: any) => ({
     genesisHash: "91b171bb158e2d3848fa23a9f1c25182fb8e20313b2c1eb49219da7a70ce90c3",
     blockHash: "5d2143bb808626d63ad7e1cda70fa8697059d670a992e82cd440fbb95ea40351",
     nonce: "0",
+    message:"0x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
     specVersion: "9130",
     transactionVersion: "8",
     tip: "",
